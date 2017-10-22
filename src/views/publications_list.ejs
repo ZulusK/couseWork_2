@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publications</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <meta name="description" content="List of all publications">
+    <meta name="author" content="Danil Kazimirov">
+</head>
+<body>
+<header>
+    <div class="elegantshadow shadowed">List of all publications</div>
+    <script>
+        function imgError(image) {
+            image.onerror = "";
+            image.src = "/images/placeholder.jpg";
+            return true;
+        }
+    </script>
+</header>
+<div>
+    <div class="dark">
+        <form method="get" action="/">
+            <button>Go back</button>
+        </form>
+    </div>
+    <div class="cards_list">
+        <div class="flex-container">
+            <% for(let obj of items){ %>
+            <div class="flex-item publication_card">
+                <a href="/publications/<%= obj.id %>" target="_self">
+                    <div class="header
+                            <% if(obj.difficult <= 3){ %>
+                            green
+                            <% }else if(obj.difficult <= 6){ %>
+                            orange
+                            <% }else{ %>
+                            red
+                            <% } %>
+"><%= obj.title %></div>
+                    <img src="/images/publications/<%= obj.image_path %>" onerror="imgError(this);"
+                         alt="image-preview of publication">
+                    <div class="description">
+                        <%= obj.description.slice(0, 120) %>
+                    </div>
+                </a>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% include footer.ejs %>
+</body>
+</html>

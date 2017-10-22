@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduction</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <meta name="description" content="Main page of site, which had created by Danil Kazimirov for lab1 task">
+    <meta name="author" content="Danil Kazimirov">
+</head>
+<body>
+<header id="into_header">
+    <div class="retro_text">
+        <p class="script"><span>IT'S</span></p>
+        <p class="shadow text2">WEB</p>
+        <p class="shadow text1">PROGBASE</p>
+        <p class="shadow text3">LAB#1</p>
+        <p class="script "><span>BY ME</span></p>
+    </div>
+</header>
+<div class="elegantshadow shadowed">Designed by primat for primats</div>
+<div class="content shadowed">
+    <div class="dark">
+        <h1>I have designed this site to perform laboratory work #1.</h1>
+        <p class="dark shadowed">My <em>dear</em> <a href="https://telegram.me/rulline" target="_blank">teacher</a>
+                                 asked me to create and complete this site for lab's work #1.<br> I hope that I coped
+                                 with the task.
+        </p>
+        <p>
+            У даній лабораторній роботі потрібно описати статичні HTML документи із окремими CSS стилями.
+        </p>
+        <ol>
+            <li>
+                Описати у
+                локальному репозиторії веб-документи:
+                <ul>
+                    <li>
+                        <em>
+                            Головна сторінка
+                        </em>
+                        (index.html) із вказанням назви сайту і додаткової інформації про сайт
+                        і його призначення.
+                    </li>
+                    <li>
+                        <em>
+                            Сторінка зі списком об’єктів
+                        </em>
+                        (наприклад, students.html). Кожен елемент списку об'єктів
+                        повинен містити основну (коротку) інформацію про об’єкт і
+                        зображення об’єкта (створити близько 5 записів).
+                    </li>
+                    <li>
+                        <em>
+                            Сторінка окремого об’єкта
+                        </em>
+                        із розширеною інформацією про об’єкт (наприклад,
+                        student/1.html).
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Зв’язати сторінки за допомогою гіперпосилань в обидві сторони. Наприклад, додати у
+                index.html
+                посилання.
+            </li>
+            <li>
+                Перейти в кореневу директорію проекта і запустити локальний сайт за допомогою Jekyll.
+                Перевірити роботу локального сайту перейшовши у веб-браузері за посиланням:
+                localhost:4000
+            </li>
+            <li>
+                Створити зовнішній CSS-стиль (наприклад, у файлі style.css) та підключити його до всіх
+                сторінок.
+            </li>
+            <li>
+                Опублікувати створений статичний веб-сайт на Github Pages (зробити git push вітки
+                gh-pages,
+                що містить
+                створені веб-документи). Перевірити роботу сайту у мережі Інтернет.
+            </li>
+        </ol>
+        <p class="dark shadowed">
+            The essence I chose is
+            <em>
+                publications about programming.
+            </em>
+            <br>
+            Each of them contains:
+            <ol>
+                <li>the text of the publication itself</li>
+                <li>the time of writing</li>
+                <li>the author's name</li>
+                <li>as well as several tags (they will help you to navigate in all publications):
+                    <ul>
+                        <li>sorting</li>
+                        <li>searching</li>
+                        <li>mixing the array</li>
+                        <li>etc.</li>
+                    </ul>
+                </li>
+                <%
+                if(number_of_publications !== undefined){
+                %>
+        <p>
+            There are <%= number_of_publications %> publications in storage
+        </p>
+        <% } %>
+        <form method="get" action="publications">
+            <p class="dark shadowed">
+                <button>Publications</button>
+            </p>
+        </form>
+    </div>
+</div>
+<% include footer.ejs%>
+</body>
+</html>

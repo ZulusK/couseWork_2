@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content=" <%= description %>">
+    <meta name="author" content="<%= author %>">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <title><%= title %></title>
+    <script>
+        function imgError(image) {
+            image.onerror = "";
+            image.src = "/images/placeholder.jpg";
+            return true;
+        }
+    </script>
+</head>
+<body>
+<header id="publication_header">
+    <h1 class="header_title">
+        <%= title %>
+    </h1>
+</header>
+<div class="content publication shadowed">
+    <div class="dark">
+        <form method="get" action="/publications">
+            <button>Go back</button>
+        </form>
+        <div class="shadowed">
+            <p>
+                <b>Author:</b> <%= author %>, <a href="https://telegram.me/<%= author_link %>"
+                                                 target="_blank">telegram</a><br>
+                <b>Date of publication:</b> <%= new Date(date).toLocaleString() %><br>
+                <b>Difficult:</b> <%= difficult %><br>
+                <b>Tags: </b>
+                <%
+                for (let tag of tags) {
+                %>
+                <%= tag + "," %>
+                <% } %>
+                <br>
+                <b>Description:</b> <%= description.slice(0, 200) %><br>
+            </p>
+        </div>
+        <p>
+            <img src="/images/publications/<%= image_path %>" alt="publication's image" onerror="imgError(this)">
+            <% for(let text_chunk of text){ %>
+        <p><%= text_chunk %></p>
+        <% } %>
+    </div>
+</div>
+<% include footer.ejs %>
+</body>
+</html>
