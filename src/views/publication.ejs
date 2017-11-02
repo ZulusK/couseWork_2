@@ -9,7 +9,7 @@
     <script>
         function imgError(image) {
             image.onerror = "";
-            image.src = "/images/placeholder.jpg";
+            image.src = "/images/design/placeholder.jpg";
             return true;
         }
     </script>
@@ -22,30 +22,19 @@
 </header>
 <div class="content publication shadowed">
     <div class="dark">
-        <form method="get" action="/publications">
-            <button>Go back</button>
-        </form>
+
+        <a href="/publications">
+            <button class="standalone">Go back</button>
+        </a>
         <div class="shadowed">
-            <p>
-                <b>Author:</b> <%= author %>, <a href="https://telegram.me/<%= author_link %>"
-                                                 target="_blank">telegram</a><br>
-                <b>Date of publication:</b> <%= new Date(date).toLocaleString() %><br>
-                <b>Difficult:</b> <%= difficult %><br>
-                <b>Tags: </b>
-                <%
-                for (let tag of tags) {
-                %>
-                <%= tag + "," %>
-                <% } %>
-                <br>
-                <b>Description:</b> <%= description.slice(0, 200) %><br>
-            </p>
+            <% include publicationInfo.ejs %>
         </div>
         <p>
-            <img src="/images/publications/<%= image_path %>" alt="publication's image" onerror="imgError(this)">
-            <% for(let text_chunk of text){ %>
-        <p><%= text_chunk %></p>
-        <% } %>
+            <img src="/res/images/<%= image_id%>" alt="publication's image" onerror="imgError(this)">
+        <p>text</p>
+        <form action="remove/<%= id %>" method="post" enctype="application/x-www-form-urlencoded">
+            <button type="submit" class="standalone">Delete</button>
+        </form>
     </div>
 </div>
 <% include footer.ejs %>

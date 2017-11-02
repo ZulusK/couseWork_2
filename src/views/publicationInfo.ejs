@@ -1,0 +1,14 @@
+<p>
+    <b>Author:</b> <%= author %>, <a href="https://telegram.me/<%= link %>"
+                                     target="_blank">telegram</a><br>
+    <b>Date of publication:</b> <%= new Date(createdOn).toLocaleString() %><br>
+    <b>Difficult:</b> <%= difficult %><br>
+    <b>Tags: </b>
+    <%
+    for (let tag of tags) {
+    %>
+    <%= tag + "," %>
+    <% } %>
+    <br>
+    <b>Description:</b> <%= description.slice(0, 200) %><br>
+</p>

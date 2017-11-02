@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new publication</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <meta name="description" content="There u can create a new publication using forms">
+    <meta name="author" content="Danil Kazimirov">
+</head>
+<body>
+<header id="publication_header">
+    <h1 class="header_title">
+        Create new publication
+    </h1>
+</header>
+<div class="content publication">
+    <script>
+        function updateTextInput(val) {
+            document.getElementById('textInput').value = val;
+        }
+
+        var tag_id = 1;
+
+        function createTagRemoveBtn() {
+            var btn = document.createElement("button");
+            btn.setAttribute("type", "button");
+            btn.setAttribute("onclick", "removeTag(" + tag_id + ")");
+            btn.setAttribute("name", "removeBtn" + tag_id);
+            btn.setAttribute("id", "removeBtn" + tag_id);
+            btn.setAttribute("class", "deleteButton");
+//            btn.innerText = "Remove";
+            return btn;
+        }
+
+        function addTagField() {
+            var tag = document.createElement("input");
+            var div = document.createElement("div");
+            div.setAttribute("class", "center");
+            div.setAttribute("id", "div_tag" + tag_id);
+            div.appendChild(tag);
+            div.appendChild(createTagRemoveBtn());
+            //Assign different attributes to the element.
+            tag.setAttribute("type", "text");
+            tag.setAttribute("name", "tag" + tag_id + "");
+            tag.setAttribute("id", "tag" + tag_id + "");
+            tag.setAttribute("value", "tag" + tag_id + "");
+            tag_id++;
+            tag.setAttribute("placeholder", "Tag of publication");
+            var area = document.getElementById("tag_area");
+            //Append the element in page (in span).
+            area.appendChild(div);
+        }
+
+        function removeDiv(id) {
+            var div = document.getElementById("div_tag" + id);
+            div.removeChild(document.getElementById("tag" + id));
+            div.removeChild(document.getElementById("removeBtn" + id));
+            document.getElementById("tag_area").removeChild(div);
+        }
+
+        function removeTag(id) {
+            //swap last and currnent tag msg
+            tag_id--;
+            for (var i = id; i < tag_id; i++) {
+                var curr = document.getElementById("tag" + i);
+                var next = document.getElementById("tag" + (i + 1));
+                curr.setAttribute("value", next.value);
+            }
+            removeDiv(tag_id);
+        }
+    </script>
+    <div>
+        <a href="/publications">
+            <button class="standalone">Go back</button>
+        </a>
+        <form target="_self" action="/publications/add" method="post" enctype="multipart/form-data" class="form-style">
+            <fieldset>
+                <legend><span class="number">1</span>Information about you</legend>
+                <div>
+                    <input type="text" name="author" placeholder="Your name" value="Danil" required>
+                </div>
+                <div>
+                    <input type="text" name="link" placeholder="Your telegram nick" required value="ZulusK">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><span class="number">2</span> Content</legend>
+                <div>
+                    <input type="text" name="title" value="A" placeholder="Title of publication" value="a" required>
+                </div>
+                <div>
+                    <input type="file" id="logo" name="logo" required>
+                </div>
+                <div class="center">
+                    <input type="range" class="slider" name="difficult" value="1" min="1" max="10"
+                           oninput="difficultOutput.value = difficult.value">
+                    <output name="difficultOutput">1</output>
+                </div>
+            </fieldset>
+
+            <div id="tag_area">
+                <input type="text" name="tag0" id="tag0" placeholder="Tag of publication" required value="tag">
+            </div>
+            <div class="center">
+                <button type="button" class="addTagBtn" onclick="addTagField()"></button>
+            </div>
+
+            <div>
+                <input type="text" name="description" required value="q" placeholder="Short description">
+            </div>
+            <div>
+                <textarea rows="20" cols="120" name="text"
+                          placeholder="Enter text of publication there" required></textarea>
+            </div>
+            <div>
+                <input type="submit" content="Create">
+            </div>
+        </form>
+
+    </div>
+</div>
+<% include footer.ejs %>
+</body>
+</html>

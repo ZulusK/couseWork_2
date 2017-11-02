@@ -1,3 +1,14 @@
+<%
+function getColor(diff) {
+    if (diff <= 3) {
+        return "green";
+    } else if (diff <= 6) {
+        return "orange";
+    } else {
+        return "red";
+    }
+}
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,40 +24,43 @@
     <script>
         function imgError(image) {
             image.onerror = "";
-            image.src = "/images/placeholder.jpg";
+            image.src = "/images/design/placeholder.jpg";
             return true;
         }
     </script>
 </header>
 <div>
-    <div class="dark">
-        <form method="get" action="/">
-            <button>Go back</button>
-        </form>
-    </div>
+    <a href="/">
+        <button class="standalone">Go back</button>
+    </a>
     <div class="cards_list">
+        <form class="form-style search-form" action="/publications" method="get">
+            <div>
+                <input type="search" placeholder="Show all publication" name="title" value=<%= searchName %>>
+                <input type="submit" content="search" value="GO">
+            </div>
+        </form>
+        <% if(items.length === 0){ %>
+        <div class="center ">
+            <p class="notFindMsg shadowed-inner">Cannot find any publication with title '<%= searchName %>'</p>
+        </div>
+        <% } %>
         <div class="flex-container">
             <% for(let obj of items){ %>
+            <% include publicationCard.ejs %>
+            <% } %>
             <div class="flex-item publication_card">
-                <a href="/publications/<%= obj.id %>" target="_self">
-                    <div class="header
-                            <% if(obj.difficult <= 3){ %>
-                            green
-                            <% }else if(obj.difficult <= 6){ %>
-                            orange
-                            <% }else{ %>
-                            red
-                            <% } %>
-"><%= obj.title %></div>
-                    <img src="/images/publications/<%= obj.image_path %>" onerror="imgError(this);"
+                <a href="/publications/new" target="_self">
+                    <div class="header white">Create</div>
+                    <img src="/images/design/create.png"
                          alt="image-preview of publication">
                     <div class="description">
-                        <%= obj.description.slice(0, 120) %>
+                        You can create your own publication!
                     </div>
                 </a>
             </div>
-            <% } %>
         </div>
+        <% include pagination.ejs %>
     </div>
 </div>
 <% include footer.ejs %>

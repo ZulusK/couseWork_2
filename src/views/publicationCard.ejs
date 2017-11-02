@@ -1,0 +1,12 @@
+<div class="flex-item publication_card">
+    <a href="/publications/<%= obj._id %>" target="_self">
+        <div class="header <%= getColor(obj.difficult) %>
+
+"><%= obj.title %></div>
+        <img src="/res/images/<%= obj.image_id %>" onerror="imgError(this);"
+             alt="image-preview of publication">
+        <div class="description">
+            <%= obj.description.slice(0, 120) %>
+        </div>
+    </a>
+</div>

@@ -110,7 +110,7 @@ function list() {
     askMainQuestion();
 }
 
-function get () {
+function get() {
     console.log("\nNow you are in get mode\n");
     question('Enter id of publication:')
         .then((answer) => {

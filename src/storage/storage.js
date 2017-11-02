@@ -1,6 +1,12 @@
 "use strict";
 let fsp = require('fs-promise');
+let shortid = require('shortid');
+let path = require('path');
+let fileType = require("file-type");
+const uploadImageFolder = path.join(__dirname, "..", "public", "images", "publications");
+
 const FILE_NAME = "publications.json";
+const imageAllowedTypes = ["png", "jpg", "gif"];
 
 function saveStorage(path, storage) {
     storage.lastUpdate = new Date().toISOString();
@@ -56,10 +62,10 @@ function create(title, author, author_link, date, image_path, tags, difficult, d
 }
 
 function getAll() {
-   // return new Promise((resolve, reject) => {
-        return getStorage(FILE_NAME)
-            .then((storage) => storage.items)
-            .catch(() => Promise.reject("CANNOT LOAD STORAGE"));
+    // return new Promise((resolve, reject) => {
+    return getStorage(FILE_NAME)
+        .then((storage) => storage.items)
+        .catch(() => Promise.reject("CANNOT LOAD STORAGE"));
     //});
 }
 
@@ -84,6 +90,8 @@ function getById(id) {
         )
         .catch(() => Promise.reject("CANNOT LOAD STORAGE"));
 }
+
+
 
 function update(id, property, value) {
     return new Promise((resolve, reject) => {
@@ -140,10 +148,29 @@ function remove(id) {
     });
 }
 
+async function loadFile(file) {
+    try {
+        let fileName = file.name;
+        let newFileName = shortid.generate() + '.' + fileType(file.data).ext;
+        if (imageAllowedTypes.indexOf(fileType(file.data).ext) !== -1) {
+            await fsp.writeFile(path.join(uploadImageFolder, newFileName), file.data);
+            console.log("___________________________ SAVED FILE " + path.join(uploadImageFolder, newFileName));
+            return newFileName;
+        } else {
+            console.log(`___________________________ FILE IS NOT AN IMAGE`);
+            return "";
+        }
+    } catch (e) {
+        console.log(`___________________________ Error: ${e}`);
+        return "";
+    }
+}
+
 module.exports = {
     create: create,
     getById: getById,
     update: update,
     remove: remove,
-    getAll: getAll
+    getAll: getAll,
+    uploadImage: loadFile
 };

@@ -1,5 +1,5 @@
 {
-  "title": "lab3",
+  "title": "lab5",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,14 +7,37 @@
     "devstart": "nodemon ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.2",
+    "busboy-body-parser": "^0.3.0",
+    "commonmark": "^0.28.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.5.7",
     "express": "~4.15.5",
+    "file-type": "^7.2.0",
     "fs-promise": "^2.0.3",
+    "github-markdown-css": "^2.9.0",
+    "gridfs": "^1.0.0",
+    "gridfs-stream": "^1.1.1",
+    "mongoose": "^4.12.6",
+    "mongoose-gridfs": "^0.3.1",
+    "mongoose-paginate": "^5.0.3",
+    "mongoose-pagination": "^1.0.0",
     "morgan": "~1.9.0",
     "nodemon": "^1.12.1",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "shortid": "^2.2.8",
+    "stream": "0.0.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "public/*",
+      "views/*",
+      "*.jpg",
+      "*.png",
+      "*.json",
+      "tmp/*"
+    ],
+    "delay": "100"
   }
 }
