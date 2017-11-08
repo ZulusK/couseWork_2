@@ -1,61 +1,46 @@
 "use strict";
 const mongoose = require('mongoose');
 const Publication = require('./models').PublicationModel;
-
-mongoose.Promise = global.Promise;
-//connect to db
-exports.connect = async function (url) {
-    return mongoose.connect(url, {useMongoClient: true});
-}
+const controller = require('./controller');
 //create new entity
-exports.create = function (title, author, link, image_id, tags, difficult, description, text) {
-    let entity = new Publication({
+exports.create = function (title, author_id, image_id, tags, difficult, description, text) {
+    return controller.create({
         title: title,
-        author: author,
-        link: link,
+        author_id: author_id,
         image_id: image_id,
         difficult: difficult,
         tags: tags,
         description: description,
         text: text
-    });
-    return entity.save();
+    }, Publication);
 }
 
 exports.getAll = function () {
-    return Publication.find().exec();
+    return controller.getAll(Publication);
 }
 
 exports.getById = function (id) {
-    return Publication.findById(id).exec();
-}
-
-exports.find = function (field, value) {
-    let query = {};
-    query[field.trim()] = new RegExp(`^${value.trim()}`, "i");
-    return Publication.find(query).exec();
+    return controller.getById(id, Publication);
 }
 
 exports.size = function () {
-    return Publication.count();
+    return controller.size(Publication);
 }
 
 exports.remove = function (id) {
-    return Publication.findByIdAndRemove(id).exec();
+    return controller.remove(id, Publication);
+}
+
+exports.select=function (field, value) {
+    return controller.select(field, value, Publication);
+}
+exports.find = function (field, value) {
+    return controller.find(field, value, Publication);
 }
 
 exports.update = async function (id, field, value) {
     if (["", "id", "date"].indexOf(field) !== -1) {
         return;
     }
-    return Publication.findById(id).then(entity => {
-        entity[field] = value;
-        return entity.save();
-    }).catch(e => {
-        throw e;
-    });
-}
-
-exports.isValidId=function (id) {
-    return mongoose.Types.ObjectId.isValid(id);
+    return controller.update(id, field, value, Publication);
 }

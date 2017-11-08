@@ -1,12 +1,24 @@
-<div class="flex-item publication_card">
-    <a href="/publications/<%= obj._id %>" target="_self">
-        <div class="header <%= getColor(obj.difficult) %>
-
-"><%= obj.title %></div>
-        <img src="/res/images/<%= obj.image_id %>" onerror="imgError(this);"
-             alt="image-preview of publication">
-        <div class="description">
-            <%= obj.description.slice(0, 120) %>
+<div class="flex-item publication-card">
+        <% let colors = ["orange", "red", "green", "blue"]; %>
+        <% function addTag(publ){ %>
+        <% let i = 0; %>
+        <% for (var tag of obj.tags) { %>
+        <% i++; %>
+        <div class="tag <%= colors[i % colors.length]; %>">
+            <%= tag.slice(0, 10); %>
         </div>
-    </a>
+        <% } %>
+        <% } %>
+        <a href="/publications/<%= obj._id %>" target="_self">
+            <div class="header <%= getColor(obj.difficult) %>
+"><%= obj.title.slice(0,30) %></div>
+            <img src="/res/images/<%= obj.image_id %>" onerror="imgError(this);"
+                 alt="image-preview of publication">
+            <div class="description">
+                <%= obj.description.slice(0, 120) %>
+            </div>
+        </a>
+        <div class="tags">
+            <% addTag(obj); %>
+        </div>
 </div>

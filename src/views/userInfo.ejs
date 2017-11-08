@@ -1,0 +1,12 @@
+<div class="dark-style">
+    <p>
+        <b>User name: <%= user.info.fullname.slice(0, 200) %></b><br/>
+        <b>Telegram:</b> <a
+                href="https://telegram.me/<%= ('telegram' in user.info) ? user.info.telegram.slice(0, 100) : "" %>"
+                target="_blank">telegram</a><br/>
+        <b>Login:</b> <%= user.info.login.slice(0, 100) %><br>
+        <% if(user.info.isAdmin){ %>
+        <b>Admin access:</b> <%= user.info.isAdmin %><br>
+        <% } %>
+    </p>
+</div>

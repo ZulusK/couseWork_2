@@ -1,0 +1,17 @@
+<div class="flex-user-item user-card">
+    <a href="/users/<%= obj._id %>" target="_self">
+        <span class="name field">name:<%= obj.fullname.slice(0, 20) %></span>
+        <span class="login field">login:<%= obj.login.slice(0, 20) %></span>
+        <span class="telegram field">telegram:<%= obj.telegram.slice(0, 20) %></span>
+        <% if(obj.isAdmin){ %>
+        <span class="red role field">ADMIN</span>
+        <% }else{ %>
+        <span class="green role field">USER</span>
+        <% } %>
+        <span class="field controll">
+            <form action="/users/remove/<%= obj._id %>" method="post">
+                <button type="submit" class="remove-user-btn"></button>
+            </form>
+        </span>
+    </a>
+</div>

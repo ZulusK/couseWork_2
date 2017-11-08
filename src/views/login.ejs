@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <meta name="description" content="There u can login to my lab's site">
+    <meta name="author" content="Danil Kazimirov">
+</head>
+<body>
+<header id="publication_header">
+    <h1 class="header_title">
+        Log in
+    </h1>
+</header>
+<div class="content-text publication-info">
+    <div>
+        <a href="/publications">
+            <button class="standalone">Go back</button>
+        </a>
+        <form target="_self" action="/auth/login" method="post" enctype="multipart/form-data" class="form-style">
+            <fieldset>
+                <legend><span class="number">✔</span>Fill next fields</legend>
+                <input type='text' id='login' name='username' class='form-control' value='' required
+                       placeholder="Login"/>
+                <input type='password' id='password' name='password' class='form-control' value=''
+                       placeholder="Password"/>
+
+
+            </fieldset>
+            <input type='submit' class='btn btn-primary' value="Log in"/>
+        </form>
+    </div>
+</div>
+<% include footer.ejs %>
+</body>
+</html>
+

@@ -39,8 +39,13 @@ header {
     height: 100%;
 }
 
-#error_header {
+#header-404 {
     background: url("../images/design/404.jpg") no-repeat fixed center;
+    background-size: cover;
+    height: 100%;
+}
+#header-401 {
+    background: url("../images/design/401.jpg") no-repeat fixed center;
     background-size: cover;
     height: 100%;
 }
@@ -81,7 +86,7 @@ button.standalone {
     margin: 20px auto;
 }
 
-.content {
+.content-text {
     padding-top: 20px;
     padding-bottom: 20px;
     margin-top: -10px;
@@ -91,7 +96,7 @@ button.standalone {
     min-height: 1000px;
 }
 
-.publication img {
+.publication-info img {
     width: 500px;
     max-height: 100%;
     max-width: 100%;
@@ -103,7 +108,7 @@ button.standalone {
     display: block;
 }
 
-.content.publication {
+.content-text.publication-info {
     margin-top: 200px;
     min-height: 90%;
     width: 100%;
@@ -117,6 +122,7 @@ button.standalone {
 .shadowed-inner {
     box-shadow: 0px 0px 10px rgba(6, 4, 4, 0.82) inset;
 }
+
 /*retro text style*/
 .retro_text {
     position: relative;
@@ -237,7 +243,7 @@ button.standalone {
 }
 
 /*dark text style*/
-div.dark {
+div.dark-style {
     padding-right: 5%;
     padding-left: 5%;
     margin-right: 2%;
@@ -250,7 +256,7 @@ div.dark {
     text-align: justify;
 }
 
-div.dark h1, h2, h3 {
+div.dark-style h1, h2, h3 {
     color: #fff;
     font-family: 'Droid Serif';
     border-bottom: 3px solid #E65634;
@@ -264,32 +270,32 @@ div.dark h1, h2, h3 {
     text-align: center;
 }
 
-div.dark p {
+div.dark-style p {
     color: #fff;
     font-family: 'Ubuntu';
     padding-left: 20%;
     padding-right: 2%;
 }
 
-p.dark {
+p.dark-style {
     border-right: 3px solid #E65634;
 }
 
-div.dark ul, ol {
+div.dark-style ul, ol {
     color: #fff;
     font-family: 'Ubuntu';
     margin: 5px auto 5px;
 }
 
-div.dark li:hover {
+div.dark-style li:hover {
     color: #cc141c;
 }
 
-div.dark a {
+div.dark-style a {
     color: #E65634;
 }
 
-div.dark a:hover {
+div.dark-style a:hover {
     color: #fff;
 }
 
@@ -334,7 +340,7 @@ div.light a:hover {
 }
 
 /*flexes*/
-.flex-container {
+.publication-list-area {
     display: flex;
     justify-content: center;
     align-items: stretch;
@@ -349,7 +355,7 @@ div.light a:hover {
     margin: 2%;
 }
 
-.cards_list {
+.publication-list-area {
     /*margin: 0px;*/
     background: url("../images/design/bg.jpg") no-repeat center fixed;
     background-size: cover;
@@ -357,7 +363,7 @@ div.light a:hover {
 }
 
 /*publication cards style*/
-.publication_card {
+.publication-card {
     font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -366,17 +372,17 @@ div.light a:hover {
     max-width: 300px;
     color: #1c1c1c;
     overflow: hidden;
-    box-shadow: 0px -10px 60px rgba(6, 4, 4, 0.5);
+    /*box-shadow: 0px -10px 60px rgba(6, 4, 4, 0.5);*/
     transition: transform 0.4s;
 }
 
-.publication_card:hover {
-    box-shadow: 0px -10px 30px rgba(6, 4, 4, 0.3);
+.publication-card:hover {
+    /*box-shadow: 0px -10px 30px rgba(6, 4, 4, 0.3);*/
     padding: 0px;
-    transform: scale(1.1, 1.1); /* Standard syntax */
+    transform: scale(0.95, 0.95); /* Standard syntax */
 }
 
-.publication_card img {
+.publication-card img {
     height: 280px;
     width: 280px;
     object-fit: cover;
@@ -388,14 +394,14 @@ div.light a:hover {
     transform: translate(-50%, 0%);
 }
 
-.publication_card .description {
+.publication-card .description {
     margin: 10px;
     line-height: 20px;
     font-size: 15px;
     text-align: justify;
 }
 
-.publication_card .header {
+.publication-card .header {
     color: white;
     line-height: 50px;
     font-size: 40px;
@@ -404,24 +410,24 @@ div.light a:hover {
     height: auto;
 }
 
-.publication_card .green {
+.publication-card .green {
     background-color: #0c8300;
 }
 
-.publication_card .white {
+.publication-card .white {
     /*background-color: #f6fff4;*/
     color: deepskyblue;
 }
 
-.publication_card .orange {
+.publication-card .orange {
     background-color: #ffaf00;
 }
 
-.publication_card .red {
+.publication-card .red {
     background-color: #ff2800;
 }
 
-.publication_card a {
+.publication-card a {
     text-decoration: none;
     color: inherit;
 }
@@ -436,7 +442,7 @@ blockquote {
     font-weight: 400;
     text-indent: -60px;
     max-width: 70%;
-    margin: 30% auto;
+    margin: 20% auto;
     bottom: 5%;
 }
 
@@ -453,7 +459,7 @@ input[type=text]:hover,
 textarea:hover,
 textarea:focus,
 input[type=text]:focus {
-    transform: scale(1.1, 1.1); /* Standard syntax */
+    transform: scale(0.97, 0.97); /* Standard syntax */
 }
 
 input[name=author] {
@@ -476,6 +482,20 @@ input[type=search] {
     background-image: url("../images/design/search.png");
 }
 
+#login{
+    background-image: url("../images/design/user.png");
+}
+#password{
+    background-image: url("../images/design/pass.png");
+}
+
+#fullname{
+    background-image: url("../images/design/name.png");
+}
+#telegram{
+    background-image: url("../images/design/telegram.png");
+
+}
 input[name^="tag"] {
     background-image: url("../images/design/tag.png");
     width: 90%;
@@ -647,18 +667,21 @@ fieldset .number {
 }
 
 .addTagBtn {
-    background-image: url("../images/design/add.png");
-    background-size: 40px;
+    /*background-image: url("../images/design/add.png");*/
+    /*background-size: 40px;*/
     background-position: center;
     background-repeat: no-repeat;
     width: 60px;
     background-color: #4CAF50;
     color: white;
-    padding: 14px 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 60px;
+    padding: 0px;
     margin: 8px auto;
     display: block;
     border: none;
-    border-radius: 10px;
+    border-radius: 50%;
     cursor: pointer;
 }
 
@@ -718,7 +741,7 @@ fieldset .number {
 .pagination a {
     box-sizing: inherit;
     /*border-radius: 5px;*/
-    /*text-align: center;*/
+    text-align: center;
     display: inline-block;
     /*margin: auto;*/
     background-color: white;
@@ -730,18 +753,23 @@ fieldset .number {
     min-width: 40px;
 
     transition: background-color .3s;
+    -webkit-transition: width 0.1s ease-in-out;
+    transition: width, transform 0.1s ease-in-out;
 }
 
 .pagination a.active {
     background-color: #4CAF50;
+    border: none;
     color: white;
+
 }
 
 .pagination a:hover:not(.active) {
-    background-color: #ddd;
+    /*background-color: #ddd;*/
+    transform: scale(0.95, 0.95); /* Standard syntax */
 }
 
-.notFindMsg {
+.items-not-found-message {
     width: 70%;
     margin: 30px auto;
 

@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content=" <%= description %>">
-    <meta name="author" content="<%= author %>">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-    <title><%= title %></title>
+    <meta name="description" content=" <%= publication.description %>">
+    <meta name="author" content="<%= publication.author %>">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style_new.css">
+    <title><%= publication.title %></title>
     <script>
         function imgError(image) {
             image.onerror = "";
@@ -14,27 +14,33 @@
         }
     </script>
 </head>
-<body>
-<header id="publication_header">
-    <h1 class="header_title">
-        <%= title %>
-    </h1>
+<body class="dark-style">
+<header class="publication-header">
+    <div class="header-title">
+        <p><%= publication.title %></p>
+    </div>
 </header>
-<div class="content publication shadowed">
-    <div class="dark">
-
+<% include header_usr.ejs %>
+<div class="dark-style shadow-box-out">
+    <div class="content-text publication-info">
         <a href="/publications">
-            <button class="standalone">Go back</button>
+            <button class="control-button">Go back</button>
         </a>
-        <div class="shadowed">
+        <div class="shadow-box-in">
             <% include publicationInfo.ejs %>
         </div>
         <p>
-            <img src="/res/images/<%= image_id%>" alt="publication's image" onerror="imgError(this)">
-        <p>text</p>
-        <form action="remove/<%= id %>" method="post" enctype="application/x-www-form-urlencoded">
-            <button type="submit" class="standalone">Delete</button>
-        </form>
+            <img class="shadow-box-out" src="/res/images/<%= publication.image_id %>" alt="publication's image"
+                 onerror="imgError(this)">
+        <p><%= publication.text %></p>
+        <% if(user.isAuthorized && ((('isAdmin' in user.info) && user.info.isAdmin ) || String(user.info._id) === String(publication.author._id))){ %>
+        <div class="center">
+            <form action="remove/<%= publication.id %>" method="post"
+                  enctype="application/x-www-form-urlencoded">
+                <button type="submit" class="control-button-red">Delete</button>
+            </form>
+        </div>
+        <% } %>
     </div>
 </div>
 <% include footer.ejs %>
