@@ -58,3 +58,6 @@ typings/
 .env
 .idea/
 test/
+src/public/images/
+src/public/javascripts/
+src/views/
