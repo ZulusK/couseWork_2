@@ -1,19 +1,9 @@
-"use strict";
-let express = require('express'),
-    router = express.Router();
-const storage_p = require("../storage/controller.publications"),
-    utils = require("../utils/util");
+var express = require('express');
+var router = express.Router();
 
 /* GET home page. */
-router.get('/', async function (req, res, next) {
-    try {
-        let args = await utils.getBasicArgsEJS(req);
-        args.number_of_publications = await storage_p.size();
-        // console.log(args);
-        res.render('index', args);
-    } catch (e) {
-        console.log(e);
-        throw e;
-    }
+router.get('/', function (req, res, next) {
+    res.render('index', {title: 'Express'});
 });
+
 module.exports = router;
