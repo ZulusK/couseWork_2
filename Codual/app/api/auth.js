@@ -16,12 +16,12 @@ api.login = (user_db) => async (req, res, next) => {
                 username: user.username
             };
             //info about user, that stored in token
-            token = jwt.sign(payload, config.secret, {expiresIn: 5});//create JWT
+            token = jwt.sign(payload, config.secret);//create JWT
             res.json({success: true, name: user.name, token: token});
         }
     })(req, res, next);
 }
-api.verify= async function (req, res, next) {
+api.verify = async function (req, res, next) {
     await passport.authenticate('jwt', function (err, user) {
         if (user) {
             res.json({status: true});

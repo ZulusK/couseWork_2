@@ -9,7 +9,7 @@ module.exports = (passport) => {
     const parameters = {
         secretOrKey: config.secret,
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        authScheme: 'Bearer',
+        // authScheme: 'Bearer',
         session: config.session
     };
     passport.use(new LocalStrategy({
@@ -29,9 +29,8 @@ module.exports = (passport) => {
             done(e);
         });
     }));
-    passport.use(new JWTStrategy(parameters, async (payload, done) => {
+    passport.use(new JWTStrategy(parameters, (payload, done) => {
         user_db.getById(payload.id).then(user => {
-            console.log(user.username, user.password);
             if (user) done(null, user);
             else done(null, false);
         }).catch(e => {
