@@ -1,7 +1,8 @@
 const PassportJWT = require('passport-jwt'),
     ExtractJWT = PassportJWT.ExtractJwt,
-    Strategy = PassportJWT.Strategy,
+    JWTStrategy = PassportJWT.Strategy,
     config = require('./index.js'),
+    LocalStrategy = require('passport-local').Strategy,
     user_db = require('@CodualDB/DB.User.controller');
 
 module.exports = (passport) => {
@@ -9,13 +10,39 @@ module.exports = (passport) => {
         secretOrKey: config.secret,
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     };
-    passport.use(new Strategy(parameters, async (payload, done) => {
-        try {
-            let user = user_db.getById(payload.id);
+    passport.use(new LocalStrategy({
+        usernameField: 'username',
+        passwordField: 'password',
+        session: config.session
+    }, function (username, password, done) {
+        console.log(username, password);
+        user_db.getByUsername(username).then(async (user) => {
+            console.log(user.username, await user.comparePassword(password));
+            if (!user || !await user.comparePassword(password)) {
+                done(null, false, {message: 'There are not such user in DB'});
+            } else {
+                done(null, user);
+            }
+        }).catch(e => {
+            done(e);
+        });
+    }));
+    passport.use(new JWTStrategy(parameters, async (payload, done) => {
+        console.log('jwt');
+        user_db.getById(payload.id).then(user => {
+            console.log('jwt');
             if (user) done(null, user);
             else done(null, false);
-        } catch (e) {
-            done(e, false);
-        }
+        }).catch(e => {
+            console.log('error', 'jwt', e);
+            done(e);
+        });
     }));
+    passport.serializeUser(function (user, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function (obj, done) {
+        done(null, obj);
+    });
 }

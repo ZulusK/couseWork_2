@@ -56,4 +56,15 @@ api.signup = (db_users) => async (req, res) => {
     }
 }
 
+api.update = (db_users) => async (req, res) => {
+    console.log(req.user);
+    try {
+        if (req.body.username) {
+
+        }
+    } catch (e) {
+        res.status(500).json('Error at set');
+    }
+    res.json('ok');
+}
 module.exports = api;
