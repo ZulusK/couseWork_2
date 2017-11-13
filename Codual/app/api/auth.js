@@ -16,29 +16,19 @@ api.login = (user_db) => async (req, res, next) => {
                 username: user.username
             };
             //info about user, that stored in token
-            token = jwt.sign(payload, config.secret);//create JWT
+            token = jwt.sign(payload, config.secret, {expiresIn: 5});//create JWT
             res.json({success: true, name: user.name, token: token});
         }
     })(req, res, next);
 }
-api.checkAuth = async function (req, res, next) {
-    console.log('1');
+api.verify= async function (req, res, next) {
     await passport.authenticate('jwt', function (err, user) {
-        console.log('chck', err, '-', user);
         if (user) {
-            res.json({msg: `hello, ${user.name}`});
+            res.json({status: true});
         } else {
-            res.status(401).json({msg: 'No such user'});
-            console.log("err");
+            res.status(401).json({status: false, msg: 'No such user'});
         }
     })(req, res, next);
-}
-api.verify = (headers) => {
-    if (headers && headers.authorization) {
-        const split = headers.authorization.split(' ');
-        if (split.length === 2) return split[1];
-        else return null;
-    } else return null;
 }
 
 module.exports = api;

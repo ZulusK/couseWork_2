@@ -8,7 +8,9 @@ const PassportJWT = require('passport-jwt'),
 module.exports = (passport) => {
     const parameters = {
         secretOrKey: config.secret,
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        authScheme: 'Bearer',
+        session: config.session
     };
     passport.use(new LocalStrategy({
         usernameField: 'username',
@@ -28,9 +30,8 @@ module.exports = (passport) => {
         });
     }));
     passport.use(new JWTStrategy(parameters, async (payload, done) => {
-        console.log('jwt');
         user_db.getById(payload.id).then(user => {
-            console.log('jwt');
+            console.log(user.username, user.password);
             if (user) done(null, user);
             else done(null, false);
         }).catch(e => {
