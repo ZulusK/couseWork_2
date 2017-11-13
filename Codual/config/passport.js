@@ -2,20 +2,20 @@ const PassportJWT = require('passport-jwt'),
     ExtractJWT = PassportJWT.ExtractJwt,
     Strategy = PassportJWT.Strategy,
     config = require('./index.js'),
-    models = require('@Codual/app/setup');
-
+    user_db = require('@CodualDB/DB.User.controller');
 
 module.exports = (passport) => {
-    const User = models.User;
     const parameters = {
         secretOrKey: config.secret,
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     };
-    passport.use(new Strategy(parameters, (payload, done) => {
-        User.findOne({id: payload.id}, (error, user) => {
-            if (error) return done(error, false);
+    passport.use(new Strategy(parameters, async (payload, done) => {
+        try {
+            let user = user_db.getById(payload.id);
             if (user) done(null, user);
             else done(null, false);
-        });
+        } catch (e) {
+            done(e, false);
+        }
     }));
 }
