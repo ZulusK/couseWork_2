@@ -46,8 +46,9 @@ module.exports.size = function (model) {
     return model.count();
 }
 
-module.exports.remove = function (id, model) {
-    return model.findByIdAndRemove(id).exec();
+module.exports.removeById = function (id, model) {
+    let target = model.findById(id);
+    return target.remove();
 }
 
 module.exports.find = function (query, model) {

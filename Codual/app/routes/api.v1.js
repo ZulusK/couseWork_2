@@ -18,7 +18,9 @@ module.exports = (app) => {
     router_user.post('/signup', API.user.signup(user_db));
     router_user.post('/setup', API.user.setup(user_db));
     router_user.put('/update', passport.authenticate('jwt', config.session), API.user.update(user_db, API));
+    router_user.delete('/delete', passport.authenticate('jwt', config.session), API.user.delete(user_db, API));
     router_user.post('/info', passport.authenticate('jwt', config.session), API.user.info(user_db));
+    router_user.post('/list', passport.authenticate('jwt', config.session), API.auth.checkAdmin, API.user.list(user_db));
     // router_user.get('/user',passport.authenticate('jwt', config.session),API.user.get(user_db));
 
     app.use('/api/v1/auth', router_auth);

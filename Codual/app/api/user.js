@@ -55,23 +55,35 @@ api.signup = (db_users) => async (req, res) => {
         }
     }
 }
+
+function getTarget(req) {
+    if (!req.body.target) {
+        throw null;
+    } else {
+        if (req.body.target === '.') {
+            return req.user.id;
+        } else {
+            return new ObjectID.createFromHexString(req.body.target);
+        }
+    }
+}
+
 api.update = (users_db) => async (req, res, next) => {
     if (!req.body.values) {
         res.status(400).json({success: false, message: 'values required'}).send();
-    } else if (!req.body.target) {
-        res.status(400).json({success: false, message: 'target required, use `.` to self-ref'}).send();
     }
     //get fields to update
-    if (req.body.target === '.') {
-        req.body.target = req.user.id;
-    } else {
-        req.body.target = new ObjectID.createFromHexString(req.body.target);
+    let targetid = "";
+    try {
+        targetid = getTarget(req);
+    } catch (err) {
+        res.status(400).json({success: false, message: 'target required, use `.` to self-ref'}).send();
     }
     let client = req.user;
-    if (((req.body.target === client.id) || client.access === 'admin')) {
+    if (((targetid === client.id) || client.access === 'admin')) {
         //get target to modify
         try {
-            let target = (req.body.target === client.id) ? client : await users_db.getById(req.body.target);
+            let target = (targetid === client.id) ? client : await users_db.getById(targetid);
             await target.set(JSON.parse(req.body.values), client.access == 'admin');
             res.status(200).json({success: true}).send();
         } catch (e) {
@@ -91,25 +103,75 @@ api.collectUserInfo = (user) => {
         contact: user.contact || api.placeholder,
         access: user.access || api.placeholder,
         publications: user.publications || api.placeholder,
+        id: user.id || api.placeholder
     };
 }
-api.info = (db_users) => async (req, res, next) => {
+api.info = (users_db) => async (req, res, next) => {
     console.log('info', req.user);
     //admin can get access to all users
-    if (req.user.access === 'admin') {
-        let user = {};
-        if (req.body.id && req.body.id != req.user.id) {
-            user = db_users.getById(req.body.id);
-        } else if (req.body.username && req.body.username != req.user.username) {
-            user = db_users.getByUsername(req.body.username);
+    try {
+        if (req.user.access === 'admin') {
+            let user = {};
+            if (req.body.id && req.body.id != req.user.id) {
+                user = await users_db.getById(req.body.id);
+            } else if (req.body.username && req.body.username != req.user.username) {
+                user = await users_db.getByUsername(req.body.username);
+            } else {
+                //get self info
+                user = req.user;
+            }
+            res.json({success: user ? true : false, user: user ? api.collectUserInfo(user) : {}}).send();
         } else {
-            //get self info
-            user = req.user;
+            //user can get only his info
+            res.json({success: true, user: api.collectUserInfo(req.user)}).send();
         }
-        res.json({success: user ? true : false, user: user ? api.collectUserInfo(req.user) : {}}).send();
+    }
+    catch (e) {
+        res.status(400).json({success: false, message: "bad id"}).send();
+    }
+}
+api.delete = (users_db) => async (req, res, next) => {
+    let targetid = "";
+    try {
+        targetid = getTarget(req);
+    } catch (err) {
+        res.status(400).json({success: false, message: 'target required, use `.` to self-ref'}).send();
+    }
+    let client = req.user;
+    if (((targetid === client.id) || client.access === 'admin')) {
+        //get target to modify
+        try {
+            await users_db.removeById(targetid);
+            res.status(200).json({success: true}).send();
+        } catch (e) {
+            console.log('error', e);
+            res.status(400).json({success: false, message: "bad target id"}).send();
+        }
+    } else {
+        res.status(403).json({success: false, message: 'Access denied'}).send();
+    }
+}
+
+api.list = (user_db) => async (req, res, next) => {
+    console.log('list', req.user);
+    //admin can get access to all users
+    if (req.user.access === 'admin') {
+        try {
+            let users = await user_db.getAll();
+            let resultJSON = [];
+            users.forEach((data) => {
+                "use strict";
+                if (data) {
+                    resultJSON.push(api.collectUserInfo(data));
+                }
+            })
+            res.json({success: true, users: resultJSON}).send();
+        } catch (e) {
+            res.status(400).json({success: false}).send();
+        }
     } else {
         //user can get only his info
-        res.json({success: true, user: api.collectUserInfo(req.user)}).send();
+        res.status(403).json({success: false, message: "Access denied"}).send();
     }
 }
 module.exports = api;

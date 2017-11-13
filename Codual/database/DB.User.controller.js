@@ -25,8 +25,8 @@ module.exports.size = function () {
     return db.size(User);
 }
 
-module.exports.remove = function (id) {
-    return db.remove(id, User).exec();
+module.exports.removeById = function (id) {
+    return db.removeById(id, User).exec();
 }
 
 module.exports.find = function (query) {
