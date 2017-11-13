@@ -21,14 +21,34 @@ api.login = (user_db) => async (req, res, next) => {
         }
     })(req, res, next);
 }
-api.verify = async function (req, res, next) {
-    await passport.authenticate('jwt', function (err, user) {
-        if (user) {
-            res.json({status: true});
-        } else {
-            res.status(401).json({status: false, msg: 'No such user'});
-        }
-    })(req, res, next);
-}
 
+api.authenticate = async (req, res, next) => {
+    return new Promise((resolve, reject) => {
+        passport.authenticate('jwt', function (err, user) {
+            req.user = user;
+            resolve(user);
+        })(req, res);
+    });
+};
+api.verify = async function (req, res, next) {
+    if (await api.authenticate(req, res)) {
+        res.json({success: true});
+    } else {
+        res.status(401).json({success: false});
+    }
+    res.send();
+}
+api.verifyAdmin = (user_db) => async (req, res, next) => {
+    if (await api.authenticate(req, res)) {
+        res.json({success: true, admin: req.user.access === 'admin'});
+    } else {
+        res.status(401).json({success: false});
+    }
+    res.send();
+
+}
+api.update = (user_db) => async (req, res, next) => {
+
+
+}
 module.exports = api;

@@ -10,7 +10,7 @@ module.exports = (passport) => {
         secretOrKey: config.secret,
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
         // authScheme: 'Bearer',
-        session: config.session
+        session: true
     };
     passport.use(new LocalStrategy({
         usernameField: 'username',
@@ -39,10 +39,21 @@ module.exports = (passport) => {
         });
     }));
     passport.serializeUser(function (user, done) {
-        done(null, user);
+        console.log('serialize', user);
+        done(null, user.id);
     });
 
-    passport.deserializeUser(function (obj, done) {
-        done(null, obj);
+    passport.deserializeUser(async function (id, done) {
+        console.log('deserialize', id);
+        try {
+            let user = await user_db.getById(id);
+            if (!user) {
+                done(`no such user ${id}`);
+            } else {
+                done(null, user);
+            }
+        } catch (e) {
+            done(e);
+        }
     });
 }
