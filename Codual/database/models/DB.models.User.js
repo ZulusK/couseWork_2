@@ -31,7 +31,21 @@ userShema.pre('save', async function (next) {
         return next();
     }
 });
+const allowed_fields = Object.keys(userShema.paths);
+const blocked_fields = ['_id', 'id', 'publications'];
 
+userShema.methods.set = function (values, adminAccess) {
+    for (let field_name in values) {
+        //check, name os correct
+        if (allowed_fields.indexOf(field_name) >= 0 && blocked_fields.indexOf(field_name) < 0) {
+            if (field_name !== 'access' || adminAccess) {
+                console.log(field_name, '=', this[field_name], '->', values[field_name]);
+                this[field_name] = values[field_name];
+            }
+        }
+    }
+    return this.save();
+}
 userShema.methods.comparePassword = function (password) {
     return utils.crypto.compare(password, this.password);
 };

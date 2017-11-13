@@ -1,5 +1,6 @@
 const User = require('@CodualDBModels/DB.models.User'),
     db = require('./DB.controller');
+
 //create new entity
 module.exports.create = function (firstName, contact, access, username, password) {
     let params = {
@@ -35,7 +36,7 @@ module.exports.getByUsername = function (username) {
     return db.findOne({"username": username}, User);
 }
 module.exports.select = function (query) {
-    return db.find(query, Model).exec();
+    return db.find(query, User).exec();
 }
 
 module.exports.addPublication = async function (user_id, publ_id) {

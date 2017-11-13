@@ -2,6 +2,6 @@
 
 module.exports = (app) => {
     app.route('/')
-        .get((req, res) => res.send('Codual Website'));
+        .get((req, res) => res.render('index'));
 }
 
