@@ -49,7 +49,7 @@ api.signup = (db_users) => async (req, res) => {
                 'user',
                 req.body.username,
                 req.body.password);
-            res.json({success: true, message: 'Account created successfully'});
+            res.json({success: true, message: 'Account created successfully', });
         } catch (e) {
             res.status(400).json({success: false, message: 'Username already exists.'});
         }
