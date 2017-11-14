@@ -117,16 +117,6 @@ api.update = (publication_db) => async (req, res, next) => {
 }
 
 api.list = (publication_db) => async (req, res, next) => {
-    if (req.user.publications.length == 0) {
-        return res.json({
-            success: true,
-            page: 1,
-            count: 0,
-            limit: process.env.PAGINATE_LIMIT_MAX,
-            total: 0,
-            items: []
-        }).send();
-    }
     let query = {_id: {$in: req.user.publications}};
     try {
         let pagination = await publication_db.find(query, req.body.page, req.body.limit, req.body.sort);
@@ -148,4 +138,31 @@ api.list = (publication_db) => async (req, res, next) => {
     }
 }
 
+
+api.delete = (publication_db, user_db) => async (req, res, next) => {
+    let targetid = "";
+    try {
+        targetid = getTarget(req);
+    } catch (err) {
+        return res.status(400).json({success: false, message: 'target required'}).send();
+    }
+    try {
+        //get target
+        let target = await publication_db.getById(targetid);
+        if (!target) {
+            return res.status(400).json({success: false, message: "bad target id"}).send();
+        } else if (target.isAuthor(req.user) || req.user.access === 'admin') {
+            //get owner of target
+            let owner = await user_db.getById(target.author);
+            //remove publication
+            await owner.removePublication(target);
+            await target.remove();
+            return res.status(200).json({success: true}).send();
+        } else {
+            return res.status(403).json({success: false, message: 'Access denied'}).send();
+        }
+    } catch (e) {
+        return res.status(500).json({success: false, message: "server error"}).send();
+    }
+}
 module.exports = api;

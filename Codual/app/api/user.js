@@ -12,7 +12,7 @@ api.setup = (db_users) => async (req, res) => {
         console.log('Admin account was succesfully set up');
         res.json({success: true});
     } catch (e) {
-        console.log(`-error '${e}'`);
+        // console.log(`-error '${e}'`);
         res.status(500).json({success: false});
     }
 }

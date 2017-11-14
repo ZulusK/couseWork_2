@@ -8,7 +8,6 @@ module.exports = (app) => {
     const API = app.api;
     let router_publ = express.Router();
     router_publ.get('/', (req, res) => res.send('Codual API publications'));
-    //REMOVE
     //ROOT
     router_publ.post('/', (req, res) => res.send('Codual publications API'));
     //ADD
@@ -19,7 +18,9 @@ module.exports = (app) => {
     router_publ.put('/update', passport.authenticate('jwt', config.session), API.publication.update(publ_db));
     //GET OWN
     router_publ.post('/list', passport.authenticate('jwt', config.session), API.publication.list(publ_db));
-    // router_publ.post('/is/logined', API.auth.verify);
+    //REMOVE
+    router_publ.delete('/delete', passport.authenticate('jwt', config.session), API.publication.delete(publ_db,user_db));
+
 
     app.use('/api/v1/publications', router_publ);
 }

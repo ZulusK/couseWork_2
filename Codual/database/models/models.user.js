@@ -58,7 +58,7 @@ userShema.methods.removePublication = async function (publication) {
         }
         this.save();
     } else {
-        throw `this user${this.username} is not author of publication${publication.title}`;
+        throw `${this.access} this user ${this.username} is not author of publication${publication.title}`;
     }
 }
 

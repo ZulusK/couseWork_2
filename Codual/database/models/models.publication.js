@@ -33,6 +33,7 @@ publictionShema.methods.setAuthor = async function (newAuthor) {
 
 publictionShema.pre('remove', function (next) {
     console.log('remove publications', this.title, this._id);
+    next();
 });
 
 publictionShema.pre('save', function (next) {
@@ -46,7 +47,7 @@ publictionShema.pre('save', function (next) {
 });
 
 publictionShema.methods.isAuthor = function (user) {
-    return this.author.id === user.id;
+    return this.author == user.id;
 };
 
 
