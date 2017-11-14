@@ -34,7 +34,7 @@ app.use(logger('dev'));
 app.use(passport.initialize());
 app.set('codualsecret', config.secret);
 //add routers to app
-consign({cwd: 'src/app'})
+consign({cwd: 'server/app'})
     .include('/api')
     .then('/routes')
     .then('../Utils.js')
@@ -42,7 +42,7 @@ consign({cwd: 'src/app'})
 
 // setup response with vue UI
 app.get('/*', (req, res, next) => {
-    res.sendFile(path.join(__dirname, "..", "views", '/index.html'));
+    res.sendFile(path.join(__dirname, "views", '/index.html'));
 });
 
 // catch 404 and forward to error handler

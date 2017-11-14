@@ -1,6 +1,9 @@
 const api = {};
 const ObjectID = require('mongoose').Types.ObjectId;
-api.setup = (db_users) => async (req, res) => {
+const userDB = require("@CodualDB/controllers/controller.user");
+
+
+api.setup = async (req, res) => {
     try {
         await db_users.create(
             "admin",
@@ -17,28 +20,59 @@ api.setup = (db_users) => async (req, res) => {
     }
 }
 
-api.signup = (db_users) => async (req, res) => {
+api.signup = async (req, res) => {
     // console.log(req.body);
-    if (!req.body.username || !req.body.password || !req.body.name) res.json({
-        success: false,
-        message: 'Please, pass a name,username and password.'
-    });
-    else {
-        try {
-            await db_users.create(
-                req.body.name,
-                req.body.contact,
-                'user',
-                req.body.username,
-                req.body.password);
-            res.json({success: true, message: 'Account created successfully',});
-        } catch (e) {
-            res.status(400).json({success: false, message: 'Username already exists.'});
+    try {
+        if (!req.body.username || !req.body.password || !req.body.name) {
+            res.status(400).json({
+                success: false,
+                message: 'Please, pass a name,username and password.'
+            }).end();
         }
+        if (!userDB.verifyPassword(req.body.password)) {
+            res.status(400).json({
+                success: false,
+                message: 'Please, use only characters A-z, 0-9 in your password, it should contain more than 8 symbols'
+            }).end();
+        }
+        if (!userDB.verifyPassword(req.body.username)) {
+            res.status(400).json({
+                success: false,
+                message: 'Username should start with A-z, and contains only characters _, A-z, 0-9 at all'
+            }).end();
+        }
+        if (!userDB.verifyName(req.body.name.trim)) {
+            res.status(400).json({
+                success: false,
+                message: 'Please, use only letters in your name'
+            }).end();
+        }
+        else {
+            try {
+                await db_users.create(
+                    req.body.name.trim(),
+                    req.body.contact,
+                    'user',
+                    req.body.username,
+                    req.body.password);
+                res.json({success: true, message: 'Account created successfully',}).end();
+            } catch (e) {
+                res.status(400).json({
+                    success: false,
+                    message: `This username ${req.body.username.trim()}already exists.`
+                }).end();
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            success: false,
+            message: `Smth going wrong`
+        }).end();
     }
 }
 
-function getTarget(req) {
+function getTarget (req) {
     if (!req.body.target) {
         throw null;
     } else {
@@ -50,7 +84,7 @@ function getTarget(req) {
     }
 }
 
-api.update = (users_db) => async (req, res, next) => {
+api.update = (userDB) => async (req, res, next) => {
     if (!req.body.values) {
         res.status(400).json({success: false, message: 'values required'}).send();
     }
@@ -65,7 +99,7 @@ api.update = (users_db) => async (req, res, next) => {
     if (((targetid === client.id) || client.access === 'admin')) {
         //get target to modify
         try {
-            let target = (targetid === client.id) ? client : await users_db.getById(targetid);
+            let target = (targetid === client.id) ? client : await userDB.getById(targetid);
             await target.set(JSON.parse(req.body.values), client.access == 'admin');
             return res.status(200).json({success: true}).send();
         } catch (e) {
@@ -88,16 +122,16 @@ api.collectUserInfo = (user) => {
         id: user.id || api.placeholder
     };
 }
-api.info = (users_db) => async (req, res, next) => {
+api.info = async (req, res, next) => {
     // console.log('info', req.user);
     //admin can get access to all users
     try {
         if (req.user.access === 'admin') {
             let user = {};
             if (req.body.id && req.body.id != req.user.id) {
-                user = await users_db.getById(req.body.id);
+                user = await userDB.getById(req.body.id);
             } else if (req.body.username && req.body.username != req.user.username) {
-                user = await users_db.getByUsername(req.body.username);
+                user = await userDB.getByUsername(req.body.username);
             } else {
                 //get self info
                 user = req.user;
@@ -112,7 +146,7 @@ api.info = (users_db) => async (req, res, next) => {
         return res.status(400).json({success: false, message: "bad id"}).send();
     }
 }
-api.delete = (users_db) => async (req, res, next) => {
+api.delete = async (req, res, next) => {
     let targetid = "";
     try {
         targetid = getTarget(req);
@@ -123,7 +157,7 @@ api.delete = (users_db) => async (req, res, next) => {
     if (((targetid === client.id) || client.access === 'admin')) {
         //get target to modify
         try {
-            await users_db.removeById(targetid);
+            await userDB.removeById(targetid);
             return res.status(200).json({success: true}).send();
         } catch (e) {
             console.log('error', e);
@@ -134,12 +168,12 @@ api.delete = (users_db) => async (req, res, next) => {
     }
 }
 
-api.list = (user_db) => async (req, res, next) => {
+api.list = async (req, res, next) => {
     // console.log('list', req.user);
     //admin can get access to all users
     if (req.user.access === 'admin') {
         try {
-            let pagination = await user_db.getAll(req.body.page, req.body.limit, {username: 1});
+            let pagination = await userDB.getAll(req.body.page, req.body.limit, {username: 1});
             let users = pagination.docs;
             let resultJSON = [];
             users.forEach((data) => {
@@ -147,7 +181,7 @@ api.list = (user_db) => async (req, res, next) => {
             });
             return res.json({
                 success: true,
-                count:resultJSON.length,
+                count: resultJSON.length,
                 page: pagination.page,
                 limit: pagination.limit,
                 total: pagination.total,

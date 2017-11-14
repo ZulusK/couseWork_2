@@ -44,25 +44,14 @@ module.exports.getAllPublications = function (user) {
     return Promise.all(allPublications);
 }
 
-//
-// module.exports.addPublication = async function (user_id, publ_id) {
-//     let user = await this.getById(user_id);
-//     user.publications.push(publ_id);
-//     return user.save();
-// }
-//
-// module.exports.removePublication = async function (user_id, publ_id) {
-//     let user = await
-//         this.getById(user_id);
-//     if (user) {
-//         let index = user.publications.indexOf(publ_id);
-//         if (index >= 0) {
-//             user.publications.splice(index, 1);
-//             return user.save();
-//         } else {
-//             throw `wrong publication id ${publ_id}`;
-//         }
-//     } else {
-//         throw `wrong user id ${publ_id}`;
-//     }
-// }
+module.exports.verifyPassword = function (password) {
+    return /^[a-z0-9]+$/i.test(password) && password.length >= 1;
+}
+
+module.exports.verifyUsername = function (username) {
+    return /^[a-z][a-z0-9_]+$/i.test(username);
+}
+
+module.exports.verifyName = function (name) {
+    return /^[a-z ]+$/i.test(name);
+}

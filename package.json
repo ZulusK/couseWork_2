@@ -6,18 +6,18 @@
     "node": "9.0.0"
   },
   "scripts": {
-    "start": "node ./src/bin/www",
-    "devstart": "nodemon ./src/bin/www"
+    "start": "node ./server/bin/www",
+    "devstart": "nodemon ./server/bin/www"
   },
   "_moduleAliases": {
     "@root": ".",
-    "@Coudal": "./src/",
-    "@CodualAPI": "./src/app/api",
-    "@CodualDB": "./src/database/",
-    "@CodualDBModels": "./src/database/models",
-    "@CodualRoutes": "./src/app/routes",
-    "@config": "./src/config/",
-    "@utils": "./src/Utils.js"
+    "@Coudal": "./server/",
+    "@CodualAPI": "./server/app/api",
+    "@CodualDB": "./server/database/",
+    "@CodualDBModels": "./server/database/models",
+    "@CodualRoutes": "./server/app/routes",
+    "@config": "./server/config/",
+    "@utils": "./server/Utils.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -46,7 +46,7 @@
       "src/views/*",
       ".git",
       ".gitignore",
-      ".README.nd"
+      "README.nd"
     ]
   }
 }

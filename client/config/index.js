@@ -1,5 +1,5 @@
 'use strict'
-// Template version: 1.2.1
+// Template version: 1.2.3
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
@@ -23,7 +23,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: false,
+    useEslint: true,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
@@ -50,10 +50,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../../server/public/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../../server/public'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

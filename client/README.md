@@ -1,6 +1,6 @@
-# client
+# codual.client
 
-> A Vue.js project
+> My term (third) work
 
 ## Build Setup
 
