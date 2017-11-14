@@ -17,24 +17,6 @@ api.setup = (db_users) => async (req, res) => {
     }
 }
 
-api.index = (db_users, token) => async (req, res) => {
-    const token = token;
-    if (token) {
-        try {
-            let users = await db_users.getAll();
-            if (users) {
-                res.status(200).json(users);
-            } else {
-                res.status(404).json({success: false});
-            }
-        } catch (e) {
-            res.status(500).json({success: false});
-        }
-    } else {
-        res.status(403).send({success: false, message: 'Unauthorized'});
-    }
-}
-
 api.signup = (db_users) => async (req, res) => {
     // console.log(req.body);
     if (!req.body.username || !req.body.password || !req.body.name) res.json({
@@ -157,16 +139,21 @@ api.list = (user_db) => async (req, res, next) => {
     //admin can get access to all users
     if (req.user.access === 'admin') {
         try {
-            let users = await user_db.getAll();
+            let pagination = await user_db.getAll(req.body.page, req.body.limit, {username: 1});
+            let users = pagination.docs;
             let resultJSON = [];
             users.forEach((data) => {
-                "use strict";
-                if (data) {
-                    resultJSON.push(api.collectUserInfo(data));
-                }
-            })
-            res.json({success: true, users: resultJSON}).send();
+                resultJSON.push(api.collectUserInfo(data));
+            });
+            res.json({
+                success: true,
+                items: resultJSON,
+                page: pagination.page,
+                limit: pagination.limit,
+                total: pagination.total
+            }).send();
         } catch (e) {
+            console.log(e);
             res.status(400).json({success: false}).send();
         }
     } else {

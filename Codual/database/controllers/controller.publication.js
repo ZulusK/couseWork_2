@@ -14,8 +14,8 @@ module.exports.create = function (title, description, author, difficult, tags, t
     return db.create(params, Publication);
 }
 
-module.exports.getAll = function () {
-    return db.getAll(Publication);
+module.exports.getAll = function (page, limit, sort) {
+    return db.getAll(Publication, page, limit, sort);
 }
 
 module.exports.getById = function (id) {
@@ -31,8 +31,7 @@ module.exports.removeById = function (id) {
     return target.remove();
 }
 
-module.exports.find = function (query) {
-    return db.find(query, Publication).exec();
+module.exports.find = function (query, page, limit, sort) {
+    return db.find(query, Publication, page, limit, sort);
 }
-
 

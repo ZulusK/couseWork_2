@@ -17,6 +17,14 @@ module.exports.connect = (mongoose, config) => {
     });
 };
 
+function getOptions(page, limit, sort) {
+    return {
+        page: Number(page) || 1,
+        limit: Number(limit) || Number(process.env.PAGINATE_LIMIT_MAX),
+        sort: sort || {_id: 1}
+    };
+}
+
 //create new entity
 module.exports.create = function (params, model) {
     let entity = new model(params);
@@ -31,13 +39,14 @@ module.exports.create = function (params, model) {
     });
 }
 
-module.exports.getAll = function (model) {
-    return model.find().exec();
+module.exports.getAll = function (model, page, limit, sort) {
+    return model.paginate({}, getOptions(page, limit, sort));
 }
 
 module.exports.getById = function (id, model) {
     return model.findById(id).exec();
 }
+
 module.exports.findOne = function (query, model) {
     return model.findOne(query).exec();
 }
@@ -51,8 +60,8 @@ module.exports.removeById = function (id, model) {
     return target.remove();
 }
 
-module.exports.find = function (query, model) {
-    return model.find(query).exec();
+module.exports.find = function (query, model, page, limit, sort) {
+    return model.paginate(query, getOptions(page, limit, sort));
 }
 
 

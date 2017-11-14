@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
-    utils = require('@utils');
+    utils = require('@utils'),
+    mongoosePaginate = require('mongoose-paginate');
 
 
 const userShema = mongoose.Schema({
@@ -18,6 +19,7 @@ const userShema = mongoose.Schema({
     }
 });
 userShema.index({'username': 1}, {unique: true});
+userShema.plugin(mongoosePaginate);
 
 userShema.pre('save', async function (next) {
     if (this.isModified('password') || this.isNew) {

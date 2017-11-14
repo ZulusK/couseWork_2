@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
-    utils = require('../../Utils');
+    utils = require('../../Utils'),
+    mongoosePaginate = require('mongoose-paginate');
 
 
 const publictionShema = mongoose.Schema({
@@ -18,7 +19,7 @@ const publictionShema = mongoose.Schema({
     description: String,
     tags: [String]
 });
-
+publictionShema.plugin(mongoosePaginate);
 
 publictionShema.methods.removeAuthor = async function () {
     this.author = null;

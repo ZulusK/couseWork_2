@@ -13,8 +13,8 @@ module.exports.create = function (firstName, contact, access, username, password
     return db.create(params, User);
 }
 
-module.exports.getAll = function () {
-    return db.getAll(User);
+module.exports.getAll = function (page, limit, sort) {
+    return db.getAll(User, page, limit, sort);
 }
 
 module.exports.getById = function (id) {
@@ -30,9 +30,10 @@ module.exports.removeById = function (id) {
     return target.remove();
 }
 
-module.exports.find = function (query) {
-    return db.find(query, User).exec();
+module.exports.find = function (query, page, limit, sort) {
+    return db.find(query, User, page, limit, sort);
 }
+
 module.exports.getByUsername = function (username) {
     return db.findOne({"username": username}, User);
 }

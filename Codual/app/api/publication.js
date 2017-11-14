@@ -26,30 +26,56 @@ api.create = (publications_db) => async (req, res, next) => {
         );
         console.log(publication);
         await client.addPublication(publication);
-        res.json({success: true, publication: publication}).send();
+        return res.json({success: true, publication: publication}).send();
     } catch (e) {
-        res.status(500).json({success: false}).send();
+        return res.status(500).json({success: false}).send();
     }
 }
+api.placeholder = "none";
+
+function collectPublicationData(data) {
+    return {
+        title: data.title || api.placeholder,
+        author: data.author || api.placeholder,
+        tags: data.tags || api.placeholder,
+        id: data._id || api.placeholder,
+        description: data.description || api.placeholder,
+        text: data.text || api.placeholder,
+        difficult: data.difficult || api.placeholder
+    };
+}
+
 
 api.get = (publication_db) => async (req, res, next) => {
     if (req.body.target) {
         let query = {};
         //parse target
         try {
-            query = JSON.parse(req.body.target);
+            query = req.body.target;
         } catch (e) {
-            res.status(400).json({success: false, message: "bad target, use JSON"}).send();
+            return res.status(400).json({success: false, message: "bad target, use JSON"}).send();
         }
         try {
-            let publications = await publication_db.find(query);
-            res.json({success: true, items: publications}).send();
+            let pagination = await publication_db.find(query, req.body.page, req.body.limit, req.body.sort);
+            let publications = [];
+            pagination.docs.forEach((data) => {
+                publications.push(collectPublicationData(data));
+            })
+            res.json({
+                success: true,
+                items: publications,
+                page: pagination.page,
+                limit: pagination.limit,
+                total: pagination.total
+            }).send();
         } catch (e) {
-            res.status(400).json({success: false, message: "bad query"}).send();
+            console.log(e);
+            return res.status(400).json({success: false, message: "bad query"}).send();
         }
-
     } else {
-        res.status(400).json({success: false, message: "bad arguments, target did not found"}).send();
+        return res.status(400).json({success: false, message: "bad arguments, target did not found"}).send();
     }
 }
+
+
 module.exports = api;
