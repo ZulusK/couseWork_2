@@ -9,34 +9,24 @@ function parseTags(str) {
     return JSON.parse(str || "[]");
 }
 
-function checkReq(req) {
-    return
-    req.body.title &&
-    req.body.description &&
-    req.body.difficult &&
-    req.body.text;
-}
-
 api.create = (publications_db) => async (req, res, next) => {
-    if (!checkReq(req)) {
-        res.status(400).json({success: false, message: "bad arguments"}).send();
-    }
-
+    // if (!checkReq(req)) {
+    //     res.status(400).json({success: false, message: "bad arguments"}).send();
+    // }
     req.body.tags = parseTags(req.body.tags);
-
     try {
         let client = req.user;
         let publication = await publications_db.create(
             req.body.title,
             req.description,
             client._id,
-            req.difficult,
-            req.tags,
-            req.text
+            req.body.difficult,
+            req.body.tags,
+            req.body.text
         );
-
-        client.addPublication(publication);
-        res.json({success: true, publication: publication._id}).send();
+        console.log(publication);
+        await client.addPublication(publication);
+        res.json({success: true, publication: publication}).send();
     } catch (e) {
         res.status(500).json({success: false}).send();
     }
@@ -44,9 +34,22 @@ api.create = (publications_db) => async (req, res, next) => {
 
 api.get = (publication_db) => async (req, res, next) => {
     if (req.body.target) {
+        let query = {};
+        //parse target
+        try {
+            query = JSON.parse(req.body.target);
+        } catch (e) {
+            res.status(400).json({success: false, message: "bad target, use JSON"}).send();
+        }
+        try {
+            let publications = await publication_db.find(query);
+            res.json({success: true, items: publications}).send();
+        } catch (e) {
+            res.status(400).json({success: false, message: "bad query"}).send();
+        }
 
     } else {
-
+        res.status(400).json({success: false, message: "bad arguments, target did not found"}).send();
     }
 }
 module.exports = api;

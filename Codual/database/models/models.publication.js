@@ -35,10 +35,10 @@ publictionShema.pre('remove', function (next) {
 
 publictionShema.pre('save', function (next) {
     if (this.isNew) {
-        this.Date = Date.now().toLocaleString();
-        this.editedOn = new Date().now().toLocaleString();
+        this.createdOn = Date.now().toLocaleString();
+        this.editedOn = Date.now().toLocaleString();
     } else {
-        this.editedOn = new Date().now().toLocaleString();
+        this.editedOn = Date.now().toLocaleString();
     }
     next();
 });

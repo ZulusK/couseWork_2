@@ -60,11 +60,12 @@ userShema.methods.removePublication = async function (publication) {
     }
 }
 
-userShema.methods.addPublication = function (publication) {
-    if (this.publications.indexOf(publication._id) < 0) {
-        this.publications.push(publication._id);
+userShema.methods.addPublication = function (publicationid) {
+    if (this.publications.indexOf(publicationid) < 0) {
+        this.publications.push(publicationid);
+        return this.save();
     } else {
-        throw `publication${publication.title} is already exist in ${this._id}`;
+        throw `publication${publicationid} is already exist in ${this._id}`;
     }
 }
 
