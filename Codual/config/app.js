@@ -23,6 +23,7 @@ app.set('views', path.resolve(__dirname, "..", "views"));    //configure path to
 app.set('view engine', 'ejs');  //choose template engine
 
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));    //configure favicons
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -33,8 +34,8 @@ app.use(logger('dev'));
 app.use(passport.initialize());
 app.set('codualsecret', config.secret);
 consign({cwd: 'Codual/app'})
-    .include('/api')
-    .then('/routes')
+    // .include('/api')
+    // .then('/routes')
     .then('../Utils.js')
     .into(app);
 
@@ -45,6 +46,13 @@ consign({cwd: 'Codual/app'})
 // app.use('/api/v1', require('@CodualRoutes/api.v1'));
 
 // catch 404 and forward to error handler
+// app.use("dist",express.static(path.resolve(__dirname,"./client/dist")))
+
+app.all("/*", (req, res, next) => {
+    console.log("AAAAAAA");
+    res.sendFile(path.join(__dirname,"..","views",'/index.html'));
+});
+
 app.use(function (req, res, next) {
     let err = new Error('Not Found');
     err.status = 404;

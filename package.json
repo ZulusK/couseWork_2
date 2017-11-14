@@ -6,8 +6,8 @@
     "node": "9.0.0"
   },
   "scripts": {
-    "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www"
+    "start": "node ./Codual/bin/www",
+    "devstart": "nodemon ./Codual/bin/www"
   },
   "_moduleAliases": {
     "@root": ".",
