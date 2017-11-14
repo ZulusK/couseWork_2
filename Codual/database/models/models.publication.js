@@ -3,14 +3,13 @@ const mongoose = require('mongoose'),
 
 
 const publictionShema = mongoose.Schema({
-    Title: {type: String, required: true},
+    title: {type: String, required: true},
     createdOn: Date,
     editedOn: Date,
-    views: Number,
+    views: {type: Number, default: 0},
     difficult: Number,
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
+        type: mongoose.Schema.Types.ObjectId
     },
     text: {
         type: String,
@@ -20,16 +19,29 @@ const publictionShema = mongoose.Schema({
     tags: [String]
 });
 
+
+publictionShema.methods.removeAuthor = async function () {
+    this.author = null;
+    return this.save();
+}
+publictionShema.methods.setAuthor = async function (newAuthor) {
+    this.author = newAuthor.id();
+    return this.save();
+}
+
+publictionShema.pre('remove', function (next) {
+    console.log('remove publications', this.title, this._id);
+});
+
 publictionShema.pre('save', function (next) {
     if (this.isNew) {
         this.Date = Date.now().toLocaleString();
+        this.editedOn = new Date().now().toLocaleString();
+    } else {
+        this.editedOn = new Date().now().toLocaleString();
     }
     next();
 });
-publictionShema.pre('update', function (next) {
-    this.editedOn = new Date().now().toLocaleString();
-    next();
-})
 
 publictionShema.methods.isAuthor = function (user) {
     return this.author.id === user.id;

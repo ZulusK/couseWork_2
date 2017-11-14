@@ -36,7 +36,7 @@ api.index = (db_users, token) => async (req, res) => {
 }
 
 api.signup = (db_users) => async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     if (!req.body.username || !req.body.password || !req.body.name) res.json({
         success: false,
         message: 'Please, pass a name,username and password.'
@@ -107,7 +107,7 @@ api.collectUserInfo = (user) => {
     };
 }
 api.info = (users_db) => async (req, res, next) => {
-    console.log('info', req.user);
+    // console.log('info', req.user);
     //admin can get access to all users
     try {
         if (req.user.access === 'admin') {
@@ -153,7 +153,7 @@ api.delete = (users_db) => async (req, res, next) => {
 }
 
 api.list = (user_db) => async (req, res, next) => {
-    console.log('list', req.user);
+    // console.log('list', req.user);
     //admin can get access to all users
     if (req.user.access === 'admin') {
         try {

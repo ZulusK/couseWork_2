@@ -3,7 +3,7 @@ const PassportJWT = require('passport-jwt'),
     JWTStrategy = PassportJWT.Strategy,
     config = require('./index.js'),
     LocalStrategy = require('passport-local').Strategy,
-    user_db = require('@CodualDB/DB.User.controller');
+    user_db = require('@CodualDB/controllers/controller.user');
 
 module.exports = (passport) => {
     const parameters = {

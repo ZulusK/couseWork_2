@@ -13,7 +13,7 @@ let express = require('express'),
     passportConfig = require('./passport')(passport),
     // jwt = require('jsonwebtoken'),
     config = require('./index'),
-    databaseController = require('../database/DB.controller').connect(mongoose, config);
+    databaseController = require('@CodualDB//controllers/controller').connect(mongoose, config);
 
 app = express();
 

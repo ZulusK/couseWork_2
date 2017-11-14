@@ -55,9 +55,6 @@ module.exports.find = function (query, model) {
     return model.find(query).exec();
 }
 
-module.exports.select = function (query, model) {
-    return model.find(query).exec();
-}
 
 module.exports.update = async function (id, field, value, model) {
     if (["id", "_id"].indexOf(field) >= 0) {

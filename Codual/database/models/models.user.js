@@ -46,6 +46,28 @@ userShema.methods.set = function (values, adminAccess) {
     }
     return this.save();
 }
+
+userShema.methods.removePublication = async function (publication) {
+    if (publication.isAuthor(this)) {
+        publication.removeAuthor();
+        let index = this.publications.indexOf(publication._id);
+        if (index >= 0) {
+            this.publications.splice(index, 1);
+        }
+        this.save();
+    } else {
+        throw `this user${this.username} is not author of publication${publication.title}`;
+    }
+}
+
+userShema.methods.addPublication = function (publication) {
+    if (this.publications.indexOf(publication._id) < 0) {
+        this.publications.push(publication._id);
+    } else {
+        throw `publication${publication.title} is already exist in ${this._id}`;
+    }
+}
+
 userShema.methods.comparePassword = function (password) {
     return utils.crypto.compare(password, this.password);
 };
