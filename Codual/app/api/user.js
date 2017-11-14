@@ -67,13 +67,13 @@ api.update = (users_db) => async (req, res, next) => {
         try {
             let target = (targetid === client.id) ? client : await users_db.getById(targetid);
             await target.set(JSON.parse(req.body.values), client.access == 'admin');
-            res.status(200).json({success: true}).send();
+            return res.status(200).json({success: true}).send();
         } catch (e) {
             console.log('error', e);
-            res.status(400).json({success: false, message: "bad field's names or target id"}).send();
+            return res.status(400).json({success: false, message: "bad field's names or target id"}).send();
         }
     } else {
-        res.status(403).json({success: false, message: 'Access denied'}).send();
+        return res.status(403).json({success: false, message: 'Access denied'}).send();
     }
 }
 api.placeholder = "none";
@@ -102,14 +102,14 @@ api.info = (users_db) => async (req, res, next) => {
                 //get self info
                 user = req.user;
             }
-            res.json({success: user ? true : false, user: user ? api.collectUserInfo(user) : {}}).send();
+            return res.json({success: user ? true : false, user: user ? api.collectUserInfo(user) : {}}).send();
         } else {
             //user can get only his info
-            res.json({success: true, user: api.collectUserInfo(req.user)}).send();
+            return res.json({success: true, user: api.collectUserInfo(req.user)}).send();
         }
     }
     catch (e) {
-        res.status(400).json({success: false, message: "bad id"}).send();
+        return res.status(400).json({success: false, message: "bad id"}).send();
     }
 }
 api.delete = (users_db) => async (req, res, next) => {
@@ -117,20 +117,20 @@ api.delete = (users_db) => async (req, res, next) => {
     try {
         targetid = getTarget(req);
     } catch (err) {
-        res.status(400).json({success: false, message: 'target required, use `.` to self-ref'}).send();
+        return res.status(400).json({success: false, message: 'target required, use `.` to self-ref'}).send();
     }
     let client = req.user;
     if (((targetid === client.id) || client.access === 'admin')) {
         //get target to modify
         try {
             await users_db.removeById(targetid);
-            res.status(200).json({success: true}).send();
+            return res.status(200).json({success: true}).send();
         } catch (e) {
             console.log('error', e);
-            res.status(400).json({success: false, message: "bad target id"}).send();
+            return res.status(400).json({success: false, message: "bad target id"}).send();
         }
     } else {
-        res.status(403).json({success: false, message: 'Access denied'}).send();
+        return res.status(403).json({success: false, message: 'Access denied'}).send();
     }
 }
 
@@ -145,20 +145,21 @@ api.list = (user_db) => async (req, res, next) => {
             users.forEach((data) => {
                 resultJSON.push(api.collectUserInfo(data));
             });
-            res.json({
+            return res.json({
                 success: true,
-                items: resultJSON,
+                count:resultJSON.length,
                 page: pagination.page,
                 limit: pagination.limit,
-                total: pagination.total
+                total: pagination.total,
+                items: resultJSON
             }).send();
         } catch (e) {
             console.log(e);
-            res.status(400).json({success: false}).send();
+            return res.status(400).json({success: false}).send();
         }
     } else {
         //user can get only his info
-        res.status(403).json({success: false, message: "Access denied"}).send();
+        return res.status(403).json({success: false, message: "Access denied"}).send();
     }
 }
 module.exports = api;

@@ -8,15 +8,17 @@ module.exports = (app) => {
     const API = app.api;
     let router_publ = express.Router();
     router_publ.get('/', (req, res) => res.send('Codual API publications'));
-    //GET BY ID
     //REMOVE
-    //UPDATE
+    //ROOT
     router_publ.post('/', (req, res) => res.send('Codual publications API'));
     //ADD
     router_publ.post('/create', passport.authenticate('jwt', config.session), API.publication.create(publ_db));
     //GET BY QUERY
     router_publ.post('/find', passport.authenticate('jwt', config.session), API.publication.get(publ_db));
-
+    //UPDATE
+    router_publ.put('/update', passport.authenticate('jwt', config.session), API.publication.update(publ_db));
+    //GET OWN
+    router_publ.post('/list', passport.authenticate('jwt', config.session), API.publication.list(publ_db));
     // router_publ.post('/is/logined', API.auth.verify);
 
     app.use('/api/v1/publications', router_publ);
