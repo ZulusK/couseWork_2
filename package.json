@@ -6,18 +6,18 @@
     "node": "9.0.0"
   },
   "scripts": {
-    "start": "node ./Codual/bin/www",
-    "devstart": "nodemon ./Codual/bin/www"
+    "start": "node ./src/bin/www",
+    "devstart": "nodemon ./src/bin/www"
   },
   "_moduleAliases": {
     "@root": ".",
-    "@Coudal": "./Codual/",
-    "@CodualAPI": "./Codual/config/app.js",
-    "@CodualDB": "./Codual/database/",
-    "@CodualDBModels": "./Codual/database/models",
-    "@CodualRoutes": "Codual/app/routes",
-    "@config": "./Codual/config/index.js",
-    "@utils": "./Codual/Utils.js"
+    "@Coudal": "./src/",
+    "@CodualAPI": "./src/app/api",
+    "@CodualDB": "./src/database/",
+    "@CodualDBModels": "./src/database/models",
+    "@CodualRoutes": "./src/app/routes",
+    "@config": "./src/config/",
+    "@utils": "./src/Utils.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -42,9 +42,11 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "Codual/public/*",
-      "Codual/views/*",
-      ".git"
+      "src/public/*",
+      "src/views/*",
+      ".git",
+      ".gitignore",
+      ".README.nd"
     ]
   }
 }

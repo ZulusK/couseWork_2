@@ -1,23 +1,16 @@
-const mongoose = require('mongoose'),
-    jwt = require('jsonwebtoken'),
-    passport = require('passport'),
-    config = require('@config'),
-    ObjectID = require('mongoose').Types.ObjectId;
+const ObjectID = require('mongoose').Types.ObjectId;
 
 api = {};
 
-function parseTags(str) {
+function parseTags (str) {
     return JSON.parse(str || "[]");
 }
 
-api.create = (publications_db) => async (req, res, next) => {
-    // if (!checkReq(req)) {
-    //     res.status(400).json({success: false, message: "bad arguments"}).send();
-    // }
+api.create = (publicationsDB) => async (req, res, next) => {
     req.body.tags = parseTags(req.body.tags);
     try {
         let client = req.user;
-        let publication = await publications_db.create(
+        let publication = await publicationsDB.create(
             req.body.title,
             req.description,
             client._id,
@@ -35,7 +28,7 @@ api.create = (publications_db) => async (req, res, next) => {
 
 api.placeholder = "none";
 
-function collectPublicationData(data) {
+function collectPublicationData (data) {
     return {
         title: data.title || api.placeholder,
         author: data.author || api.placeholder,
@@ -80,7 +73,7 @@ api.get = (publication_db) => async (req, res, next) => {
 }
 
 
-function getTarget(req) {
+function getTarget (req) {
     if (!req.body.target) {
         throw null;
     } else {
@@ -93,18 +86,18 @@ api.update = (publication_db) => async (req, res, next) => {
         return res.status(400).json({success: false, message: 'values required'}).send();
     }
     //get fields to update
-    let targetid = "";
+    let targetID = "";
     try {
-        targetid = getTarget(req);
+        targetID = getTarget(req);
     } catch (err) {
         console.log(req.body, err);
         return res.status(400).json({success: false, message: 'target required'}).send();
     }
     let client = req.user;
-    if (((client.publications.indexOf(targetid) >= 0) || client.access === 'admin')) {
+    if (((client.publications.indexOf(targetID) >= 0) || client.access === 'admin')) {
         //get target to modify
         try {
-            let target = await publication_db.getById(targetid);
+            let target = await publication_db.getById(targetID);
             await target.set(JSON.parse(req.body.values), client.access == 'admin');
             return res.status(200).json({success: true}).send();
         } catch (e) {

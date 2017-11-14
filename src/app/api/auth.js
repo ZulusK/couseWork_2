@@ -1,9 +1,9 @@
-const mongoose = require('mongoose'),
-    jwt = require('jsonwebtoken'),
+const jwt = require('jsonwebtoken'),
     passport = require('passport'),
     config = require('@config');
 
 const api = {};
+
 api.token = (user) => {
     const payload = {
         id: user.id,
@@ -13,6 +13,7 @@ api.token = (user) => {
     token = jwt.sign(payload, config.secret);//create JWT
     return {success: true, name: user.name, token: token};
 }
+
 api.login = (user_db) => async (req, res, next) => {
     await passport.authenticate('local', function (err, user) {
         if (!user) {

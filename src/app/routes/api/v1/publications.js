@@ -1,5 +1,5 @@
-const publ_db = require('@CodualDB//controllers/controller.publication'),
-    user_db = require('@CodualDB//controllers/controller.user'),
+const publ_db = require('@CodualDB/controllers/controller.publication'),
+    user_db = require('@CodualDB/controllers/controller.user'),
     passport = require('passport'),
     config = require('@config'),
     express = require('express');
@@ -19,7 +19,7 @@ module.exports = (app) => {
     //GET OWN
     router_publ.post('/list', passport.authenticate('jwt', config.session), API.publication.list(publ_db));
     //REMOVE
-    router_publ.delete('/delete', passport.authenticate('jwt', config.session), API.publication.delete(publ_db,user_db));
+    router_publ.delete('/delete', passport.authenticate('jwt', config.session), API.publication.delete(publ_db, user_db));
 
 
     app.use('/api/v1/publications', router_publ);
