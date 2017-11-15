@@ -4,6 +4,19 @@
       <panel title="Publicaions">
         <slot>
           <v-layout row>
+            <v-btn
+              slot="action"
+              :to="{name: 'publications.create'}"
+              color="success"
+              light
+              medium
+              absolute
+              right
+              middle
+              fab>
+              <v-icon color="white">add</v-icon>
+
+            </v-btn>
             <div v-for="publication in publications" :key="publication.id" class="ma-3">
               <panel :title="publication.title">
                 {{publication.title}}
@@ -27,19 +40,27 @@
 
   export default {
     components: {
-      Panel
+      Panel,
     },
     data () {
       return {
-        publications: []
+        publications: [],
+        timer: null,
       }
     },
-    async mounted () {
-      //do a req to api
-      try {
-        this.publications = PublicationsService.index().response.items;
-      } catch (e) {
-        console.log(e);
+    created: async function () {
+      console.log('Я родился');
+      await this.getItems();
+      this.timer = setInterval(this.getItems, 1000 * 60)
+    },
+    methods: {
+      async getItems () {
+        console.log('Я обновился');
+        try {
+          this.publications = (await PublicationsService.index()).data.items;
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   }

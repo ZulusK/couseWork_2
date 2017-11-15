@@ -5,7 +5,7 @@
       <panel title="Login">
         <v-form>
           <v-card-text>
-            <v-container fluid>
+            <v-container add_circle_outline>
               <v-text-field
                 label="Username"
                 name="username"
