@@ -2,14 +2,15 @@ const Publication = require('@CodualDBModels/models.publication'),
     db = require('./controller');
 
 //create new entity
-module.exports.create = function (title, description, author, difficult, tags, text) {
+module.exports.create = function (title, description, author, difficult, tags, imageURL, text) {
     let params = {
         title: title,
         description: description,
         author: author,
         difficult: difficult,
         tags: tags,
-        text: text
+        text: text,
+        imageURL: imageURL
     }
     return db.create(params, Publication);
 }

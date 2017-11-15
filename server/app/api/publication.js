@@ -16,6 +16,7 @@ api.create = (publicationsDB) => async (req, res, next) => {
             client._id,
             req.body.difficult,
             req.body.tags,
+            req.body.imageURL,
             req.body.text
         );
         console.log(publication);
@@ -36,7 +37,8 @@ function collectPublicationData (data) {
         id: data._id || api.placeholder,
         description: data.description || api.placeholder,
         text: data.text || api.placeholder,
-        difficult: data.difficult || api.placeholder
+        imageURL: data.imageURL || api.placeholder,
+        difficult: data.difficult || api.placeholder,
     };
 }
 

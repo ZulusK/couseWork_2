@@ -76,6 +76,8 @@
 
           this.error = null;
           this.success = "You are logged successful";
+          this.$router.push({name: 'publications'})
+
         } catch (error) {
           this.error = (error.data && error.data.response && error.data.response.message) ? error.data.response.message : "Error";
           this.success = null;

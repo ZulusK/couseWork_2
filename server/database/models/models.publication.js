@@ -17,7 +17,8 @@ const publictionShema = mongoose.Schema({
         required: true
     },
     description: String,
-    tags: [String]
+    tags: [String],
+    imageURL: String
 });
 publictionShema.plugin(mongoosePaginate);
 
