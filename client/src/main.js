@@ -10,7 +10,6 @@ import store from '@/store/store'
 
 import('vuetify/dist/vuetify.min.css') // Ensure you are using css-loader
 
-
 Vue.config.productionTip = false
 Vue.use(Vuetify);
 

@@ -9,18 +9,36 @@ The feature of the service is a combination of:
 * visual programming sandbox for practical programming lessons
 * Students will be able to write a program with the help of visual elements and structural blocks, to run and get the result of its execution.
 
+### Scope:
+An URL to DB mLab
+`mongodb://CodualWebApp:kG44fRUEEAh2GBFLAZJjcrF9@ds042527.mlab.com:42527/codual_db`
+The admin's login and password: `admin:admin`
+
+The user's login and password: `1:1`
+
+An URL of heroku app ``http://codual.herokuapp.com``
+
+ Реализованные возможности:
+1. RESTFull server, at `{{host}}/api/v1` 
+2. Login and authentication with JWT token, using webapp
+3. Creation of new publication, using webapp
+
+So, work in progress 
+
+
 >## Build Setup
 
 ``` bash
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
-
+# compile  UI
+cd client
+ 
 # build for production with minification
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# run this application
+cd .. 
+npm start
 ```
