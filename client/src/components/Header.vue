@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar fixed=true  class="blue accent-3">
+  <v-toolbar fixed=true class="blue accent-3">
     <v-toolbar-title class="white--text ma-2">
       <span class="logo home" flat dark @click="navigateTo({name:'root'})">
         Codual
@@ -14,10 +14,14 @@
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <!--<router-link to="signup">-->
-      <v-btn flat dark @click="navigateTo({name:'signup'})">
+      <v-btn
+        v-if="!$store.state.isUserLoggedIn"
+        flat dark @click="navigateTo({name:'signup'})">
         Sign UP
       </v-btn>
-      <v-btn flat dark @click="navigateTo({name:'login'})">
+      <v-btn
+        v-if="!$store.state.isUserLoggedIn"
+        flat dark @click="navigateTo({name:'login'})">
         LOG IN
       </v-btn>
       <!--</router-link>-->

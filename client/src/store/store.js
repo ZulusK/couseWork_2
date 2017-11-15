@@ -14,15 +14,17 @@ export default new Vuex.Store({
   mutations: {
     setToken (state, token) {
       state.token = token
+      if (token) {
+        state.isUserLoggedIn = true;
+      } else {
+        state.isUserLoggedIn = false;
+      }
     },
-    setID (state, id) {
+    setId (state, id) {
       state.id = id
     },
     setUsername (state, username) {
       state.username = username
-    },
-    setIsLoggedIn (state, value) {
-      state.isUserLoggedIn = value
     }
   },
   actions: {
@@ -34,9 +36,6 @@ export default new Vuex.Store({
     },
     setUsername ({commit}, username) {
       commit('setUsername', username);
-    },
-    setIsLoggedIn ({commit}, value) {
-      commit('setIsLoggedIn', value);
     }
   }
 })

@@ -1,5 +1,7 @@
 <template>
-  <v-layout column>
+  <v-layout
+    v-if="!$store.state.isUserLoggedIn"
+    column>
     <v-flex xs6 offset-xs3>
       <div class="white elevation-2">
         <v-toolbar flat fense class="blue accent-3">
@@ -67,17 +69,16 @@
             password: this.password,
             name: this.name
           });
+
           this.$store.dispatch('setToken', response.data.token);
           this.$store.dispatch('setUsername', response.data.username);
           this.$store.dispatch('setId', response.data.id);
-          this.$store.dispatch('setIsLoggedIn', true);
+
           this.error = null;
           this.success = "You are logged successful";
         } catch (error) {
-          console.log('1\n\n', error);
           this.error = (error.data && error.data.response && error.data.response.message) ? error.data.response.message : "Error";
           this.success = null;
-          console.log(error);
         }
       }
     }
