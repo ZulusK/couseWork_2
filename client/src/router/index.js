@@ -32,7 +32,7 @@ export default new Router({
     },
     {
       path: '/publications/create',
-      name: 'publicationCreate',
+      name: 'publications.create',
       component: PublicationCreate
     },
   ]

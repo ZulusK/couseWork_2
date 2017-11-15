@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar fixed=true    class="blue accent-3">
+  <v-toolbar fixed class="blue accent-3">
     <v-toolbar-title class="white--text ma-2">
       <span class="logo home" flat dark @click="navigateTo({name:'root'})">
         Codual
@@ -10,7 +10,13 @@
         flat dark @click="navigateTo({name:'publications'})">
         Publications
       </v-btn>
+      <v-btn
+        v-if="$store.state.isUserLoggedIn"
+        flat dark @click="navigateTo({name:'publications.create'})">
+        +
+      </v-btn>
     </v-toolbar-items>
+
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <!--<router-link to="signup">-->
@@ -24,6 +30,12 @@
         flat dark @click="navigateTo({name:'login'})">
         LOG IN
       </v-btn>
+      <v-btn
+        v-if="$store.state.isUserLoggedIn"
+        flat dark @click="logout()">
+        Log out
+      </v-btn>
+
       <!--</router-link>-->
     </v-toolbar-items>
   </v-toolbar>
@@ -36,8 +48,14 @@
     components: {LoginIcon},
     methods: {
       navigateTo (route) {
-//        console.log(route);
         this.$router.push(route);
+      },
+      logout () {
+        //set data in storage
+        this.$store.dispatch('setToken', null);
+        this.$store.dispatch('setUsername', null);
+        this.$store.dispatch('setId', null);
+        navigateTo({name: 'root'})
       }
     }
   }

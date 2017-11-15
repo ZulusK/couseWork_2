@@ -1,15 +1,17 @@
 <template>
   <v-layout column>
-    <v-flex xs6 offset-xs3>
+    <v-flex xs6 offset-xs3 class="text-xs-center">
       <panel title="Create publication">
+
         <v-snackbar
+          :timeout="timeout"
+          :multi-line="true"
+          :vertical="true"
           v-model="snackbar"
-          absolute
-          top
-          right
-          color="success"
+          color="error"
         >
-          <span>Publication created!</span>
+          <h2>{{ error }}</h2>
+          <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
         </v-snackbar>
         <v-form>
           <v-card-text>
@@ -25,8 +27,26 @@
                     name="title"
                     v-model="publication.title"
                     required
+                    :rules="[required]"
                   ></v-text-field>
 
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs4>
+                  <v-subheader>Short description</v-subheader>
+                </v-flex>
+                <v-flex xs8>
+                  <v-layout row>
+                    <v-text-field
+                      color="blue darken-2"
+                      label="Decription"
+                      name="description"
+                      v-model="publication.description"
+                      required
+                      :rules="[required]"
+                    ></v-text-field>
+                  </v-layout>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -45,6 +65,7 @@
                       thumb-label
                       v-model="publication.difficult"
                       required
+                      :rules="[required]"
                     ></v-slider>
                   </v-layout>
                 </v-flex>
@@ -62,6 +83,7 @@
                       chips
                       tags
                       required
+                      :rules="[required]"
                     >
                     </v-select>
                   </v-layout>
@@ -80,10 +102,12 @@
                       name="imageURL"
                       v-model="publication.imageURL"
                       required
+                      :rules="[required]"
                     ></v-text-field>
                   </v-layout>
                 </v-flex>
               </v-layout>
+
 
               <v-layout row>
                 <v-flex>
@@ -94,6 +118,7 @@
                     label="Text of publication"
                     v-model="publication.text"
                     aria-required="true"
+                    :rules="[required]"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -127,19 +152,34 @@
           description: null,
           text: null,
           tags: [],
-          imageURL: null
+          imageURL: null,
         },
-        snackbar: null
+        timeout: 2000,
+        snackbar: false,
+        error: null,
+        required: (value) => !!value || 'Required.'
       }
     },
     methods: {
       async create () {
-//        cal API
+//        call API
+        this.error = null
+        const areAllFieldsFilledIn = Object
+          .keys(this.publication)
+          .every(key => !!this.publication[key])
+
+        if (!areAllFieldsFilledIn) {
+          this.error = 'Please fill in all the required fields.'
+          this.snackbar = true
+          return
+        }
+
         try {
           await PublicationsService.create(this.publication);
           this.$router.push({name: 'publications'})
         } catch (err) {
-          console.log(err);
+          error = err.response.data.message
+          this.snackbar = true;
         }
       }
     }

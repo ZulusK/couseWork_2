@@ -1,6 +1,7 @@
 <template>
   <v-layout
     v-if="!$store.state.isUserLoggedIn"
+    class="text-xs-center"
     column>
     <v-flex xs6 offset-xs3>
       <panel title="Login">
@@ -47,6 +48,12 @@
         password: '',
         error: null,
         success: null
+      }
+    },
+    mounted () {
+      //leave page
+      if ($store.state.isUserLoggedIn) {
+        this.$router.push({name: 'root'})
       }
     },
     methods: {
