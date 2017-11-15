@@ -3,11 +3,19 @@ const ObjectID = require('mongoose').Types.ObjectId;
 api = {};
 
 function parseTags (str) {
-    return JSON.parse(str || "[]");
+    if (typeof str === typeof "")
+        return JSON.parse(str || "[]");
+    else
+        return str;
 }
 
 api.create = (publicationsDB) => async (req, res, next) => {
-    req.body.tags = parseTags(req.body.tags);
+    try {
+        req.body.tags = parseTags(req.body.tags);
+    } catch (e) {
+        return res.status(500).json({success: false, message: "Invalid tags"}).send();
+    }
+
     try {
         let client = req.user;
         let publication = await publicationsDB.create(
@@ -23,7 +31,7 @@ api.create = (publicationsDB) => async (req, res, next) => {
         await client.addPublication(publication);
         return res.json({success: true, publication: publication}).send();
     } catch (e) {
-        return res.status(500).json({success: false}).send();
+        return res.status(500).json({success: false, message: "Invalid arguments"}).send();
     }
 }
 

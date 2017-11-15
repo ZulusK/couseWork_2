@@ -22,7 +22,7 @@
 
 </template>
 <script>
-  import Panel from '@/components/Panel'
+  import Panel from '@/components/global/Panel'
   import PublicationsService from '@/services/PublicationsService'
 
   export default {
@@ -36,7 +36,11 @@
     },
     async mounted () {
       //do a req to api
-      this.publications = PublicationsService.index().response.items;
+      try {
+        this.publications = PublicationsService.index().response.items;
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 </script>

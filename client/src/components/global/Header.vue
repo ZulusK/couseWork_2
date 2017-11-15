@@ -35,17 +35,12 @@
         flat dark @click="logout()">
         Log out
       </v-btn>
-
-      <!--</router-link>-->
     </v-toolbar-items>
   </v-toolbar>
 </template>
 
 <script>
-  import LoginIcon from "../../node_modules/vue-material-design-icons/login.vue";
-
   export default {
-    components: {LoginIcon},
     methods: {
       navigateTo (route) {
         this.$router.push(route);

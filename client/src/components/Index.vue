@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import Panel from '@/components/Panel'
+  import Panel from '@/components/global/Panel'
 
   export default {
     name: 'Index',

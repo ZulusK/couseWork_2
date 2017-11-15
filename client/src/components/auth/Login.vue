@@ -36,7 +36,7 @@
 <script>
 
   import AuthService from '@/services/AuthService'
-  import Panel from '@/components/Panel'
+  import Panel from '@/components/global/Panel'
 
   export default {
     components: {

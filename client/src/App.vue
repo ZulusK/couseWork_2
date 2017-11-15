@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import PageHeader from '@/components/Header.vue'
-  import PageFooter from '@/components/Footer.vue'
+  import PageHeader from '@/components/global/Header.vue'
+  import PageFooter from '@/components/global/Footer.vue'
   import VParallax from "vuetify/src/components/VParallax/VParallax";
   //  import VApp from "vuetify/src/components/VApp/VApp";
 

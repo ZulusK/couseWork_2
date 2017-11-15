@@ -2,17 +2,7 @@
   <v-layout column>
     <v-flex xs6 offset-xs3 class="text-xs-center">
       <panel title="Create publication">
-
-        <v-snackbar
-          :timeout="timeout"
-          :multi-line="true"
-          :vertical="true"
-          v-model="snackbar"
-          color="error"
-        >
-          <h2>{{ error }}</h2>
-          <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
-        </v-snackbar>
+        <error-bar :show.sync="error" :message="errorMessage"/>
         <v-form>
           <v-card-text>
             <v-container fluid>
@@ -107,8 +97,6 @@
                   </v-layout>
                 </v-flex>
               </v-layout>
-
-
               <v-layout row>
                 <v-flex>
                   <v-text-field
@@ -136,13 +124,13 @@
 <script>
 
   import PublicationsService from '@/services/PublicationsService'
-  import Panel from '@/components/Panel'
-  import VForm from "vuetify/src/components/VForm/VForm";
+  import Panel from '@/components/global/Panel'
+  import ErrorBar from '@/components/global/ErrorSnackbar'
 
   export default {
     components: {
-      VForm,
-      Panel
+      Panel,
+      ErrorBar
     },
     data () {
       return {
@@ -154,32 +142,29 @@
           tags: [],
           imageURL: null,
         },
-        timeout: 2000,
-        snackbar: false,
-        error: null,
+        error: false,
+        errorMessage: null,
         required: (value) => !!value || 'Required.'
       }
     },
     methods: {
       async create () {
 //        call API
-        this.error = null
         const areAllFieldsFilledIn = Object
           .keys(this.publication)
           .every(key => !!this.publication[key])
-
         if (!areAllFieldsFilledIn) {
-          this.error = 'Please fill in all the required fields.'
-          this.snackbar = true
+          this.errorMessage = 'Please fill in all the required fields.'
+          this.error = true;
+          console.log()
           return
         }
-
         try {
           await PublicationsService.create(this.publication);
           this.$router.push({name: 'publications'})
         } catch (err) {
-          error = err.response.data.message
-          this.snackbar = true;
+          this.errorMessages = err.response.data.message;
+          this.error = true;
         }
       }
     }
