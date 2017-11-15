@@ -31607,133 +31607,6 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ "Fx1Z":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'v-form',
-
-  inheritAttrs: false,
-
-  data () {
-    return {
-      inputs: [],
-      errorBag: {}
-    }
-  },
-
-  props: {
-    value: Boolean,
-    lazyValidation: Boolean
-  },
-
-  watch: {
-    errorBag: {
-      handler () {
-        const errors = Object.values(this.errorBag).includes(true)
-
-        this.$emit('input', !errors)
-
-        return !errors
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    getInputs () {
-      const results = []
-
-      const search = (children, depth = 0) => {
-        for (const child of children) {
-          if (child.errorBucket !== undefined) {
-            results.push(child)
-          } else {
-            search(child.$children, depth + 1)
-          }
-        }
-        if (depth === 0) return results
-      }
-
-      return search(this.$children)
-    },
-    watchInputs (inputs = this.getInputs()) {
-      for (const child of inputs) {
-        if (this.inputs.includes(child)) {
-          continue // We already know about this input
-        }
-
-        this.inputs.push(child)
-        this.watchChild(child)
-      }
-    },
-    watchChild (child) {
-      const watcher = (child) => {
-        child.$watch('valid', (val) => {
-          this.$set(this.errorBag, child._uid, !val)
-        }, { immediate: true })
-      }
-
-      if (!this.lazyValidation) return watcher(child)
-
-      // Only start watching inputs if we need to
-      child.$watch('shouldValidate', (val) => {
-        if (!val) return
-
-        // Only watch if we're not already doing it
-        if (this.errorBag.hasOwnProperty(child._uid)) return
-
-        watcher(child)
-      })
-    },
-    validate () {
-      const errors = this.inputs.filter(input => !input.validate(true)).length
-      return !errors
-    },
-    reset () {
-      this.inputs.forEach((input) => input.reset())
-      if (this.lazyValidation) {
-        Object.keys(this.errorBag).forEach(key => this.$delete(this.errorBag, key))
-      }
-    }
-  },
-
-  mounted () {
-    this.watchInputs()
-  },
-
-  updated () {
-    const inputs = this.getInputs()
-
-    if (inputs.length < this.inputs.length) {
-      // Something was removed, we don't want it in the errorBag any more
-      const removed = this.inputs.filter(i => !inputs.includes(i))
-
-      for (const input of removed) {
-        this.$delete(this.errorBag, input._uid)
-        this.$delete(this.inputs, this.inputs.indexOf(input))
-      }
-    }
-
-    this.watchInputs(inputs)
-  },
-
-  render (h) {
-    return h('form', {
-      attrs: Object.assign({
-        novalidate: true
-      }, this.$attrs),
-      on: {
-        submit: e => this.$emit('submit', e)
-      }
-    }, this.$slots.default)
-  }
-});
-
-
-/***/ }),
-
 /***/ "GHBc":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36314,6 +36187,150 @@ module.exports = btoa;
 
 /***/ }),
 
+/***/ "uBzb":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/vuetify/src/mixins/themeable.js
+/* harmony default export */ var themeable = ({
+  props: {
+    dark: Boolean,
+    light: Boolean
+  },
+
+  computed: {
+    themeClasses () {
+      return {
+        'theme--light': this.light,
+        'theme--dark': this.dark
+      }
+    }
+  }
+});
+
+// CONCATENATED MODULE: ./node_modules/vuetify/src/mixins/colorable.js
+/* harmony default export */ var colorable = ({
+  props: {
+    color: String
+  },
+
+  data () {
+    return {
+      defaultColor: null
+    }
+  },
+
+  computed: {
+    computedColor () {
+      return this.color || this.defaultColor
+    }
+  },
+
+  methods: {
+    addBackgroundColorClassChecks (obj = {}, prop = 'computedColor') {
+      const classes = Object.assign({}, obj)
+
+      if (prop && this[prop]) {
+        classes[this[prop]] = true
+      }
+
+      return classes
+    },
+    addTextColorClassChecks (obj = {}, prop = 'computedColor') {
+      const classes = Object.assign({}, obj)
+
+      if (prop && this[prop]) {
+        const parts = this[prop].trim().split(' ')
+
+        let color = parts[0] + '--text'
+
+        if (parts.length > 1) color += ' text--' + parts[1]
+
+        classes[color] = !!this[prop]
+      }
+
+      return classes
+    }
+  }
+});
+
+// CONCATENATED MODULE: ./node_modules/vuetify/src/components/VIcon/VIcon.js
+__webpack_require__("P0ba")
+
+
+
+
+/* harmony default export */ var VIcon = __webpack_exports__["a"] = ({
+  name: 'v-icon',
+
+  functional: true,
+
+  mixins: [colorable, themeable],
+
+  props: {
+    disabled: Boolean,
+    large: Boolean,
+    left: Boolean,
+    medium: Boolean,
+    right: Boolean,
+    xLarge: Boolean
+  },
+
+  render (h, { props, data, children = [] }) {
+    let iconName = ''
+    if (children.length) {
+      iconName = children.pop().text
+    } else if (data.domProps && data.domProps.textContent) {
+      iconName = data.domProps.textContent
+      delete data.domProps.textContent
+    } else if (data.domProps && data.domProps.innerHTML) {
+      iconName = data.domProps.innerHTML
+      delete data.domProps.innerHTML
+    }
+
+    let iconType = 'material-icons'
+    const thirdPartyIcon = iconName.indexOf('-') > -1
+    if (thirdPartyIcon) iconType = iconName.slice(0, iconName.indexOf('-'))
+
+    data.staticClass = (`${iconType} icon ${data.staticClass || ''}`).trim()
+    data.attrs = data.attrs || {}
+
+    if (!('aria-hidden' in data.attrs)) {
+      data.attrs['aria-hidden'] = true
+    }
+
+    const classes = Object.assign({
+      'icon--disabled': props.disabled,
+      'icon--large': props.large,
+      'icon--left': props.left,
+      'icon--medium': props.medium,
+      'icon--right': props.right,
+      'icon--x-large': props.xLarge,
+      'theme--dark': props.dark,
+      'theme--light': props.light
+    }, props.color ? colorable.methods.addTextColorClassChecks.call(props, {}, 'color') : {
+      'primary--text': props.primary,
+      'secondary--text': props.secondary,
+      'success--text': props.success,
+      'info--text': props.info,
+      'warning--text': props.warning,
+      'error--text': props.error
+    })
+
+    const iconClasses = Object.keys(classes).filter(k => classes[k]).join(' ')
+    iconClasses && (data.staticClass += ` ${iconClasses}`)
+
+    if (thirdPartyIcon) data.staticClass += ` ${iconName}`
+    else children.push(iconName)
+
+    return h('i', data, children)
+  }
+});
+
+
+/***/ }),
+
 /***/ "uqUo":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36626,4 +36643,4 @@ __webpack_require__("vIB/")(String, 'String', function (iterated) {
 /***/ })
 
 });
-//# sourceMappingURL=vendor.a79e07aaf584d824e30c.js.map
+//# sourceMappingURL=vendor.f3294efcb7b2440da587.js.map
