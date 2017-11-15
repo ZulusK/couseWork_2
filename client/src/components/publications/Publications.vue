@@ -1,22 +1,9 @@
 <template>
   <v-layout column>
-    <v-flex xs6 offset-xs3>
+    <v-flex >
       <panel title="Publicaions">
         <slot>
-          <v-layout row>
-            <v-btn
-              slot="action"
-              :to="{name: 'publications.create'}"
-              color="success"
-              light
-              medium
-              absolute
-              right
-              middle
-              fab>
-              <v-icon color="white">add</v-icon>
-
-            </v-btn>
+          <!--<v-layout row>-->
             <div v-for="publication in publications" :key="publication.id" class="ma-3">
               <panel :title="publication.title">
                 {{publication.title}}
@@ -27,7 +14,7 @@
                 </div>
               </panel>
             </div>
-          </v-layout>
+          <!--</v-layout>-->
         </slot>
       </panel>
     </v-flex>
