@@ -8,7 +8,6 @@ module.exports = (app) => {
     let router_user = express.Router();
 
     router_user.get('/', (req, res) => res.send('Codual API users'));
-    router_user.post('/signup', API.user.signup);
     router_user.post('/setup', API.user.setup);
     router_user.put('/update', passport.authenticate('jwt', config.session), API.user.update);
     router_user.delete('/delete', passport.authenticate('jwt', config.session), API.user.delete);

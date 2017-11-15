@@ -5,7 +5,7 @@ const userDB = require("@CodualDB/controllers/controller.user");
 
 api.setup = async (req, res) => {
     try {
-        await db_users.create(
+        await userDB.create(
             "admin",
             "#",
             "admin",
@@ -20,57 +20,6 @@ api.setup = async (req, res) => {
     }
 }
 
-api.signup = async (req, res) => {
-    // console.log(req.body);
-    try {
-        if (!req.body.username || !req.body.password || !req.body.name) {
-            res.status(400).json({
-                success: false,
-                message: 'Please, pass a name,username and password.'
-            }).end();
-        }
-        if (!userDB.verifyPassword(req.body.password)) {
-            res.status(400).json({
-                success: false,
-                message: 'Please, use only characters A-z, 0-9 in your password, it should contain more than 8 symbols'
-            }).end();
-        }
-        if (!userDB.verifyPassword(req.body.username)) {
-            res.status(400).json({
-                success: false,
-                message: 'Username should start with A-z, and contains only characters _, A-z, 0-9 at all'
-            }).end();
-        }
-        if (!userDB.verifyName(req.body.name.trim)) {
-            res.status(400).json({
-                success: false,
-                message: 'Please, use only letters in your name'
-            }).end();
-        }
-        else {
-            try {
-                await db_users.create(
-                    req.body.name.trim(),
-                    req.body.contact,
-                    'user',
-                    req.body.username,
-                    req.body.password);
-                res.json({success: true, message: 'Account created successfully',}).end();
-            } catch (e) {
-                res.status(400).json({
-                    success: false,
-                    message: `This username ${req.body.username.trim()}already exists.`
-                }).end();
-            }
-        }
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({
-            success: false,
-            message: `Smth going wrong`
-        }).end();
-    }
-}
 
 function getTarget (req) {
     if (!req.body.target) {

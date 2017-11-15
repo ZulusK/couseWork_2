@@ -4,17 +4,11 @@
       <div class="white elevation-2">
         <v-toolbar flat fense class="blue accent-3">
           <v-toolbar-title>
-            Join us
+            Login
           </v-toolbar-title>
         </v-toolbar>
-        <div class="pl-4 pr-4 pt-2 pb-2">
+        <div class="pl-4 pr-4 pt-2 pb-2" light>
           <form>
-            <v-text-field
-              label="Name"
-              name="name"
-              v-model="name"
-              required
-            ></v-text-field>
             <v-text-field
               label="Username"
               name="username"
@@ -35,7 +29,7 @@
                      class="white--text text-lg-center" transition="scale-transition">
             </v-alert>
             <v-btn round @click="submit" class="green accent-5">
-              Submit
+              Login
             </v-btn>
           </form>
 
@@ -62,11 +56,11 @@
       async submit () {
         try {
 
-          const response = await AuthService.signup({
+          const response = await AuthService.login({
             username: this.username,
-            password: this.password,
-            name: this.name
+            password: this.password
           });
+
           this.$store.dispatch('setToken', response.data.token);
           this.$store.dispatch('setUsername', response.data.username);
           this.$store.dispatch('setId', response.data.id);
