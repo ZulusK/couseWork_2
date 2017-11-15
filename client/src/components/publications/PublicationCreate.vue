@@ -1,8 +1,8 @@
 <template>
-  <v-layout column>
-    <v-flex xs6 offset-xs3 class="text-xs-center">
+  <v-layout column v-if="$store.state.isUserLoggedIn" class="text-xs-center">
+    <error-bar :show.sync="error" :message="errorMessage"/>
+    <v-flex xs6 offset-xs3>
       <panel title="Create publication">
-        <error-bar :show.sync="error" :message="errorMessage"/>
         <v-form>
           <v-card-text>
             <v-container fluid>
@@ -113,7 +113,6 @@
               <v-btn round @click="create" color="success">
                 Create
               </v-btn>
-
             </v-container>
           </v-card-text>
         </v-form>
@@ -156,7 +155,6 @@
         if (!areAllFieldsFilledIn) {
           this.errorMessage = 'Please fill in all the required fields.'
           this.error = true;
-          console.log()
           return
         }
         try {

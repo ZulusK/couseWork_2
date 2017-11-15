@@ -1,34 +1,32 @@
 <template>
-  <v-layout
-    v-if="!$store.state.isUserLoggedIn"
-    class="text-xs-center"
-    column>
+  <v-layout column v-if="!$store.state.isUserLoggedIn" class="text-xs-center">
+    <error-bar :show.sync="error" :message="errorMessage"/>
     <v-flex xs6 offset-xs3>
       <panel title="Login">
-        <form>
-          <v-text-field
-            label="Username"
-            name="username"
-            v-model="username"
-            required
-          ></v-text-field>
-          <v-text-field
-            type="password"
-            label="Password"
-            name="username"
-            v-model="password"
-            required
-          ></v-text-field>
-          <v-alert color="error" icon="check_circle" :value="error" v-html="error" class="white--text text-lg-center"
-                   transition="scale-transition">
-          </v-alert>
-          <v-alert color="success" icon="check_circle" :value="success" v-html="success"
-                   class="white--text text-lg-center" transition="scale-transition">
-          </v-alert>
-          <v-btn round @click="submit" color="success">
-            Login
-          </v-btn>
-        </form>
+        <v-form>
+          <v-card-text>
+            <v-container fluid>
+              <v-text-field
+                label="Username"
+                name="username"
+                v-model="credentials.username"
+                :rules="[required]"
+                required
+              ></v-text-field>
+              <v-text-field
+                type="password"
+                label="Password"
+                name="password"
+                v-model="credentials.password"
+                :rules="[required]"
+                required
+              ></v-text-field>
+              <v-btn round @click="submit" color="success">
+                Login
+              </v-btn>
+            </v-container>
+          </v-card-text>
+        </v-form>
       </panel>
     </v-flex>
   </v-layout>
@@ -37,45 +35,50 @@
 
   import AuthService from '@/services/AuthService'
   import Panel from '@/components/global/Panel'
+  import ErrorBar from '@/components/global/ErrorSnackbar'
 
   export default {
     components: {
-      Panel
+      Panel,
+      ErrorBar
     },
     data () {
       return {
-        username: '',
-        password: '',
-        error: null,
-        success: null
+        credentials: {
+          username: null,
+          password: null,
+        },
+        error: false,
+        errorMessage: null,
+        required: (value) => !!value || 'Required.'
       }
     },
     mounted () {
       //leave page
-      if ($store.state.isUserLoggedIn) {
+      if (this.$store.state.isUserLoggedIn) {
         this.$router.push({name: 'root'})
       }
     },
     methods: {
       async submit () {
+        const areAllFieldsFilledIn = Object
+          .keys(this.credentials)
+          .every(key => !!this.credentials[key])
+        if (!areAllFieldsFilledIn) {
+          this.errorMessage = 'Please fill in all the required fields.'
+          this.error = true;
+          return
+        }
         try {
-
-          const response = await AuthService.login({
-            username: this.username,
-            password: this.password
-          });
-
+          const response = await AuthService.login(this.credentials);
           //set data in storage
           this.$store.dispatch('setToken', response.data.token);
           this.$store.dispatch('setUsername', response.data.username);
           this.$store.dispatch('setId', response.data.id);
-
-          this.error = null;
-          this.success = "You are logged successful";
           this.$router.push({name: 'publications'})
         } catch (error) {
-          this.error = (error.data && error.data.response && error.data.response.message) ? error.data.response.message : "Error";
-          this.success = null;
+          this.errorMessage = error.response.data.message
+          this.error = true;
         }
       }
     }

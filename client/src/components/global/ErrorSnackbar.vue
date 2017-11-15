@@ -2,7 +2,7 @@
   <v-snackbar
     :timeout="timeout"
     :vertical="true"
-    top="true"
+    :top="true"
     v-model="show"
     @close="hide()"
   >
