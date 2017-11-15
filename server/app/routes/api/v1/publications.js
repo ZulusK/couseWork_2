@@ -13,7 +13,7 @@ module.exports = (app) => {
     //ADD
     router_publ.post('/create', passport.authenticate('jwt', config.session), API.publication.create(publ_db));
     //GET BY QUERY
-    router_publ.post('/find', passport.authenticate('jwt', config.session), API.publication.get(publ_db));
+    router_publ.post('/find', API.publication.get(publ_db));//passport.authenticate('jwt', config.session)
     //UPDATE
     router_publ.put('/update', passport.authenticate('jwt', config.session), API.publication.update(publ_db));
     //GET OWN

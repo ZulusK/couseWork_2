@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "mdi": "^2.0.46",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.2",
+    "vue-material-design-icons": "^0.7.1",
     "vue-router": "^3.0.1",
     "vuetify": "^0.17.0",
     "vuex": "^3.0.1",

@@ -1,61 +1,61 @@
 <template>
   <v-layout
-    v-if="!$store.state.isUserLoggedIn"
     column>
     <v-flex xs6 offset-xs3>
-      <div class="white elevation-2">
-        <v-toolbar flat fense class="blue accent-3">
-          <v-toolbar-title>
-            Join us
-          </v-toolbar-title>
-        </v-toolbar>
-        <div class="pl-4 pr-4 pt-2 pb-2">
-          <form>
-            <v-text-field
-              label="Name"
-              name="name"
-              v-model="name"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="Username"
-              name="username"
-              v-model="username"
-              required
-            ></v-text-field>
-            <v-text-field
-              type="password"
-              label="Password"
-              name="username"
-              v-model="password"
-              required
-            ></v-text-field>
-            <v-alert color="error" icon="check_circle" :value="error" v-html="error" class="white--text text-lg-center"
-                     transition="scale-transition">
-            </v-alert>
-            <v-alert color="success" icon="check_circle" :value="success" v-html="success"
-                     class="white--text text-lg-center" transition="scale-transition">
-            </v-alert>
-            <v-btn round @click="submit" class="green accent-5">
+      <panel title="Join us">
+        <!--todo-->
+        <form>
+          <v-text-field
+            label="Name"
+            name="name"
+            v-model="name"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="Username"
+            name="username"
+            v-model="username"
+            required
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            label="Password"
+            name="username"
+            v-model="password"
+            required
+          ></v-text-field>
+          <v-progress-linear slot="progress" :value="progress" height="5" :color="color"></v-progress-linear>
+          <v-alert color="error" icon="check_circle" :value="error" v-html="error"
+                   class="white--text text-lg-center"
+                   transition="scale-transition">
+          </v-alert>
+          <v-alert color="success" icon="check_circle" :value="success" v-html="success"
+                   class="white--text text-lg-center" transition="scale-transition">
+          </v-alert>
+          <v-layout row>
+            <v-btn round @click="submit" color="success" large type="submit">
               Submit
             </v-btn>
-          </form>
-
-        </div>
-      </div>
+          </v-layout>
+        </form>
+      </panel>
     </v-flex>
   </v-layout>
 </template>
 <script>
 
   import AuthService from '@/services/AuthService'
+  import Panel from '@/components/Panel'
 
   export default {
-    components: {},
+    components: {
+      Panel
+    },
     data () {
       return {
         username: '',
         password: '',
+        name: '',
         error: null,
         success: null
       }
@@ -81,17 +81,19 @@
           this.success = null;
         }
       }
+    },
+    computed: {
+      progress () {
+        return Math.min(100, this.password.length * 10)
+      },
+      color () {
+        return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+      }
     }
   }
 </script>
 
 
 <style scoped>
-  .error {
-    color: red;
-  }
 
-  .success {
-    color: green;
-  }
 </style>

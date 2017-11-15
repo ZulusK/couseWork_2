@@ -3,7 +3,7 @@
     <v-app>
       <page-header/>
       <main>
-        <v-container fluid>
+        <v-container fluid dark>
           <router-view/>
         </v-container>
       </main>
@@ -15,12 +15,14 @@
 <script>
   import PageHeader from '@/components/Header.vue'
   import PageFooter from '@/components/Footer.vue'
+  import VParallax from "vuetify/src/components/VParallax/VParallax";
   //  import VApp from "vuetify/src/components/VApp/VApp";
 
   export default {
     name: 'app',
     components: {
 //      VApp,
+      VParallax,
       PageHeader,
       PageFooter
     }
@@ -28,21 +30,20 @@
 </script>
 
 <style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-
   .input-group--text-field input {
-    border-bottom: 1px dotted rgba(0, 0, 0, .2);
+    /*border-bottom: 1px dotted rgba(0, 0, 0, .6);*/
   }
 
-  .btn__content, .toolbar__title {
-    color: white;
+  .h1 {
+    font-size: 120px;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .success {
+    color: green;
   }
 
 </style>

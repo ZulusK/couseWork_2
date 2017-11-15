@@ -41,6 +41,7 @@ function collectPublicationData (data) {
 }
 
 api.get = (publication_db) => async (req, res, next) => {
+    console.log(req.body);
     if (req.body.target) {
         let query = {};
         //parse target

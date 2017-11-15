@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Signup from '@/components/Signup'
 import Login from '@/components/Login'
+import Publications from '@/components/Publications'
+import PublicationCreate from '@/components/PublicationCreate'
 
 Vue.use(Router)
 
@@ -22,6 +24,16 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
-    }
+    },
+    {
+      path: '/publications',
+      name: 'publications',
+      component: Publications
+    },
+    {
+      path: '/publications/create',
+      name: 'publicationCreate',
+      component: PublicationCreate
+    },
   ]
 })

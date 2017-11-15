@@ -1,6 +1,6 @@
 <template>
-  <v-footer class="pa-3 white blue--text">
-    Developer: Danil Kazimirov, KPI, FAM student
+  <v-footer class="pa-3">
+    <h4>Developer: Danil Kazimirov, KPI, FAM student</h4>
     <v-spacer></v-spacer>
     <div>© {{ new Date().getFullYear() }}</div>
   </v-footer>
