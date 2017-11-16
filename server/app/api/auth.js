@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken'),
 
 const api = {};
 
+api.loginRoad = "To login, send req with fields 'password' and 'username', server return your username, id and jwt token"
+
+
 
 function jwtToken (user) {
     // const ONE_DAY = 60 * 60 * 24;
@@ -21,7 +24,7 @@ function jwtToken (user) {
 api.login = async (req, res, next) => {
     await passport.authenticate('local', function (err, user) {
         if (!user) {
-            res.status(401).json({success: false, message: "Login failed"}).send();
+            res.status(401).json({success: false, message: "Login failed", description: api.loginRoad}).send();
         } else {
             res.json(jwtToken(user)).send();
         }

@@ -5,7 +5,7 @@
         Codual
       </span>
     </v-toolbar-title>
-    <v-toolbar-items>
+    <v-toolbar-items class="hidden-xs-only">
       <v-btn
         flat dark @click="navigateTo({name:'publications'})">
         <!--Publications-->
@@ -18,7 +18,7 @@
     </v-toolbar-items>
 
     <v-spacer></v-spacer>
-    <v-toolbar-items>
+    <v-toolbar-items class="hidden-xs-only">
       <!--<router-link to="signup">-->
       <v-btn
         v-if="!$store.state.isUserLoggedIn"

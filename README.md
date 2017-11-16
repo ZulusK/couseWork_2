@@ -20,8 +20,9 @@ An URL of heroku app ``http://codual.herokuapp.com``
 
  Реализованные возможности:
 1. RESTFull server, at `{{host}}/api/v1` 
-2. Login and authentication with JWT token, using webapp
-3. Creation of new publication, using webapp
+2. You can use api, with Postman, just import settings (file `api_test.json`)
+3. Login and authentication with JWT token, using webapp
+4. Creation of new publication, using webapp
 
 So, work in progress 
 
