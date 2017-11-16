@@ -6,6 +6,12 @@ const jwt = require('jsonwebtoken'),
 
 const api = {};
 
+api.rootRoad = "You can use auth api. Just send get-req if you want get help,or post-req to use api to next urls: "
+    + "'/api/v1/auth/login', "
+    + "'/api/v1/auth/logout', "
+    + "'/api/v1/auth/is/user', "
+    + "'/api/v1/auth/is/admin', "
+    + "'/api/v1/auth/signup'";
 api.loginRoad = "To login, send post req with fields 'password' and 'username', server return your username, id and jwt token (you need send it at header, like Bearer token"
 api.isloginedRoad = "To check, have you  been logged, send post request to this url"
 api.logoutRoad = "To logout from Codual, send post req to this url"

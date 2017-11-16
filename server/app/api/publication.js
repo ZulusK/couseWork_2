@@ -1,6 +1,17 @@
 const ObjectID = require('mongoose').Types.ObjectId;
 
 api = {};
+api.rootRoad = "You can use publications api. Just send get-req if you want get help, or post-, delete-, put-  req to use api to next urls: "
+    + "'/api/v1/publications/create', "
+    + "'/api/v1/publications/find', "
+    + "'/api/v1/publications/update', "
+    + "'/api/v1/publications/list', "
+    + "'/api/v1/publications/delete'";
+api.createRoad = "If you have been logged, send post req with next fields to create a new publication {'title','[tags]','description','difficult','text','imageURL'}"
+api.updateRoad = "If you have been logged, send put req with next fields to update the target publication {'target:id','values:{'title','[tags]','description','difficult','text','imageURL'}'}"
+api.deleteRoad = "If you have been logged and you are admin or owner of publication, send delete-req to this url and specify target(id) to remove "
+api.listRoad = "If you have been logged, send post req, and I return you list of all your publications, you can specify {'page', 'limit','sort'} to use pagination"
+api.findRoad = "Send post req, and I return you list of publications, which you are search, you can specify {'page', 'limit','sort', 'target(query)'}"
 
 function parseTags (str) {
     if (typeof str === typeof "")
@@ -56,8 +67,11 @@ api.get = (publication_db) => async (req, res, next) => {
         let query = {};
         //parse target
         try {
+            // query = JSON.parse(req.body.target);
+            console.log(query);
             query = req.body.target;
         } catch (e) {
+            console.log(req.body.target);
             return res.status(400).json({success: false, message: "bad target, use JSON"}).send();
         }
         try {
@@ -68,6 +82,7 @@ api.get = (publication_db) => async (req, res, next) => {
             })
             res.json({
                 success: true,
+                target: query,
                 page: pagination.page,
                 limit: pagination.limit,
                 total: pagination.total,
