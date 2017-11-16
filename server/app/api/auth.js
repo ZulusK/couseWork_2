@@ -6,9 +6,12 @@ const jwt = require('jsonwebtoken'),
 
 const api = {};
 
-api.loginRoad = "To login, send req with fields 'password' and 'username', server return your username, id and jwt token"
-
-
+api.loginRoad = "To login, send post req with fields 'password' and 'username', server return your username, id and jwt token (you need send it at header, like Bearer token"
+api.isloginedRoad = "To check, have you  been logged, send post request to this url"
+api.logoutRoad = "To logout from Codual, send post req to this url"
+api.isUserRoad = "To check, is your role is 'user', send post req to this url"
+api.isAdminRoad = "To check, is your role is 'admin', send post req to this url"
+api.signupRoad = "To register at Codual, send post req to this url, you need send next fields: {'name','username','password','contact'}"
 
 function jwtToken (user) {
     // const ONE_DAY = 60 * 60 * 24;
