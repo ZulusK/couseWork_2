@@ -24,7 +24,7 @@ function jwtToken (user) {
 api.login = async (req, res, next) => {
     await passport.authenticate('local', function (err, user) {
         if (!user) {
-            res.status(401).json({success: false, message: "Login failed", description: api.loginRoad}).send();
+            res.status(401).json({success: false, message: "Login failed"}).send();
         } else {
             res.json(jwtToken(user)).send();
         }
