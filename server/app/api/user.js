@@ -3,6 +3,16 @@ const ObjectID = require('mongoose').Types.ObjectId;
 const userDB = require("@CodualDB/controllers/controller.user");
 
 
+api.rootRoad = "You can use users api. Just send get-req if you want get help, or post-, delete-, put-  req to use api to next urls: "
+    + "'/api/v1/users/info', "
+    + "'/api/v1/users/update', "
+    + "'/api/v1/users/delete', "
+    + "'/api/v1/users/list'";
+api.updateRoad = "If you have been logged, send put req with next fields to update the target publication {'target:id, or `.` to self-ref','values:{'name','username','contact'}"
+api.deleteRoad = "If you have been logged and you are admin or owner of account, send delete-req to this url and specify target(id) to remove "
+api.listRoad = "If you have been logged and you are admin, send post req, and I return you list of all users, use the same arguments for pagination, like in publication's api"
+api.infoRoad = "If you have been logged and you are admin or owner of account, send post-req to this url and specify target(id) to get info about him"
+
 api.setup = async (req, res) => {
     try {
         await userDB.create(
