@@ -1,31 +1,55 @@
 <template>
+  <!--<div id="app">-->
+  <!--<v-app>-->
+  <!--<page-header/>-->
+  <!--<main>-->
+  <!--<v-container fluid dark>-->
+  <!--<router-view/>-->
+  <!--</v-container>-->
+  <!--</main>-->
+  <!--<page-footer/>-->
+  <!--</v-app>-->
+  <!--</div>-->
   <div id="app">
     <v-app>
-      <page-header/>
-      <main>
-        <v-container fluid dark>
-          <router-view/>
+      <sidebar :drawer.sync="sidebarDrawer"
+               @opened="sidebarDrawer=true" @closed="sidebarDrawer=false"/>
+      <!--<v-toolbar-side-icon @click="sidebarDrawer=!sidebarDrawer"></v-toolbar-side-icon>-->
+      <page-header @sidebar="sidebarDrawer=!sidebarDrawer"/>
+      <!--<v-toolbar app></v-toolbar>-->
+      <!--<page-header/>-->
+      <v-content>
+        <v-container fluid>
+          <!--<router-view/>-->
         </v-container>
-      </main>
-      <page-footer/>
+      </v-content>
+      <v-footer app></v-footer>
     </v-app>
   </div>
 </template>
+
 
 <script>
   import PageHeader from '@/components/global/Header.vue'
   import PageFooter from '@/components/global/Footer.vue'
   import VParallax from "vuetify/src/components/VParallax/VParallax";
-  //  import VApp from "vuetify/src/components/VApp/VApp";
+  import Sidebar from "@/components/global/Sidebar.vue"
 
   export default {
     name: 'app',
     components: {
-//      VApp,
       VParallax,
       PageHeader,
-      PageFooter
-    }
+      PageFooter,
+      Sidebar
+    },
+    data () {
+      return {
+        dialog: false,
+        sidebarDrawer: this.$vuetify.breakpoint.name === 'xl',
+      }
+    },
+    methods: {}
   }
 </script>
 
@@ -38,12 +62,5 @@
     font-size: 120px;
   }
 
-  .error {
-    color: red;
-  }
-
-  .success {
-    color: green;
-  }
 
 </style>

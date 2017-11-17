@@ -19,7 +19,6 @@
                     required
                     :rules="[required]"
                   ></v-text-field>
-
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -79,7 +78,6 @@
                   </v-layout>
                 </v-flex>
               </v-layout>
-
               <v-layout row>
                 <v-flex xs4>
                   <v-subheader>Publication image URL</v-subheader>

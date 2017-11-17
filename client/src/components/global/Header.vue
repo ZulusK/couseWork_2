@@ -1,43 +1,48 @@
 <template>
-  <v-toolbar :fixed="true" class="blue accent-3">
-    <v-toolbar-title class="white--text ma-2">
-      <span class="logo home" flat dark @click="navigateTo({name:'root'})">
-        Codual
-      </span>
-    </v-toolbar-title>
-    <v-toolbar-items class="hidden-xs-only">
-      <v-btn
-        flat dark @click="navigateTo({name:'publications'})">
-        <!--Publications-->
-        <v-icon large color="white">view_comfy</v-icon>
-      </v-btn>
-      <v-btn v-if="$store.state.isUserLoggedIn"
-             flat dark @click="navigateTo({name:'publications.create'})">
-        <v-icon large color="white">add_circle_outline</v-icon>
-      </v-btn>
-    </v-toolbar-items>
 
-    <v-spacer></v-spacer>
-    <v-toolbar-items class="hidden-xs-only">
-      <!--<router-link to="signup">-->
-      <v-btn
-        v-if="!$store.state.isUserLoggedIn"
-        flat dark @click="navigateTo({name:'signup'})">
-        <!--Sign UP-->
-        <v-icon color="white" large>person_add</v-icon>
+  <v-toolbar color="amber" app fixed class="pa-1" clipped-left>
+    <v-toolbar-title class="display-2">
+      <v-toolbar-side-icon @click="$emit('sidebar')" large>
+        <v-icon large color="white">menu</v-icon>
+      </v-toolbar-side-icon>
+      <span class="home" flat dark @click="navigateTo({name:'root'})">
+        Codual</span>
+    </v-toolbar-title>
+    <v-spacer class="hidden-md-and-down"></v-spacer>
+    <v-text-field
+      solo
+      flat
+      color="red"
+      class="ma-5  pl-2 pr-2"
+      prepend-icon="search"
+      placeholder="Search"
+    ></v-text-field>
+    <v-spacer class="hidden-md-and-down"></v-spacer>
+
+    <v-toolbar-item>
+    <span v-if="!$store.state.isUserLoggedIn">
+    <v-btn icon large
+           flat dark :to='login' color="white">
+      <v-icon large>account_circle</v-icon>
+    </v-btn>
+    <v-btn icon large
+           flat dark :to='signup' color="white">
+      <v-icon large>person_add</v-icon>
+    </v-btn>
+  </span>
+      <span v-else>
+    <v-btn icon large
+           flat dark @click="logout()" color="white">
+      <v-icon large>exit_to_app</v-icon>
+    </v-btn>
+  </span>
+      <v-btn icon large
+             flat dark :to='publications' color="white">
+        <v-icon large>apps</v-icon>
       </v-btn>
-      <v-btn
-        v-if="!$store.state.isUserLoggedIn"
-        flat dark @click="navigateTo({name:'login'})">
-        <v-icon color="white" large>account_circle</v-icon>
-      </v-btn>
-      <v-btn
-        v-if="$store.state.isUserLoggedIn"
-        flat dark @click="logout()">
-        <v-icon large color="white">exit_to_app</v-icon>
-      </v-btn>
-    </v-toolbar-items>
+    </v-toolbar-item>
   </v-toolbar>
+
 </template>
 
 <script>
@@ -46,6 +51,7 @@
   export default {
     components: {
       VIcon
+
     },
     methods: {
       navigateTo (route) {
@@ -66,9 +72,10 @@
 
   .home {
     cursor: pointer;
+    color: white;
   }
 
   .home:hover {
-    color: darkblue;
+    color: rgb(255, 87, 34);
   }
 </style>
