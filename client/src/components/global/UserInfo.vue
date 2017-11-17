@@ -17,7 +17,7 @@
         </v-flex>
         <v-flex xs12 sm12 md12>
           <v-card-text>
-            <div class="display-1 grey--text text--darken-3">{{username}}</div>
+            <div class="display-1 grey--text text--darken-3">{{username()}}</div>
           </v-card-text>
         </v-flex>
       </div>
@@ -49,9 +49,7 @@
       VSubheader
     },
     data () {
-      return {
-        username: this.$store.state.username
-      }
+      return {}
     },
     computed: {
       avatarHeight () {
@@ -69,7 +67,11 @@
         }
       }
     },
-    methods: {}
+    methods: {
+      username: function () {
+        return this.$store.state.username;
+      }
+    }
   }
 </script>
 

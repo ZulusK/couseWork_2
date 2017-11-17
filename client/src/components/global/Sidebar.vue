@@ -1,9 +1,10 @@
 <template>
 
   <v-navigation-drawer
+    absolute
     fixed
-    clipped
-    app
+    temporary
+    hide-overlay
     v-model="drawer"
     :width="sidebarWidth"
   >

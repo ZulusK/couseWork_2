@@ -18,6 +18,17 @@
         </slot>
       </panel>
     </v-flex>
+    <v-btn
+      fab
+
+      right
+      color="pink"
+      dark
+      fixed
+      :to="{name:'publications.create'}"
+    >
+      <v-icon>add</v-icon>
+    </v-btn>
   </v-layout>
 
 </template>

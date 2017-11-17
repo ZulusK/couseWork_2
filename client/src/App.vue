@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <v-app>
+      <page-header @sidebar="sidebarDrawer=!sidebarDrawer"/>
       <sidebar :drawer.sync="sidebarDrawer"
                @opened="sidebarDrawer=true" @closed="sidebarDrawer=false"/>
-      <page-header @sidebar="sidebarDrawer=!sidebarDrawer"/>
+
 
       <v-content>
         <v-container fluid fill-heigth>
