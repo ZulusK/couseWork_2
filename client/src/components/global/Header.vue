@@ -22,11 +22,11 @@
     <v-toolbar-item>
     <span v-if="!$store.state.isUserLoggedIn">
     <v-btn icon large
-           flat dark :to='login' color="white">
+           flat dark :to="{name:'login'}" color="white">
       <v-icon large>account_circle</v-icon>
     </v-btn>
     <v-btn icon large
-           flat dark :to='signup' color="white">
+           flat dark :to='{name:"signup"}' color="white">
       <v-icon large>person_add</v-icon>
     </v-btn>
   </span>
@@ -37,7 +37,7 @@
     </v-btn>
   </span>
       <v-btn icon large
-             flat dark :to='publications' color="white">
+             flat dark :to='{name:"publications"}' color="white">
         <v-icon large>apps</v-icon>
       </v-btn>
     </v-toolbar-item>
