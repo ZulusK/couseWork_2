@@ -1,44 +1,24 @@
 <template>
-  <v-layout column>
-    <v-flex >
-      <panel title="Publicaions">
-        <slot>
-          <!--<v-layout row>-->
-            <div v-for="publication in publications" :key="publication.id" class="ma-3">
-              <panel :title="publication.title">
-                {{publication.title}}
-                {{publication.difficult}}
-                {{publication.description}}
-                <div v-for="tag in publication.tags">
-                  {{tag}}
-                </div>
-              </panel>
-            </div>
-          <!--</v-layout>-->
-        </slot>
-      </panel>
-    </v-flex>
-    <v-btn
-      fab
+  <v-content>
+    <v-container>
+      <v-layout row wrap class="text-xs-center">
+        <v-flex xs12 md10 offset-md1>
+            <publication-list :items="publications"/>
+        </v-flex>
+      </v-layout>
+    </v-container>
 
-      right
-      color="pink"
-      dark
-      fixed
-      :to="{name:'publications.create'}"
-    >
-      <v-icon>add</v-icon>
-    </v-btn>
-  </v-layout>
-
+  </v-content>
 </template>
 <script>
-  import Panel from '@/components/global/Panel'
+  import Panel from '@/components/global/Panel.vue'
   import PublicationsService from '@/services/PublicationsService'
+  import PublicationList from '@/components/publications/PublicationList.vue'
 
   export default {
     components: {
       Panel,
+      PublicationList
     },
     data () {
       return {

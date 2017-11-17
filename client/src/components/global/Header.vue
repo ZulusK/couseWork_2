@@ -31,10 +31,15 @@
     </v-btn>
   </span>
       <span v-else>
+        <v-btn icon large
+               flat dark :to="{name:'publications.create'}" color="white">
+        <v-icon large>add</v-icon>
+      </v-btn>
     <v-btn icon large
            flat dark @click="logout()" color="white">
       <v-icon large>exit_to_app</v-icon>
     </v-btn>
+
   </span>
       <v-btn icon large
              flat dark :to='{name:"publications"}' color="white">
@@ -46,13 +51,9 @@
 </template>
 
 <script>
-  import VIcon from "vuetify/src/components/VIcon/VIcon";
 
   export default {
-    components: {
-      VIcon
-
-    },
+    components: {},
     methods: {
       navigateTo (route) {
         this.$router.push(route);

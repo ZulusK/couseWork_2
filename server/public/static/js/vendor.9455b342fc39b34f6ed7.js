@@ -31761,6 +31761,55 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
+/***/ "Jjaz":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'v-card-media',
+
+  props: {
+    contain: Boolean,
+    height: {
+      type: [Number, String],
+      default: 'auto'
+    },
+    src: {
+      type: String
+    }
+  },
+
+  render (h) {
+    const data = {
+      'class': 'card__media',
+      style: {
+        height: !isNaN(this.height) ? `${this.height}px` : this.height
+      },
+      on: this.$listeners
+    }
+
+    const children = []
+
+    if (this.src) {
+      children.push(h('div', {
+        'class': 'card__media__background',
+        style: {
+          background: `url(${this.src}) center center / ${this.contain ? 'contain' : 'cover'} no-repeat`
+        }
+      }))
+    }
+
+    children.push(h('div', {
+      'class': 'card__media__content'
+    }, this.$slots.default))
+
+    return h('div', data, children)
+  }
+});
+
+
+/***/ }),
+
 /***/ "K9AI":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -36801,4 +36850,4 @@ __webpack_require__("vIB/")(String, 'String', function (iterated) {
 /***/ })
 
 });
-//# sourceMappingURL=vendor.3a005b9c6a703be55ef7.js.map
+//# sourceMappingURL=vendor.9455b342fc39b34f6ed7.js.map

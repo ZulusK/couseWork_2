@@ -12,7 +12,7 @@
             <img class="croped"
                  src="http://cp12.nevsepic.com.ua/93/1348001954-76201-9009437024-www.nevspc.com.ua.jpg"
                  alt="user avatar"
-                 onerror="this.src='https://cdn3.iconfinder.com/data/icons/internet-and-web-4/78/internt_web_technology-13-512.png'">
+                 onerror="this.src=`https://randomuser.me/api/portraits/men/${Math.floor(Math.random()*100)}.jpg`">
           </v-avatar>
         </v-flex>
         <v-flex xs12 sm12 md12>

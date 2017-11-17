@@ -17,7 +17,7 @@
           row
           v-if="item.heading"
           align-center
-          :key="index"
+          :key="i"
         >
           <v-flex xs6>
             <v-subheader v-if="item.heading">

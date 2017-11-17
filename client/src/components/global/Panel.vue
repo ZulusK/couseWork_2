@@ -2,7 +2,7 @@
   <v-flex class="elevation-5 white">
 
     <v-card flat fense class="accent-3 white--text ">
-      <v-card-title :class="color">
+      <v-card-title v-if="title" :class="color">
         <div class="display-3">{{title}}</div>
       </v-card-title>
       <v-card-media v-if="image" :src="image" height="300px"></v-card-media>
