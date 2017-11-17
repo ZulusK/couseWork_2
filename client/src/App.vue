@@ -16,14 +16,13 @@
                @opened="sidebarDrawer=true" @closed="sidebarDrawer=false"/>
       <!--<v-toolbar-side-icon @click="sidebarDrawer=!sidebarDrawer"></v-toolbar-side-icon>-->
       <page-header @sidebar="sidebarDrawer=!sidebarDrawer"/>
-      <!--<v-toolbar app></v-toolbar>-->
-      <!--<page-header/>-->
+
       <v-content>
         <v-container fluid>
           <!--<router-view/>-->
         </v-container>
       </v-content>
-      <v-footer app></v-footer>
+      <page-footer/>
     </v-app>
   </div>
 </template>
