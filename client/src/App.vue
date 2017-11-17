@@ -1,24 +1,12 @@
 <template>
-  <!--<div id="app">-->
-  <!--<v-app>-->
-  <!--<page-header/>-->
-  <!--<main>-->
-  <!--<v-container fluid dark>-->
-  <!--<router-view/>-->
-  <!--</v-container>-->
-  <!--</main>-->
-  <!--<page-footer/>-->
-  <!--</v-app>-->
-  <!--</div>-->
   <div id="app">
     <v-app>
       <sidebar :drawer.sync="sidebarDrawer"
                @opened="sidebarDrawer=true" @closed="sidebarDrawer=false"/>
-      <!--<v-toolbar-side-icon @click="sidebarDrawer=!sidebarDrawer"></v-toolbar-side-icon>-->
       <page-header @sidebar="sidebarDrawer=!sidebarDrawer"/>
 
       <v-content>
-        <v-container fluid>
+        <v-container fluid fill-heigth>
           <router-view/>
         </v-container>
       </v-content>

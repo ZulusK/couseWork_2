@@ -1,44 +1,64 @@
 <template>
-  <v-layout column v-if="!$store.state.isUserLoggedIn" class="text-xs-center">
-    <error-bar :show.sync="error" :message="errorMessage"/>
-    <v-flex xs6 offset-xs3>
-      <panel title="Login">
-        <v-form>
-          <v-card-text>
-            <v-container add_circle_outline>
-              <v-text-field
-                label="Username"
-                name="username"
-                v-model="credentials.username"
-                :rules="[required]"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="password"
-                label="Password"
-                name="password"
-                v-model="credentials.password"
-                :rules="[required]"
-                required
-              ></v-text-field>
-              <v-btn round @click="submit" color="success">
-                Login
-              </v-btn>
-            </v-container>
-          </v-card-text>
-        </v-form>
-      </panel>
-    </v-flex>
-  </v-layout>
+  <v-content>
+    <v-container>
+      <error-bar :show.sync="error" :message="errorMessage"/>
+      <!--<v-flex >-->
+      <v-layout v-if="!$store.state.isUserLoggedIn" class="text-xs-center">
+        <v-flex md10 offset-md1 lg8 offset-lg2 xl4 offset-xl4>
+          <panel title="Login" color="red"
+                 image="https://images.unsplash.com/photo-1495511623436-ba44aaee07cf?auto=format&fit=crop&w=1351&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D">
+            <div slot="text">
+              <v-form slot="text">
+                <v-container add_circle_outline>
+                  <v-layout column>
+                    <v-flex xs10 offset-xs1>
+                      <v-text-field
+                        label="Username"
+                        name="username"
+                        v-model="credentials.username"
+                        :rules="[required]"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs10 offset-xs1>
+                      <v-text-field
+                        type="password"
+                        label="Password"
+                        name="password"
+                        v-model="credentials.password"
+                        :rules="[required]"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-btn large @click="submit" color="success">
+                        Login
+                      </v-btn>
+                      <v-btn large :to="{name:'root'}" color="error">
+                        cancel
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-form>
+            </div>
+          </panel>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
+
 </template>
 <script>
 
   import AuthService from '@/services/AuthService'
   import Panel from '@/components/global/Panel'
   import ErrorBar from '@/components/global/ErrorSnackbar'
+  import VContent from "vuetify/src/components/VGrid/VContent";
 
   export default {
     components: {
+      VContent,
       Panel,
       ErrorBar
     },

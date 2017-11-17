@@ -1,43 +1,62 @@
 <template>
-  <v-layout column v-if="!$store.state.isUserLoggedIn" class="text-xs-center">
-    <error-bar :show.sync="error" :message="errorMessage"/>
-    <v-flex xs6 offset-xs3>
-      <panel title="Join us">
-        <v-form>
-          <v-card-text>
-            <v-container fluid>
-              <v-text-field
-                label="Name"
-                name="name"
-                v-model="credentials.name"
-                :rules="[required]"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="Username"
-                name="username"
-                v-model="credentials.username"
-                :rules="[required]"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="password"
-                label="Password"
-                name="username"
-                v-model="credentials.password"
-                :rules="[required]"
-                required
-              ></v-text-field>
-              <v-progress-linear slot="progress" :value="progress" height="5" :color="color"></v-progress-linear>
-              <v-btn round @click="submit" color="success">
-                Submit
-              </v-btn>
-            </v-container>
-          </v-card-text>
-        </v-form>
-      </panel>
-    </v-flex>
-  </v-layout>
+  <v-content>
+    <v-container>
+      <error-bar :show.sync="error" :message="errorMessage"/>
+      <v-layout column v-if="!$store.state.isUserLoggedIn" class="text-xs-center">
+        <v-flex md10 offset-md1 lg8 offset-lg2 xl4 offset-xl4>
+          <panel title="Join us" color="success"
+                 image="https://images.unsplash.com/photo-1493689485253-f07fcbfc731b?auto=format&fit=crop&w=1333&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D">
+            <div slot="text">
+              <v-form>
+                <v-container add_circle_outline>
+                  <v-layout column>
+                    <v-flex xs10 offset-xs1>
+                      <v-text-field
+                        label="Name"
+                        name="name"
+                        v-model="credentials.name"
+                        :rules="[required]"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs10 offset-xs1>
+                      <v-text-field
+                        label="Username"
+                        name="username"
+                        v-model="credentials.username"
+                        :rules="[required]"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs10 offset-xs1>
+                      <v-text-field
+                        type="password"
+                        label="Password"
+                        name="username"
+                        v-model="credentials.password"
+                        :rules="[required]"
+                        required
+                      ></v-text-field>
+                      <v-progress-linear slot="progress" :value="progress" height="5"
+                                         :color="color"></v-progress-linear>
+                    </v-flex>
+                    <v-flex>
+                      <v-btn large @click="submit" color="success">
+                        Submit
+                      </v-btn>
+                      <v-btn large :to="{name:'root'}" color="error">
+                        cancel
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-form>
+            </div>
+          </panel>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
 </template>
 <script>
 
