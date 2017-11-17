@@ -3,7 +3,7 @@
     <v-container>
       <v-layout row wrap class="text-xs-center">
         <v-flex xs12 xl10 offset-xl1>
-            <publication-list :items="publications"/>
+          <publication-list :items="publications"/>
         </v-flex>
       </v-layout>
     </v-container>
