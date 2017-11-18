@@ -38,7 +38,7 @@
     },
     computed: {
       titleColor () {
-        return ['green', 'success', 'yellow', 'orange', 'pink', 'red'][this.publication.difficult % 6];
+        return ['green', 'success', 'amber', 'orange', 'pink', 'red'][this.publication.difficult % 6];
       },
       title () {
         return this.publication.title.slice(0, 20);

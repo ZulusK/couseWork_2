@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs12 md8 offset-md2 xl6 offset-xl3>
         <v-card flat>
-          <img :src="publication.imageURL" @error="usePlaceholder(publication.id)" :id="publication.id" :height="400">
+          <img :src="publication.imageURL" @error="usePlaceholder(publication.id)" :id="publication.id">
           <v-card-title>
             <div class="display-1">
               {{publication.title}}
@@ -15,7 +15,7 @@
                 <tags :tags="publication.tags"/>
               </v-flex>
               <v-flex xs10 flexbox offset-xs1>
-                <div class="markdown-body">
+                <div class="clear markdown-body">
                   <vue-markdown :source="publication.text"/>
                 </div>
               </v-flex>
@@ -35,10 +35,10 @@
 
   export default {
     components: {
-      VueMarkdown,
       Panel,
       Tags,
       PublicationList,
+      VueMarkdown
     },
     data () {
       return {
@@ -61,7 +61,9 @@
         return ['green', 'success', 'yellow', 'orange', 'pink', 'red'][this.publication.difficult % 6];
       },
     },
+
     methods: {
+
       usePlaceholder (id) {
         console.log(id);
         let placeholder = (process.env.NODE_ENV.startsWith('dev')) ? 'https://cdn.browshot.com/static/images/not-found.png' : '/images/placeholder-image.png';
@@ -83,13 +85,14 @@
 <style scoped>
   img {
     width: 100%;
-    /*max-height: 100%;*/
-    /*max-width: 100%;*/
     object-fit: cover;
-    /*float: left;*/
     position: relative;
-    /*margin: 20px;*/
     border-radius: 5px;
     display: block;
   }
+
+  .clear * {
+    all: unset;
+  }
+
 </style>
