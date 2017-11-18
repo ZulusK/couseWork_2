@@ -1,20 +1,19 @@
 <template>
-  <v-content>
-    <v-container>
-      <v-layout row wrap class="text-xs-center">
-        <v-flex xs12 xl10 offset-xl1>
-            <publication-list :items="publications"/>
-        </v-flex>
-      </v-layout>
-    </v-container>
+  <!--<v-content>-->
+  <v-container>
+    <v-layout row wrap class="center">
+      <v-flex xs12 relative>
+        <publication-list :items="publications"/>
+      </v-flex>
+    </v-layout>
+  </v-container>
 
-  </v-content>
+  <!--</v-content>-->
 </template>
 <script>
   import Panel from '@/components/global/Panel.vue'
   import PublicationsService from '@/services/PublicationsService'
   import PublicationList from '@/components/publications/PublicationList.vue'
-
   export default {
     components: {
       Panel,
@@ -45,5 +44,9 @@
 </script>
 
 <style scoped>
-
+  .center {
+    margin: auto;
+    position: relative;
+    text-align: center;
+  }
 </style>

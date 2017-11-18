@@ -1,14 +1,11 @@
 <template>
-  <v-content>
-    <v-container>
-      <v-layout row wrap class="text-xs-center">
-        <v-flex xs12 xl10 offset-xl1>
-          <publication-list :items="publications"/>
-        </v-flex>
-      </v-layout>
-    </v-container>
+  <v-container>
+    <v-card>
+      <v-card-title>
 
-  </v-content>
+      </v-card-title>
+    </v-card>
+  </v-container>
 </template>
 <script>
   import Panel from '@/components/global/Panel.vue'
@@ -22,20 +19,26 @@
     },
     data () {
       return {
-        publications: [],
+        publication: {
+          title: "",
+          author: "",
+          difficult: null,
+
+        },
         timer: null,
       }
     },
     created: async function () {
       console.log('Я родился');
-      await this.getItems();
-      this.timer = setInterval(this.getItems, 1000 * 60)
+      await this.getItem();
+      this.timer = setInterval(this.getItem, 1000 * 60)
     },
+
     methods: {
-      async getItems () {
+      async getItem () {
         console.log('Я обновился');
         try {
-          this.publications = (await PublicationsService.index()).data.items;
+          this.publication = (await PublicationsService.get(this.$route.query.id)).data.items[0];
         } catch (e) {
           console.log(e);
         }

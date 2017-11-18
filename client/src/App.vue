@@ -35,6 +35,7 @@
       return {
         dialog: false,
         sidebarDrawer: this.$vuetify.breakpoint.name === 'xl',
+
       }
     },
     methods: {}

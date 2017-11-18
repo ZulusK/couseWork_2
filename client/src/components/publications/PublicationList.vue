@@ -1,11 +1,11 @@
 <template>
-  <v-container fluid grid-list-xl>
-    <v-layout row wrap>
-      <v-flex xs3 v-for="publication in items" :key="publication.title">
-        <publication-card  :publication="publication"/>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <!--<v-container fluid grid-list-xl>-->
+  <div class="flex-publication-prev-container">
+    <div v-for="publication in items" :key="publication.title">
+      <publication-card :publication="publication"/>
+    </div>
+  </div>
+  <!--</v-container>-->
 </template>
 
 <script>
@@ -23,3 +23,14 @@
     ]
   }
 </script>
+
+<style scoped>
+  .flex-publication-prev-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-flow: row wrap;
+    margin: 20px;
+    position: relative;
+  }
+</style>

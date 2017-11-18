@@ -61,17 +61,31 @@ function collectPublicationData (data) {
     };
 }
 
+function parseQuery (target) {
+    let query = {};
+    //get by id
+    if (target.id) {
+        if (Array.isArray(target.id)) {
+            query._id = {$in: []};
+            target._id.forEach((value) => query._id.$in.push(new ObjectID.createFromHexString(value)));
+        } else {
+            query._id = new ObjectID.createFromHexString(target.id);
+        }
+    }
+
+    return query;
+}
+
 api.get = (publication_db) => async (req, res, next) => {
     console.log(req.body);
-    if (req.body.target) {
+    if (req.body) {
         let query = {};
         //parse target
         try {
-            // query = JSON.parse(req.body.target);
-            console.log(query);
-            query = req.body.target;
+            query = parseQuery(typeof req.body.target === 'String' ? JSON.parse(req.body.target) : req.body.target);
+            // console.log(query);
         } catch (e) {
-            console.log(req.body.target);
+            console.log(req.body.target, e);
             return res.status(400).json({success: false, message: "bad target, use JSON"}).send();
         }
         try {

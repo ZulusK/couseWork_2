@@ -9,5 +9,8 @@ export default {
   },
   create (args) {
     return API().post('api/v1/publications/create', args);
+  },
+  get (id) {
+    return API().post('api/v1/publications/find', {target: {id: id}});
   }
 }

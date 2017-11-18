@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "mdi": "^2.0.46",
+    "page": "^1.7.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.2",

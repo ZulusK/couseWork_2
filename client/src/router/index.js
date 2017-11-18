@@ -6,6 +6,7 @@ import Login from '@/components/auth/Login'
 import Publications from '@/components/publications/Publications'
 import PublicationCreate from '@/components/publications/PublicationCreate'
 import PublicationEdit from '@/components/publications/PublicationEdit'
+import Publication from '@/components/publications/Publication'
 
 Vue.use(Router)
 
@@ -41,5 +42,10 @@ export default new Router({
       name: 'publications.edit',
       component: PublicationEdit
     },
+    {
+      path: '/publication/',
+      name: 'publication',
+      component: Publication
+    }
   ]
 })

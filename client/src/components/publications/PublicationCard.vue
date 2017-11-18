@@ -1,30 +1,28 @@
 <template>
-
-  <v-card v-if="publication" flat class=" elevation-5 publication-card">
-    <!--<a href="/publications/<%= obj._id %>" target="_self">-->
-    <div class='header' :class="titleColor">
-      <div class="display-1">{{title}}</div>
+  <router-link :to="{name:'publication',query:{id:publication.id}}">
+    <div v-if="publication" class=" elevation-5 publication-card flex-item">
+      <div class='header' :class="titleColor">
+        {{title}}
+      </div>
+      <img :src="publication.imageURL"
+           :id="publication.id"
+           @error.stop="usePlaceholder(publication.id)"
+           alt="image-preview of publication">
+      <div class="description">
+        {{description}}
+      </div>
+      <div class="tags">
+        <v-chip v-for="(tag,i) in publication.tags" class="tag" label :color="tagColor(i)" text-color="white" :key="i">
+          {{tag.slice(0, 10)}}
+        </v-chip>
+      </div>
     </div>
-    <img :src="publication.imageURL"
-         onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaL_bwIbirU4Yx3KneeiqTPeVyKztRfKJROVYK4LttLfDb3wYnw'"
-         alt="image-preview of publication">
-    <div class="description">
-      {{description}}
-    </div>
-    <div class="text-xs-center">
-      <v-chip v-for="(tag,i) in publication.tags" label :color="tagColor(i)" text-color="white" :key="i">
-        {{tag.slice(0, 10)}}
-      </v-chip>
-    </div>
-    <!--</a>-->
-  </v-card>
+  </router-link>
 </template>
 
 <script>
-  import VCardTitle from "vuetify/src/components/VCard/VCardTitle";
 
   export default {
-    components: {VCardTitle},
     data () {
       return {}
     },
@@ -35,11 +33,17 @@
       tagColor (i) {
         let colors = ['primary', 'red', 'blue', 'green', 'secondary', 'error'];
         return colors[Math.floor(Math.random(i) * colors.length)];
+      },
+      usePlaceholder (id) {
+        console.log(id);
+        console.log();
+        let placeholder = (process.env.NODE_ENV.startsWith('dev')) ? 'https://cdn.browshot.com/static/images/not-found.png' : '/images/placeholder-image.png';
+        document.getElementById(id).src = placeholder;
       }
     },
     computed: {
       titleColor () {
-        return ['green', 'success', 'yellow accent-3', 'orange lighten-1', 'pink', 'red'][this.publication.difficult % 6];
+        return ['green', 'success', 'yellow', 'orange', 'pink', 'red'][this.publication.difficult % 6];
       },
       title () {
         return this.publication.title.slice(0, 20);
@@ -72,21 +76,19 @@
 <style scoped>
 
   .publication-card {
+    width: 300px;
     color: #1c1c1c;
-    height: 100%;
+    height: auto;
     overflow: hidden;
-    /*box-shadow: 0px -10px 60px rgba(6, 4, 4, 0.5);*/
     transition: transform 0.4s;
-
     background-color: white;
-
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
   }
 
   .publication-card:hover {
-    /*box-shadow: 0px -10px 30px rgba(6, 4, 4, 0.3);*/
     padding: 0px;
+    word-wrap: break-word;
     transform: scale(0.95, 0.95); /* Standard syntax */
   }
 
@@ -95,28 +97,52 @@
     width: 280px;
     object-fit: cover;
     object-position: center;
-
     border-radius: 50%;
-    margin-top: 2%;
-    margin-left: 50%;
-    transform: translate(-50%, 0%);
+    margin: 10px;
   }
 
   .publication-card .description {
     color: #222;
     text-align: center;
     margin: 2%;
-    line-height: 20px;
+    font-weight: 100;
     font-size: 20px;
   }
 
   .publication-card .header {
     color: white;
     white-space: normal;
-    font-weight: 600;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 5px;
     text-align: center;
     height: auto;
   }
 
+  .flex-item {
+    flex-grow: 1;
+    flex-basis: 25%;
+    flex-shrink: 1;
+    margin: 20px;
+  }
+
+  .publication-card .tag {
+    color: white;
+    width: auto;
+    flex-grow: 1;
+    flex-basis: 25%;
+    flex-shrink: 1;
+    margin: 5px;
+  }
+
+  .publication-card .tags {
+    /*display: flex;*/
+    width: 90%;
+    justify-content: space-around;
+    align-items: center;
+    flex-flow: row wrap;
+    margin: 5px auto;
+    background: transparent;
+  }
 
 </style>

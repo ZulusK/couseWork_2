@@ -18,7 +18,6 @@ let express = require('express'),
 // setup express app
 app = express();
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'srs', "views"));             //configure path to views
 app.set('view engine', 'ejs');                                      //choose template engine
