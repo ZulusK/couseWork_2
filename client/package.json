@@ -19,6 +19,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.2",
+    "vue-markdown": "^2.2.4",
     "vue-material-design-icons": "^0.7.1",
     "vue-router": "^3.0.1",
     "vuetify": "^0.17.0",

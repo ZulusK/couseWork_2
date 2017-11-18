@@ -1,1445 +1,1445 @@
 {
-	"info": {
-		"name": "codual test",
-		"_postman_id": "459f1eef-8040-a9d1-f871-a911d42cd0bd",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "auth",
-			"description": "",
-			"item": [
-				{
-					"name": "/api/v1/auth/login[admin]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"",
-									"if(jsonData.token)pm.globals.set(\"admin_token\", jsonData.token);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "admin",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "admin",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "name",
-									"value": "2",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/login",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"login"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/login[user]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"if(jsonData.token)pm.globals.set(\"user_token\", jsonData.token);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "1",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "1",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/login",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"login"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/is/logined[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							},
-							{
-								"key": "Authorization",
-								"value": ""
-							}
-						],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/is/logined",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"is",
-								"logined"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/is/admin[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/is/admin",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"is",
-								"admin"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/is/admin[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/is/admin",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"is",
-								"admin"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/is/user[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/is/user",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"is",
-								"user"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/is/user[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/is/user",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"is",
-								"user"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/auth/signup[admin]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "express1",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "express1",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "name",
-									"value": "express",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/auth/signup",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"signup"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "users",
-			"description": "",
-			"item": [
-				{
-					"name": "/api/v1/users/info[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/users/info",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"info"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/users/info[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{host}}/api/v1/users/info",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"info"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/users/update[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "values",
-									"value": "{\"password\":\"admin\"}",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": "5a09960b5fa1225dc1b572d4",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "target",
-									"value": ".",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/update",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"update"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/users/update[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "values",
-									"value": "{\"name\":\"leha\"}",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": "5a09960b5fa1225dc1b572d4",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "target",
-									"value": "",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/update",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"update"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/users/delete[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "values",
-									"value": "{\"name\":\"leha\"}",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": "5a099674443a155e7c15b3bd",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": ".",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/delete",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"delete"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/users/delete[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "values",
-									"value": "{\"name\":\"leha\"}",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": "5a099674443a155e7c15b3bd",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "target",
-									"value": ".",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/delete",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"delete"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "{{host}}/api/v1/users/list[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "limit",
-									"value": "2",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/list",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"list"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "{{host}}/api/v1/users/setup",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "admi",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "name",
-									"value": "user",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "user",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/users/setup",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"setup"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "pubications",
-			"description": "",
-			"item": [
-				{
-					"name": "{{host}}/api/v1/publications/create[admin]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"",
-									"if(jsonData.publication)pm.globals.set(\"publication_admin\", jsonData.publication);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "title",
-									"value": "NEW PUBLICATION 3",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "descr 1 2 3 4 5",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "text",
-									"value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "tags",
-									"value": "[\"tag1\",\"tag2\",\"tag3\"]",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "difficult",
-									"value": "3",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/create",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"create"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "{{host}}/api/v1/publications/create[user]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"",
-									"if(jsonData.publication)pm.globals.set(\"publication_user\", jsonData.publication);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "title",
-									"value": "NEW PUBLICATION USER",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "descr 1 2 3 4 5",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "text",
-									"value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "tags",
-									"value": "[\"tag1\",\"tag2\",\"tag3\"]",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "difficult",
-									"value": "3",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/create",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"create"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "{{host}}/api/v1/publications/get[user]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"",
-									"if(jsonData.publication)pm.globals.set(\"publication_user\", jsonData.publication);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "title",
-									"value": "NEW PUBLICATION USER",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "description",
-									"value": "descr 1 2 3 4 5",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "text",
-									"value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "tags",
-									"value": "[\"tag1\",\"tag2\",\"tag3\"]",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "difficult",
-									"value": "3",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "target",
-									"value": "{}",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/find",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"find"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "{{host}}/api/v1/publications/update[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "5a0ac0709ae270672b784c5a",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "limit",
-									"value": "30",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "1",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "values",
-									"value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/update",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"update"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/publications/find[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "{}",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/find",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"find"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/publications/list[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "5a0ac0709ae270672b784c5a",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "limit",
-									"value": "30",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "1",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "values",
-									"value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/list",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"list"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/publications/list[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "5a0ac0709ae270672b784c5a",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "limit",
-									"value": "30",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "1",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "values",
-									"value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
-									"description": "",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/list",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"list"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/publications/delete[admin]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{admin_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "5a0aec9a7e772517ac58fa7a",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "limit",
-									"value": "30",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "values",
-									"value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/delete",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"delete"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/publications/delete[user]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "target",
-									"value": "5a0af2f0cd754f1fadfde169",
-									"description": "",
-									"type": "text"
-								},
-								{
-									"key": "limit",
-									"value": "30",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "values",
-									"value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
-									"description": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/publications/delete",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"publications",
-								"delete"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "/api/v1",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "localhost:3000/api/v1/",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"v1",
-						""
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "name": "codual test",
+    "_postman_id": "459f1eef-8040-a9d1-f871-a911d42cd0bd",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "description": "",
+      "item": [
+        {
+          "name": "/api/v1/auth/login[admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(jsonData.token)pm.globals.set(\"admin_token\", jsonData.token);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "admin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "2",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/login[user]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "if(jsonData.token)pm.globals.set(\"user_token\", jsonData.token);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "1",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "1",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/is/logined[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/auth/is/logined",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "is",
+                "logined"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/is/admin[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/auth/is/admin",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "is",
+                "admin"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/is/admin[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/auth/is/admin",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "is",
+                "admin"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/is/user[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/auth/is/user",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "is",
+                "user"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/is/user[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/auth/is/user",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "is",
+                "user"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/auth/signup[admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "express1",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "express1",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "express",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/auth/signup",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "description": "",
+      "item": [
+        {
+          "name": "/api/v1/users/info[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/users/info",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "info"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/users/info[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{host}}/api/v1/users/info",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "info"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/users/update[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "values",
+                  "value": "{\"password\":\"admin\"}",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": "5a09960b5fa1225dc1b572d4",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "target",
+                  "value": ".",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/update",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "update"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/users/update[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "values",
+                  "value": "{\"name\":\"leha\"}",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": "5a09960b5fa1225dc1b572d4",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "target",
+                  "value": "",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/update",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "update"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/users/delete[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "values",
+                  "value": "{\"name\":\"leha\"}",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": "5a099674443a155e7c15b3bd",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": ".",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/delete",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "delete"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/users/delete[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "values",
+                  "value": "{\"name\":\"leha\"}",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": "5a099674443a155e7c15b3bd",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "target",
+                  "value": ".",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/delete",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "delete"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "{{host}}/api/v1/users/list[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/list",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "list"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "{{host}}/api/v1/users/setup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "admi",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "name",
+                  "value": "user",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "password",
+                  "value": "user",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/users/setup",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "setup"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "pubications",
+      "description": "",
+      "item": [
+        {
+          "name": "{{host}}/api/v1/publications/create[admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(jsonData.publication)pm.globals.set(\"publication_admin\", jsonData.publication);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "NEW PUBLICATION 3",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "descr 1 2 3 4 5",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "text",
+                  "value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"tag1\",\"tag2\",\"tag3\"]",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "difficult",
+                  "value": "3",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/create",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "create"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "{{host}}/api/v1/publications/create[user]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(jsonData.publication)pm.globals.set(\"publication_user\", jsonData.publication);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "NEW PUBLICATION USER",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "descr 1 2 3 4 5",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "text",
+                  "value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"tag1\",\"tag2\",\"tag3\"]",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "difficult",
+                  "value": "3",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/create",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "create"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "{{host}}/api/v1/publications/get[user]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(jsonData.publication)pm.globals.set(\"publication_user\", jsonData.publication);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "NEW PUBLICATION USER",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "description",
+                  "value": "descr 1 2 3 4 5",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "text",
+                  "value": "uhcihwcihj xhci hceuiah auiechia ceicw/c[w p/wq p,po [ . ./r. oot .po ptiqowmjwio",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"tag1\",\"tag2\",\"tag3\"]",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "difficult",
+                  "value": "3",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "target",
+                  "value": "{}",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/find",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "find"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "{{host}}/api/v1/publications/update[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "5a0ac0709ae270672b784c5a",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "values",
+                  "value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/update",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "update"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/publications/find[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "{}",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/find",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "find"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/publications/list[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "5a0ac0709ae270672b784c5a",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "values",
+                  "value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/list",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "list"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/publications/list[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "5a0ac0709ae270672b784c5a",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "values",
+                  "value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
+                  "description": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/list",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "list"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/publications/delete[admin]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "5a0aec9a7e772517ac58fa7a",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "values",
+                  "value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/delete",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "delete"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "/api/v1/publications/delete[user]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{user_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "target",
+                  "value": "5a0af2f0cd754f1fadfde169",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "limit",
+                  "value": "30",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "values",
+                  "value": "{\"title\":\"SET\", \"tags\":[\"1\"]}",
+                  "description": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/api/v1/publications/delete",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "publications",
+                "delete"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "/api/v1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "url": {
+          "raw": "localhost:3000/api/v1/",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "v1",
+            ""
+          ]
+        },
+        "description": ""
+      },
+      "response": []
+    }
+  ]
 }

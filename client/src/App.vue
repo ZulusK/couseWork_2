@@ -51,7 +51,7 @@
     font-size: 120px;
   }
 
-  .content{
+  .content {
     background: url('https://images.unsplash.com/photo-1507237081139-5dfb209dba79?auto=format&fit=crop&w=2060&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D') no-repeat center fixed;
     background-size: cover;
 
