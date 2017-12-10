@@ -1,49 +1,46 @@
 {
-  "name": "codual",
+  "name": "webprogbase2",
   "version": "0.0.1",
   "private": true,
-  "engines": {
-    "node": "9.0.0"
-  },
   "scripts": {
-    "start": "node ./server/bin/www",
-    "devstart": "nodemon ./server/bin/www"
+    "start": "node .server/bin/www",
+    "dev": "nodemon ./server/bin/www"
   },
   "_moduleAliases": {
     "@root": ".",
-    "@Coudal": "./server/",
-    "@CodualAPI": "./server/app/api",
-    "@CodualDB": "./server/database/",
-    "@CodualDBModels": "./server/database/models",
-    "@CodualRoutes": "./server/app/routes",
-    "@config": "./server/config/",
-    "@utils": "./server/Utils.js"
+    "@server": "./server/",
+    "@APIv1": "./server/routes/api/v1/",
+    "@DB": "./server/database/",
+    "@config": "./server/config/index.js",
+    "@utils": "./server/tools/utils.js",
+    "@auth": "./server/tools/auth.js",
+    "@routes": "./server/tools/routes.js",
+    "@driverDB": "./server/tools/driverDB.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "busboy": "^0.2.14",
+    "busboy-body-parser": "^0.3.1",
     "consign": "^0.1.6",
     "cookie-parser": "~1.4.3",
-    "cors": "^2.8.4",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^4.0.0",
-    "ejs": "^2.5.7",
     "express": "~4.15.5",
-    "jsonwebtoken": "^8.1.0",
-    "module-alias": "^2.0.2",
-    "mongoose": "^4.13.1",
+    "module-alias": "^2.0.3",
+    "mongoose": "^4.13.6",
     "mongoose-paginate": "^5.0.3",
     "morgan": "~1.9.0",
-    "nodemon": "^1.12.1",
-    "passport": "^0.4.0",
-    "passport-jwt": "^3.0.1",
-    "passport-local": "^1.0.0",
+    "nodemon": "^1.12.5",
     "serve-favicon": "~2.4.5"
   },
   "nodemonConfig": {
     "ignore": [
-      "src/public/*",
-      "src/views/*",
+      "node_modules/*",
+      "server/public/*",
+      "server/views/*",
+      "server/static/*",
+      "client/*",
       ".git",
       ".gitignore",
       "README.nd"
