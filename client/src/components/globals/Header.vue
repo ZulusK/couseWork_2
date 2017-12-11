@@ -1,30 +1,36 @@
 <template>
   <header v-show="UI.isShown">
     <section
-      class="hero is-small is-primary"
+      class="hero is-small  is-transparent"
       ref="hero">
-      <div class="hero-head">
-        <div
-          class="navbar"
-          role="navigation"
-          aria-label="main navigation"
-          id="header"
-          ref="header">
-          <div class="navbar-brand ">
-            <!--logo-->
-            <logo-btn/>
-            <!--login-->
-            <login-btn @action="$emit('login')"/>
-            <button
-              class="button navbar-burger is-amber is-left"
-              data-target="menu"
-              ref="burger"
-              @click="showAllMenu()"
-              v-ripple>
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
+      <div class="hero-head is-primary">
+        <div class="container">
+          <div
+            class="navbar is-primary"
+            role="navigation"
+            aria-label="main navigation"
+            id="header"
+            ref="header">
+            <div class="navbar-brand ">
+              <!--logo-->
+              <logo-btn/>
+              <!--login-->
+              <login-btn @action="$emit('login')"/>
+              <!--register-->
+              <register-btn @action="$emit('register')"/>
+              <!--logout-->
+              <logout-btn @action="$emit('logout')"/>
+              <button
+                class="button navbar-burger is-amber is-left"
+                data-target="menu"
+                ref="burger"
+                @click="showAllMenu()"
+                v-ripple>
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -51,12 +57,9 @@
         }
       }
     },
-    methods: {},
-    computed: {},
     props: [
       'toggle'
     ],
-    created: {},
     watch: {
       toggle () {
         this.UI.isShown = !this.UI.isShown;
@@ -65,4 +68,7 @@
   }
 </script>
 <style scoped lang="scss">
+  .no-bg {
+    background-color: transparent;
+  }
 </style>

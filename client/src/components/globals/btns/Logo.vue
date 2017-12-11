@@ -1,19 +1,17 @@
 <template>
-  <a class="navbar-item is-transparent">
+  <a class="navbar-item" ref="btn">
     <router-link
       :to="{name:'index'}">
       <b-icon
+        class="has-text-primary-2 "
         pack="fa"
         icon="home"
-        size="is-large">
+        customSize="fa-2x">
       </b-icon>
-      <b-icon
-        pack="mdi"
-        icon="account"
-        size="is-small">
-      </b-icon>
-      <span class="title is-primary">Codual</span>
+      <span class="title is-hidden-touch has-text-primary-2">Codual</span>
     </router-link>
+    <ui-ripple-ink trigger="btn" class="ripple"/>
+    <ui-tooltip trigger="btn" position="is-bottom">Go to home</ui-tooltip>
   </a>
 </template>
 <script>
@@ -22,12 +20,12 @@
     data () {
       return {}
     },
-    methods: {},
-    computed: {},
-    props: [],
-    created: {}
   }
 </script>
 <style scoped lang="scss">
+  @import "~material-colors/dist/colors";
 
+  .ripple {
+    color: $md-amber-200;
+  }
 </style>

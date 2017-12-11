@@ -6,10 +6,10 @@
     data () {
       return {}
     },
-    methods: {},
-    computed: {},
-    props: {},
-    created: {}
+//    methods: {},
+//    computed: {},
+//    props: {},
+//    created: {}
   }
 </script>
 <style scoped lang="scss">

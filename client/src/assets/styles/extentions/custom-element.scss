@@ -5,10 +5,11 @@
 // Set your colors
 $primary: $md-amber-500;
 $primary-invert: $white;
-
+$twitter: $md-light-blue-500;
+$twitter-invert: $md-white;
 $primary-2: $md-grey-900;
 $primary-2-invert: $white;
-// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+
 $colors: (
   "white": ($white, $black),
   "black": ($black, $white),
@@ -20,12 +21,13 @@ $colors: (
   "danger": ($danger, $danger-invert),
   "primary": ($primary, $primary-invert),
   "primary-2": ($primary-2, $primary-2-invert),
+  "twitter":($twitter, $twitter-invert)
 );
 
 // Links
-$link: $primary;
-$link-invert: $primary-invert;
-$link-focus-border: $primary;
+$link: $twitter;
+$link-invert: $twitter-invert;
+$link-focus-border: $twitter;
 
 // Import Bulma and Buefy styles
 @import "~bulma";

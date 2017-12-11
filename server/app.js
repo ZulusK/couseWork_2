@@ -10,7 +10,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const busboyBodyParser = require('busboy-body-parser');
-
+const cors = require('cors');
 // start
 var app = express();
 console.log("+APP: Up");
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(busboyBodyParser());
 app.use(cookieParser());
-
+app.use(cors());
 require('@auth').init(app);
 require('@middlewares')(app);
 require('@driverDB')(app);
