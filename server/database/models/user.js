@@ -2,7 +2,7 @@ const Schema = require('mongoose').Schema;
 const mongoose = require('mongoose');
 const Utils = require('@utils');
 const validator = require('@validator');
-
+const config = require('@config');
 let User = new Schema({
         email: {
             type: String,
@@ -30,8 +30,7 @@ let User = new Schema({
         facebook: {
             id: {
                 type: String,
-                unique:
-                    true
+                unique: true
             }
             ,
             name: {
@@ -104,6 +103,9 @@ let User = new Schema({
 User.index({email: 1}, {unique: true})
 User.plugin(require('mongoose-paginate'));
 
+/**
+ * define virtual property, accessToken, eq. tokens.access.value
+ */
 User.virtual('accessToken')
     .set(function (value) {
         this.tokens.access.created = Date.now();
@@ -112,6 +114,10 @@ User.virtual('accessToken')
     .get(function () {
         return this.tokens.access.value;
     });
+
+/**
+ * define virtual property, refreshToken, eq. tokens.refresh.value
+ */
 User.virtual('refreshToken')
     .set(function (value) {
         this.tokens.refresh.created = Date.now();
@@ -121,6 +127,9 @@ User.virtual('refreshToken')
         return this.tokens.refresh.value;
     });
 
+/**
+ * define virtual property, credentials, eq. {tokens.access.value, tokens.refresh.value}
+ */
 User.virtual('credentials')
     .get(function () {
         return {
@@ -160,7 +169,15 @@ User.pre('save', async function (next) {
  * @returns {boolean} is token is valid
  */
 User.methods.verifyToken = function (name, token) {
-    return this[name + 'Token'] == token;
+    return this[name + 'Token'] == token && !this.isTokenOutdated('name');
+}
+/**
+ * check is token is outdated
+ * @param name name of token: access or refresh
+ * @returns {boolean} true, if outdated
+ */
+User.methods.isTokenOutdated = function (name) {
+    return Math.round((Date.now() - this.tokens[name].created) / 1000) > config.security.TOKEN_LIFE[name];
 }
 /**
  * generate new token for user
@@ -170,11 +187,21 @@ User.methods.generateToken = function (name) {
     this[name + 'Token'] = Utils.crypto.random(32);
 }
 
+/**
+ * validate email value
+ * @param value value of email to validate
+ * @returns {boolean} true, if valid
+ */
 function validateEmail (value) {
     return !this.email.required
         || validator('user', 'email', value);
 }
 
+/**
+ * validate password value
+ * @param value value of password to validate
+ * @returns {boolean} true, if valid
+ */
 function validatePassword (value) {
     return !this.password.required
         || validator('user', 'password', value);
