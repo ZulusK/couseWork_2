@@ -52,6 +52,27 @@ module.exports.init = (app) => {
             }
         }
     ));
+    // facebook startegy
+    passport.use(new FacebookStrategy({
+            // pull in our app id and secret from our auth.js file
+            clientID: config.auth.facebook.APP_ID,
+            clientSecret: config.auth.facebook.APP_SECRET,
+            callbackURL: config.auth.facebook.CALLBACK_URL,
+        },
+        // facebook will send back the token and profile
+        async function (token, refreshToken, profile, done) {
+            try {
+                const user = await DBusers.get.byFacebook(profile.id);
+                if (!user) {
+                    done(null, false)
+                } else {
+                    done(null, user);
+                }
+            } catch (err) {
+                return done(err);
+            }
+        }
+    ));
     app.use(passport.initialize());
     console.log("+Auth: configured");
 }

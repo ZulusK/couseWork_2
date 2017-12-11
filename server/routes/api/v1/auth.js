@@ -73,7 +73,7 @@ router.post('/logout', passport.authenticate(['basic', 'bearer'], {session: fals
     await req.user.save();
     return res.json({success: true});
 });
-router.post('/token', passport.authenticate('bearer-refresh', {session: false}), async (req, res, next) => {
+router.get('/token', passport.authenticate('bearer-refresh', {session: false}), async (req, res, next) => {
     req.user.generateToken('access');
     await req.user.save();
     return res.json(
@@ -84,4 +84,23 @@ router.post('/token', passport.authenticate('bearer-refresh', {session: false}),
             }
         });
 })
+
+// Redirect the user to Facebook for authentication
+router.get('/facebook', passport.authenticate('facebook', {session: false}));
+
+// Facebook will redirect the user to this URL after approval.
+router.get('/auth/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
+    try {
+        req.user.generateToken('access');
+        req.user.generateToken('refresh');
+        await req.user.save();
+        res.json({
+            success: true,
+            tokens: req.user.credentials
+        });
+    } catch (err) {
+        console.log(err);
+        return Utils.sendError(res, 500, "Server error");
+    }
+});
 module.exports = router;
