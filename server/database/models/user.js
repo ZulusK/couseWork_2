@@ -4,55 +4,104 @@ const Utils = require('@utils');
 const validator = require('@validator');
 
 let User = new Schema({
-    username: {
-        type: String,
-        unique: true,
-        required: true,
-        validate: {
-            validator: (value) => validator('user', 'username', value),
-            message: '{VALUE} is not a valid username'
-        },
-    },
-    password: {
-        type: String,
-        required: true,
-        validate: {
-            validator: (value) => validator('user', 'password', value),
-            message: '{VALUE} is not a valid password'
-        },
-    },
-    facebookId: {
-        type: String,
-    },
-    salt: {
-        type: String
-    },
-    tokens: {
-        access: {
-            value: {
-                type: String,
-                default: '',
+        email: {
+            type: String,
+            unique: function () {
+                return !Boolean(this.facebook.id);
             },
-            created: {
-                type: Date
-            }
-        },
-        refresh: {
-            value: {
-                type: String,
-                default: '',
+            required: function () {
+                return !Boolean(this.facebook.id)
             },
-            created: {
-                type: Date
-            }
+            validate: {
+                validator: validateEmail,
+                message: '{VALUE} is not a valid username'
+            },
         },
-    },
-    created: {
-        type: Date,
-        default: Date.now
-    }
-});
-User.index({username: 1}, {unique: true})
+        password: {
+            type: String,
+            required: function () {
+                return !Boolean(this.facebook.id);
+            },
+            validate: {
+                validator: validatePassword,
+                message: '{VALUE} is not a valid password'
+            },
+        },
+        facebook: {
+            id: {
+                type: String,
+                unique:
+                    true
+            }
+            ,
+            name: {
+                type: String
+            }
+            ,
+            avatar: {
+                type: String
+            }
+            ,
+            email: {
+                type: String
+            }
+            ,
+            tokens: {
+                access: {
+                    type: String
+                }
+                ,
+                refresh: {
+                    type: String
+                }
+            }
+        }
+        ,
+        salt: {
+            type: String
+        }
+        ,
+        tokens: {
+            access: {
+                value: {
+                    type: String,
+                    default:
+                        '',
+                }
+                ,
+                created: {
+                    type: Date
+                }
+            }
+            ,
+            refresh: {
+                value: {
+                    type: String,
+                    default:
+                        '',
+                }
+                ,
+                created: {
+                    type: Date
+                }
+            }
+            ,
+        }
+        ,
+        created: {
+            type: Date,
+            default:
+            Date.now
+        }
+        ,
+        isAdmin: {
+            type: Boolean,
+            default:
+                false
+        }
+    })
+;
+User.index({email: 1}, {unique: true})
 User.plugin(require('mongoose-paginate'));
 
 User.virtual('accessToken')
@@ -93,7 +142,11 @@ User.methods.comparePasswords = function (password) {
 User.pre('save', async function (next) {
     if (this.isModified('password') || this.isNew) {
         this.salt = await Utils.crypto.random(8);
-        this.password = await Utils.crypto.hash(this.password, this.salt);
+        if (!this.password) {
+            this.password = await Utils.crypto.random(32);
+        } else {
+            this.password = await Utils.crypto.hash(this.password, this.salt);
+        }
         // fill tokens by random bytes
         this.generateToken('access');
         this.generateToken('refresh');
@@ -116,4 +169,15 @@ User.methods.verifyToken = function (name, token) {
 User.methods.generateToken = function (name) {
     this[name + 'Token'] = Utils.crypto.random(32);
 }
+
+function validateEmail (value) {
+    return !this.email.required
+        || validator('user', 'email', value);
+}
+
+function validatePassword (value) {
+    return !this.password.required
+        || validator('user', 'password', value);
+}
+
 module.exports = mongoose.model('User', User);

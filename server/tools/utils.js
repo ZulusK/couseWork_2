@@ -30,15 +30,15 @@ exports.crypto = {
      */
     random: (length) => {
         return crypto
-            .randomBytes(length)
-            .toString('base64');
+            .randomBytes(length + 1)
+            .toString('base64').substr(0, length);
     }
 }
 
 exports.errors = {
-    InvalidRequesDatatError (msg) {
+    InvalidRequesDataError (msg) {
         return {
-            name: 'InvalidRequesDatatError',
+            name: 'InvalidRequesDataError',
             message: msg
         }
     }

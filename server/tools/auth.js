@@ -10,9 +10,9 @@ const DBusers = require('@DBcore').users;
 module.exports.init = (app) => {
     // username & password auth
     passport.use(new BasicStrategy(
-        async function (username, password, done) {
+        async function (email, password, done) {
             try {
-                const user = await DBusers.get.byCredentials(username, password);
+                const user = await DBusers.get.byCredentials(email, password);
                 if (user) {
                     return done(null, user);
                 } else {
@@ -23,7 +23,7 @@ module.exports.init = (app) => {
             }
         }));
     // bearer token's auth, with access-tokens
-    passport.use(new BearerStrategy(
+    passport.use('access-token', new BearerStrategy(
         async function (token, done) {
             try {
                 const me = await DBusers.get.byToken('access', token);
@@ -38,7 +38,7 @@ module.exports.init = (app) => {
         }
     ));
     // bearer token's auth
-    passport.use('bearer-refresh', new BearerStrategy(
+    passport.use('refresh-token', new BearerStrategy(
         async function (token, done) {
             try {
                 const me = await DBusers.get.byToken('refresh', token);
@@ -52,23 +52,30 @@ module.exports.init = (app) => {
             }
         }
     ));
-    // facebook startegy
+    // facebook strategy
     passport.use(new FacebookStrategy({
             // pull in our app id and secret from our auth.js file
             clientID: config.auth.facebook.APP_ID,
             clientSecret: config.auth.facebook.APP_SECRET,
             callbackURL: config.auth.facebook.CALLBACK_URL,
+            profileFields: ['id', 'displayName', 'photos', 'email', 'gender', 'first_name', 'last_name']
         },
         // facebook will send back the token and profile
         async function (token, refreshToken, profile, done) {
+            console.log(profile)
             try {
-                const user = await DBusers.get.byFacebook(profile.id);
+                let user = await DBusers.get.byFacebook(profile.id);
                 if (!user) {
-                    done(null, false)
+                    // create new user
+                    let newUser = await DBusers.create.facebook(profile)
+                    done(null, newUser || false);
                 } else {
+                    // update user info
+                    await DBusers.update.facebook(user, profile);
                     done(null, user);
                 }
             } catch (err) {
+                console.log(err)
                 return done(err);
             }
         }

@@ -12,7 +12,7 @@ tools.collectDataFromReq = {
      */
     register (req) {
         let args = {};
-        args.username = req.body.username;
+        args.email = req.body.email;
         args.password = req.body.password;
         return args;
     }
@@ -20,15 +20,16 @@ tools.collectDataFromReq = {
 
 tools.verifyData = {
     register (args) {
-        if (!args.username || !validate(args.username)) {
-            throw Utils.errors.InvalidRequesDatatError('Your username is invalid')
+        if (!args.email || !validate('user', 'email', args.email)) {
+            throw Utils.errors.InvalidRequesDataError('Your email is invalid')
         }
         if (!args.password || !validate(args.password)) {
-            throw Utils.errors.InvalidRequesDatatError('Your password is invalid')
+            throw Utils.errors.InvalidRequesDataError('Your password is invalid')
         }
         return true;
     }
 }
+
 router.post('/register', async function (req, res, next) {
     const args = tools.collectDataFromReq.register(req);
     try {
@@ -37,8 +38,7 @@ router.post('/register', async function (req, res, next) {
         return Utils.sendError(res, 400, err.message);
     }
     try {
-        let user = await DBusers.create(args.username, args.password);
-        console.log(user)
+        let user = await DBusers.create.basic(args.email, args.password);
         return res.json(
             {
                 success: true,
@@ -67,13 +67,13 @@ router.post('/login', passport.authenticate('basic', {session: false}), async (r
         return Utils.sendError(res, 500, "Server error");
     }
 });
-router.post('/logout', passport.authenticate(['basic', 'bearer'], {session: false}), async (req, res, next) => {
+router.post('/logout', passport.authenticate(['access-token', 'bearer'], {session: false}), async (req, res, next) => {
     req.user.generateToken('access');
     req.user.generateToken('refresh');
     await req.user.save();
     return res.json({success: true});
 });
-router.get('/token', passport.authenticate('bearer-refresh', {session: false}), async (req, res, next) => {
+router.get('/token', passport.authenticate('refresh-token', {session: false}), async (req, res, next) => {
     req.user.generateToken('access');
     await req.user.save();
     return res.json(
