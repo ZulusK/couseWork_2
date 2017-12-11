@@ -9,7 +9,7 @@ module.exports = {
         facebook: {
             APP_ID: process.env.FACEBOOK_APP_ID,
             APP_SECRET: process.env.FACEBOOK_APP_SECRET,
-            CALLBACK_URL: this.ROOT_URL + '/api/v1/auth/facebook/token'
+            CALLBACK_URL: '/api/v1/auth/facebook/token'
         }
     },
     security: {
