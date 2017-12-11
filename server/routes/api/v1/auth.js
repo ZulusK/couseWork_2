@@ -89,7 +89,7 @@ router.get('/token', passport.authenticate('bearer-refresh', {session: false}), 
 router.get('/facebook', passport.authenticate('facebook', {session: false}));
 
 // Facebook will redirect the user to this URL after approval.
-router.get('/auth/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
+router.get('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
     try {
         req.user.generateToken('access');
         req.user.generateToken('refresh');
