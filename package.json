@@ -3,19 +3,23 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node .server/bin/www",
+    "start": "node ./server/bin/www",
     "dev": "nodemon ./server/bin/www"
   },
   "_moduleAliases": {
     "@root": ".",
     "@server": "./server/",
     "@APIv1": "./server/routes/api/v1/",
+    "@routes": "./server/routes/",
     "@DB": "./server/database/",
+    "@DBcore": "./server/database/driver",
     "@config": "./server/config/index.js",
     "@utils": "./server/tools/utils.js",
     "@auth": "./server/tools/auth.js",
-    "@routes": "./server/tools/routes.js",
-    "@driverDB": "./server/tools/driverDB.js"
+    "@middlewares": "./server/tools/routes.js",
+    "@driverDB": "./server/tools/driverDB.js",
+    "@DBmodels": "./server/database/models/models.js",
+    "@validator": "./server/tools/validator.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -32,6 +36,10 @@
     "mongoose-paginate": "^5.0.3",
     "morgan": "~1.9.0",
     "nodemon": "^1.12.5",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-http": "^0.3.0",
+    "passport-http-bearer": "^1.0.1",
     "serve-favicon": "~2.4.5"
   },
   "nodemonConfig": {

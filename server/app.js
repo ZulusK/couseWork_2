@@ -13,7 +13,7 @@ const busboyBodyParser = require('busboy-body-parser');
 
 // start
 var app = express();
-console.log("+:Up");
+console.log("+APP: Up");
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -24,7 +24,7 @@ app.use(busboyBodyParser());
 app.use(cookieParser());
 
 require('@auth').init(app);
-require('@routes')(app);
+require('@middlewares')(app);
 require('@driverDB')(app);
 
 module.exports = app;

@@ -1,4 +1,6 @@
 module.exports = (app) => {
+    // api middleware
+    app.use('/api', require('@routes/api'))
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
         var err = new Error('Not Found');
@@ -14,7 +16,7 @@ module.exports = (app) => {
 
         // render the error page
         res.status(err.status || 500);
-        res.render('error');
+        res.json({success: false, message: "Something going wrong", code: err.status || 500});
     });
-    console.log("+:Routes configured")
+    console.log("+Routes: configured")
 }
