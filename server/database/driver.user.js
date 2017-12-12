@@ -35,14 +35,11 @@ module.exports.update = {
 module.exports.get = {
     async byCredentials (email, password) {
         const user = await DB.findOne(UserModel, {email: email});
-        console.log(user)
         if (user && user.comparePasswords(password)) return user;
         else return null;
     },
     async byToken (name, token) {
-        const user = (name == 'access') ?
-            await DB.findOne(UserModel, {'tokens.access.value': token})
-            : await DB.findOne(UserModel, {'tokens.refresh.value': token});
+        const user = await UserModel.findById(token.id);
         if (user && user.verifyToken(name, token)) return user;
         else return null;
     },

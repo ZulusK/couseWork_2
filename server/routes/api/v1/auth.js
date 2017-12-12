@@ -55,8 +55,6 @@ router.post('/register', async function (req, res, next) {
 
 router.post('/login', passport.authenticate('basic', {session: false}), async (req, res, next) => {
     try {
-        req.user.generateToken('access');
-        req.user.generateToken('refresh');
         await req.user.save();
         res.json({
             success: true,
@@ -67,14 +65,13 @@ router.post('/login', passport.authenticate('basic', {session: false}), async (r
         return Utils.sendError(res, 500, "Server error");
     }
 });
-router.post('/logout', passport.authenticate(['access-token', 'bearer'], {session: false}), async (req, res, next) => {
-    req.user.generateToken('access');
-    req.user.generateToken('refresh');
+router.post('/logout', passport.authenticate(['access-token', 'refresh-token'], {session: false}), async (req, res, next) => {
+    req.user.generateSecret('access');
+    req.user.generateSecret('refresh');
     await req.user.save();
     return res.json({success: true});
 });
 router.get('/token', passport.authenticate('refresh-token', {session: false}), async (req, res, next) => {
-    req.user.generateToken('access');
     await req.user.save();
     return res.json(
         {
@@ -84,15 +81,15 @@ router.get('/token', passport.authenticate('refresh-token', {session: false}), a
             }
         });
 })
-
+router.post('/check', passport.authenticate(['access-token', 'basic'], {session: false}), (req, res, next) => {
+    return res.json({success: true});
+})
 // Redirect the user to Facebook for authentication
 router.get('/facebook', passport.authenticate('facebook', {session: false}));
 
 // Facebook will redirect the user to this URL after approval.
 router.get('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
     try {
-        req.user.generateToken('access');
-        req.user.generateToken('refresh');
         await req.user.save();
         res.json({
             success: true,

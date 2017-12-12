@@ -3,7 +3,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const BasicStrategy = require('passport-http').BasicStrategy;
 const config = require('@config');
-
+const Utils = require('@utils');
 
 const DBusers = require('@DBcore').users;
 
@@ -19,6 +19,8 @@ module.exports.init = (app) => {
                     return done(null, false);
                 }
             } catch (err) {
+                err.status = 400;
+                console.log('basic', err)
                 return done(err);
             }
         }));
@@ -26,13 +28,16 @@ module.exports.init = (app) => {
     passport.use('access-token', new BearerStrategy(
         async function (token, done) {
             try {
-                const me = await DBusers.get.byToken('access', token);
+                const decode = Utils.tokens.decode('access', token);
+                const me = await DBusers.get.byToken('access', decode);
                 if (me) {
                     return done(null, me);
                 } else {
                     return done(null, false);
                 }
             } catch (err) {
+                err.status = 400;
+                console.log('access', err)
                 return done(err);
             }
         }
@@ -41,13 +46,16 @@ module.exports.init = (app) => {
     passport.use('refresh-token', new BearerStrategy(
         async function (token, done) {
             try {
-                const me = await DBusers.get.byToken('refresh', token);
+                const decode = Utils.tokens.decode('refresh', token);
+                const me = await DBusers.get.byToken('refresh', decode);
                 if (me) {
                     return done(null, me);
                 } else {
                     return done(null, false);
                 }
             } catch (err) {
+                err.status = 400;
+                console.log('refresh', err)
                 return done(err);
             }
         }
@@ -75,7 +83,8 @@ module.exports.init = (app) => {
                     done(null, user);
                 }
             } catch (err) {
-                console.log(err)
+                err.status = 400;
+                console.log('facebook', err)
                 return done(err);
             }
         }

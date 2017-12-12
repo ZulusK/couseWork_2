@@ -9,7 +9,7 @@
       <span class="is-size-4 is-hidden-touch has-text-primary-2">Login</span>
     </span>
     <ui-ripple-ink trigger="btn" class="ripple"/>
-    <ui-tooltip trigger="btn" position="is-bottom">Login in app</ui-tooltip>
+    <ui-tooltip trigger="btn" position="bottom center">Login in app</ui-tooltip>
   </a>
 </template>
 <script>

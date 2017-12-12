@@ -58,35 +58,15 @@ let User = new Schema({
         ,
         salt: {
             type: String
-        }
-        ,
-        tokens: {
+        },
+    secrets: {
             access: {
-                value: {
-                    type: String,
-                    default:
-                        '',
-                }
-                ,
-                created: {
-                    type: Date
-                }
-            }
-            ,
+                type: String
+            },
             refresh: {
-                value: {
-                    type: String,
-                    default:
-                        '',
-                }
-                ,
-                created: {
-                    type: Date
-                }
+                type: String
             }
-            ,
-        }
-        ,
+    },
         created: {
             type: Date,
             default:
@@ -104,27 +84,39 @@ User.index({email: 1}, {unique: true})
 User.plugin(require('mongoose-paginate'));
 
 /**
- * define virtual property, accessToken, eq. tokens.access.value
+ * define virtual property, accessToken, generate token
  */
 User.virtual('accessToken')
-    .set(function (value) {
-        this.tokens.access.created = Date.now();
-        this.tokens.access.value = value;
-    })
     .get(function () {
-        return this.tokens.access.value;
+        return Utils.tokens.generate('access', this.payloadAccess)
     });
 
 /**
- * define virtual property, refreshToken, eq. tokens.refresh.value
+ * define virtual property, refreshToken, generate token
  */
 User.virtual('refreshToken')
-    .set(function (value) {
-        this.tokens.refresh.created = Date.now();
-        this.tokens.refresh.value = value;
-    })
     .get(function () {
-        return this.tokens.refresh.value;
+        return Utils.tokens.generate('refresh', this.payloadRefresh)
+    });
+/**
+ * define virtual property, payloadRefresh, contains id of user and his secret
+ */
+User.virtual('payloadRefresh')
+    .get(function () {
+        return {
+            id: this.id,
+            secret: this.secrets.refresh
+        }
+    });
+/**
+ * define virtual property, payloadAccess, contains id of user and his secret
+ */
+User.virtual('payloadAccess')
+    .get(function () {
+        return {
+            id: this.id,
+            secret: this.secrets.access
+        }
     });
 
 /**
@@ -133,8 +125,8 @@ User.virtual('refreshToken')
 User.virtual('credentials')
     .get(function () {
         return {
-            access: this.tokens.access.value,
-            refresh: this.tokens.refresh.value,
+            access: this.accessToken,
+            refresh: this.refreshToken
         }
     });
 /**
@@ -157,19 +149,19 @@ User.pre('save', async function (next) {
             this.password = await Utils.crypto.hash(this.password, this.salt);
         }
         // fill tokens by random bytes
-        this.generateToken('access');
-        this.generateToken('refresh');
+        this.generateSecret('access');
+        this.generateSecret('refresh');
     }
     next();
 })
 /**
  * check, is token is valid
  * @param name name of token, eq. 'access' or 'refresh'
- * @param token string with token's
+ * @param decode string with decoded token
  * @returns {boolean} is token is valid
  */
-User.methods.verifyToken = function (name, token) {
-    return this[name + 'Token'] == token && !this.isTokenOutdated('name');
+User.methods.verifyToken = function (name, decode) {
+    return decode.secret == this.secrets[name];
 }
 /**
  * check is token is outdated
@@ -180,11 +172,11 @@ User.methods.isTokenOutdated = function (name) {
     return Math.round((Date.now() - this.tokens[name].created) / 1000) > config.security.TOKEN_LIFE[name];
 }
 /**
- * generate new token for user
+ * generate new token's secret for user
  * @param name name of token
  */
-User.methods.generateToken = function (name) {
-    this[name + 'Token'] = Utils.crypto.random(32);
+User.methods.generateSecret = function (name) {
+    this.secrets[name] = Utils.crypto.random(32);
 }
 
 /**

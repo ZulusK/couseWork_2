@@ -9,7 +9,7 @@
       <span class="is-size-4 is-hidden-touch has-text-primary-2">Sign up</span>
     </span>
     <ui-ripple-ink trigger="btn" class="ripple"/>
-    <ui-tooltip trigger="btn" position="is-bottom">Sign up now</ui-tooltip>
+    <ui-tooltip trigger="btn" position="bottom center">Sign up now</ui-tooltip>
   </a>
 </template>
 <script>

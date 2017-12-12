@@ -1,5 +1,6 @@
 const crypto = require('crypto');
-
+const jwt = require('jsonwebtoken');
+const config = require('@config');
 exports.crypto = {
     /**
      * get hash of string, with this salt
@@ -32,6 +33,44 @@ exports.crypto = {
         return crypto
             .randomBytes(length + 1)
             .toString('base64').substr(0, length);
+    }
+}
+exports.tokens = {
+    algorithm: 'HS256',
+    /**
+     * generate new token, with specified name and data
+     * @param name on of 'access' or 'refresh'
+     * @param data data to store in token
+     * @returns {String} string created token
+     */
+    generate (name, data) {
+        return jwt.sign(
+            data,
+            name == 'access'
+                ? process.env.ACCESS_TOKENS_SECRET
+                : process.env.REFRESH_TOKENS_SECRET,
+            {
+                algorithm: this.algorithm,
+                expiresIn: config.security.TOKEN_LIFE[name]
+            }
+        )
+    },
+    /**
+     * decode token
+     * @param name one of 'access', 'refresh'
+     * @param token string with token
+     * @returns {{}} decoded token
+     */
+    decode (name, token) {
+        return jwt.verify(
+            token,
+            name == 'access'
+                ? process.env.ACCESS_TOKENS_SECRET
+                : process.env.REFRESH_TOKENS_SECRET,
+            {
+                algorithms: [this.algorithm]
+            }
+        )
     }
 }
 

@@ -14,7 +14,7 @@ module.exports = {
     },
     security: {
         TOKEN_LIFE: {
-            access: 60 * 60 * 24, //36 hours
+            access: 60 * 60 * 24, //24 hours
             refresh: 60 * 60 * 24 * 10 //10 days
         }
     },
