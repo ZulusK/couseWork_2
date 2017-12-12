@@ -95,7 +95,7 @@
       success (msg) {
         this.$toast.open({
           duration: 5000,
-          message: msg || "Something is going wrong",
+          message: msg || "All is ok",
           position: 'is-top',
           type: 'is-success'
         })
@@ -105,11 +105,11 @@
           try {
             const response = await AuthAPI.login(this.credentials);
             if (response.data.success) {
-              this.success("Hello, user");
-              this.isShown = false;
               this.$store.dispatch('setToken_access', response.data.tokens.access);
               this.$store.dispatch('setToken_refresh', response.data.tokens.refresh);
-              this.$store.dispatch('setUser', {});
+              this.$store.dispatch('setUser', response.data.user);
+              this.success(`Hello, ${response.data.user.name}`);
+              this.UI.isShown = false;
             } else {
               this.error(response.message)
             }
@@ -117,6 +117,8 @@
             console.log(err)
             this.error(err.message)
           }
+        } else {
+          this.error("Not all required fields are valid");
         }
       }
     },

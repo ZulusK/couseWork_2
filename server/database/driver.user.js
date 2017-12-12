@@ -2,10 +2,11 @@ const UserModel = require('@DBmodels').User
 const DB = require('@DBcore');
 
 module.exports.create = {
-    basic (email, password, isAdmin) {
+    basic (name, email, password, isAdmin) {
         return DB.create(UserModel, {
             password: password,
             email: email,
+            name: name,
             isAdmin: isAdmin || false
         })
     },

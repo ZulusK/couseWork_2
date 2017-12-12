@@ -7,7 +7,9 @@
         <div class="tabs is-centered is-boxed">
           <ul>
             <li><a ref="about" v-ripple>About</a></li>
-            <li><a v-ripple>API</a></li>
+            <li><a v-ripple>
+              <router-link :to="{name:'API'}">API</router-link>
+            </a></li>
             <li><a v-ripple :href="instagramLink" target="_blank"><span class="icon is-medium"><i
               class="fa fa-instagram fa-2x"></i> </span></a></li>
             <li><a v-ripple><span class="icon is-medium"><i class="fa fa-github fa-2x"></i> </span></a></li>

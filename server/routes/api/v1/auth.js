@@ -14,6 +14,7 @@ tools.collectDataFromReq = {
         let args = {};
         args.email = req.body.email;
         args.password = req.body.password;
+        args.name = req.body.name;
         return args;
     }
 };
@@ -23,9 +24,14 @@ tools.verifyData = {
         if (!args.email || !validate('user', 'email', args.email)) {
             throw Utils.errors.InvalidRequesDataError('Your email is invalid')
         }
-        if (!args.password || !validate(args.password)) {
+        if (!args.password || !validate('user', 'password', args.password)) {
             throw Utils.errors.InvalidRequesDataError('Your password is invalid')
         }
+        if (!args.name || !validate('user', 'name', args.name
+            )) {
+            throw Utils.errors.InvalidRequesDataError('Your name is invalid')
+        }
+
         return true;
     }
 }
@@ -38,13 +44,15 @@ router.post('/register', async function (req, res, next) {
         return Utils.sendError(res, 400, err.message);
     }
     try {
-        let user = await DBusers.create.basic(args.email, args.password);
+        let user = await DBusers.create.basic(args.name, args.email, args.password);
         return res.json(
             {
                 success: true,
-                tokens: user.credentials
+                tokens: user.credentials,
+                user: user.info()
             });
     } catch (err) {
+        console.log(err)
         if (err.code == 11000) {
             return Utils.sendError(res, 400, "This username is already taken");
         } else {
@@ -58,7 +66,8 @@ router.post('/login', passport.authenticate('basic', {session: false}), async (r
         await req.user.save();
         res.json({
             success: true,
-            tokens: req.user.credentials
+            tokens: req.user.credentials,
+            user: req.user.info()
         });
     } catch (err) {
         console.log(err);
@@ -93,7 +102,8 @@ router.get('/facebook/token', passport.authenticate('facebook', {session: false}
         await req.user.save();
         res.json({
             success: true,
-            tokens: req.user.credentials
+            tokens: req.user.credentials,
+            user: req.user.info()
         });
     } catch (err) {
         console.log(err);

@@ -4,6 +4,18 @@ const Utils = require('@utils');
 const validator = require('@validator');
 const config = require('@config');
 let User = new Schema({
+    name: {
+        type: String,
+        required: function () {
+            return !Boolean(this.facebook.id)
+        },
+        validate: {
+            validator: function (value) {
+                return validate('name', value, this)
+            },
+            message: '{VALUE} is not a valid name'
+        },
+    },
         email: {
             type: String,
             unique: function () {
@@ -13,8 +25,10 @@ let User = new Schema({
                 return !Boolean(this.facebook.id)
             },
             validate: {
-                validator: validateEmail,
-                message: '{VALUE} is not a valid username'
+                validator: function (value) {
+                    return validate('email', value, this)
+                },
+                message: '{VALUE} is not a valid email'
             },
         },
         password: {
@@ -23,39 +37,34 @@ let User = new Schema({
                 return !Boolean(this.facebook.id);
             },
             validate: {
-                validator: validatePassword,
+                validator: function (value) {
+                    return validate('password', value, this)
+                },
                 message: '{VALUE} is not a valid password'
             },
         },
         facebook: {
             id: {
-                type: String,
-                unique: true
-            }
-            ,
+                type: String
+            },
             name: {
                 type: String
-            }
-            ,
+            },
             avatar: {
                 type: String
-            }
-            ,
+            },
             email: {
                 type: String
-            }
-            ,
+            },
             tokens: {
                 access: {
                     type: String
-                }
-                ,
+                },
                 refresh: {
                     type: String
                 }
             }
-        }
-        ,
+        },
         salt: {
             type: String
         },
@@ -71,12 +80,10 @@ let User = new Schema({
             type: Date,
             default:
             Date.now
-        }
-        ,
+        },
         isAdmin: {
             type: Boolean,
-            default:
-                false
+            default: false
         }
     })
 ;
@@ -180,23 +187,28 @@ User.methods.generateSecret = function (name) {
 }
 
 /**
- * validate email value
- * @param value value of email to validate
+ * validate value in user object
+ * @param field name of field to validate
+ * @param value value to validate
+ * @param subject object to get fields
  * @returns {boolean} true, if valid
  */
-function validateEmail (value) {
-    return !this.email.required
-        || validator('user', 'email', value);
+function validate (field, value, subject) {
+    return !subject[field].required
+        || validator('user', field, value);
 }
 
-/**
- * validate password value
- * @param value value of password to validate
- * @returns {boolean} true, if valid
- */
-function validatePassword (value) {
-    return !this.password.required
-        || validator('user', 'password', value);
+User.methods.info = function () {
+    return {
+        id: this.id,
+        email: this.email || undefined,
+        name: this.name || undefined,
+        facebook: {
+            name: this.facebook.name,
+            avatar: this.facebook.avatar,
+        },
+        isAdmin: this.isAdmin,
+        created: this.created
+    }
 }
-
 module.exports = mongoose.model('User', User);

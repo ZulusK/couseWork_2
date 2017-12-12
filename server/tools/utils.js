@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const config = require('@config');
+const fs = require('fs-promise');
+const commonmark = require('commonmark');
 exports.crypto = {
     /**
      * get hash of string, with this salt
@@ -84,4 +86,27 @@ exports.errors = {
 }
 exports.sendError = (res, code, msg) => {
     return res.status(code).json({success: false, message: msg}).end();
+}
+
+exports.fs = {
+    /**
+     * read file from file storage
+     * @param pathToFile path to file
+     * @returns {*}
+     */
+    read (pathToFile) {
+        return fs.readFile(pathToFile, 'utf8');
+    }
+}
+exports.md = {
+    reader: new commonmark.Parser(),
+    writer: new commonmark.HtmlRenderer({safe: true}),
+    /**
+     * render string as Markdown
+     * @param text text to render
+     */
+    render (text) {
+        var parsed = this.reader.parse(text);
+        return this.writer.render(parsed); // result is a String
+    }
 }
