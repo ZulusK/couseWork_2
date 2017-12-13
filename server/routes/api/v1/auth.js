@@ -94,7 +94,7 @@ router.post('/check', passport.authenticate(['access-token', 'basic'], {session:
     return res.json({success: true});
 })
 // Redirect the user to Facebook for authentication
-router.get('/facebook', passport.authenticate('facebook', {session: false}));
+router.post('/facebook', passport.authenticate('facebook', {session: false}));
 
 // Facebook will redirect the user to this URL after approval.
 router.get('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {

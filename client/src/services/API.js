@@ -9,6 +9,7 @@ export default {
       username: username,
       password: password
     }
+
     console.log(4)
     return axios.create(args)
   },
@@ -30,6 +31,10 @@ export default {
   },
   noAuth () {
     let args = {};
+    args.maxRedirects = 10;
+    args.headers = {
+      'Access-Control-Allow-Origin': '*'
+    };
     args.baseURL = globals.ROOT_URL;
     return axios.create(args)
   }

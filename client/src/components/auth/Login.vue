@@ -52,7 +52,22 @@
          @click="login()">
         Login
       </a>
-      <br>
+      <hr>
+      <a class="button is-facebook is-medium"
+         ref="btn"
+         v-ripple
+         @click="loginFacebook()">
+        <b-icon
+          type="is-white"
+          pack="mdi"
+          icon="facebook"
+          size="is-middle">
+        </b-icon>
+        <div>Facebook</div>
+      </a>
+      <br/>
+      <br/>
+
       <p class="has-text-grey">
         <a @click="$emit('register'); UI.isShown=false">
           Sign Up
@@ -99,6 +114,24 @@
           position: 'is-top',
           type: 'is-success'
         })
+      },
+      async loginFacebook () {
+        try {
+          const response = await AuthAPI.loginFacebook();
+          if (response.data.success) {
+            console.log(response, response.data);
+            this.$store.dispatch('setToken_access', response.data.tokens.access);
+            this.$store.dispatch('setToken_refresh', response.data.tokens.refresh);
+            this.$store.dispatch('setUser', response.data.user);
+            this.success(`Hello, ${response.data.user.name}`);
+            this.UI.isShown = false;
+          } else {
+            this.error(response.message)
+          }
+        } catch (err) {
+          console.log(err)
+          this.error(err.message)
+        }
       },
       async login () {
         if (await this.$validator.validateAll()) {

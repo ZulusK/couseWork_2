@@ -9,8 +9,8 @@
         customSize="fa-2x">
       </b-icon>
       <span class="title is-hidden-touch has-text-primary-2">Codual</span>
-    </router-link>
     <ui-ripple-ink trigger="btn" class="ripple"/>
+    </router-link>
     <ui-tooltip trigger="btn" position="bottom center">Go to home</ui-tooltip>
   </a>
 </template>

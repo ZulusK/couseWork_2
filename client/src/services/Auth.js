@@ -4,6 +4,9 @@ export default {
   login (credentials) {
     return API.basic(credentials.email, credentials.password).post('/api/v1/auth/login');
   },
+  loginFacebook () {
+    return API.noAuth().post('/api/v1/auth/facebook');
+  },
   register (credentials) {
     return API.noAuth().post('/api/v1/auth/register/', credentials);
   },
