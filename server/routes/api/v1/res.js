@@ -21,6 +21,9 @@ tools.collectDataFromReq = {
         }
         return args;
 
+    },
+    delete (req) {
+        return this.get(req);
     }
 }
 
@@ -36,6 +39,9 @@ tools.verifyData = {
             throw Utils.errors.InvalidRequesDataError('Invalid id of file')
         }
         return true;
+    },
+    delete (args) {
+        return this.get(args)
     }
 }
 tools.result = {
@@ -95,6 +101,31 @@ router.route('/')
         } catch (err) {
             console.log(err);
             return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+    .delete(passport.authenticate(['access-token', 'basic', 'facebook'], {session: false}), async (req, res, next) => {
+        const args = tools.collectDataFromReq.delete(req);
+        try {
+            tools.verifyData.delete(args);
+        } catch (err) {
+            Utils.sendError(res, 400, err.message);
+        }
+        try {
+            const result = await DBimage.get.byID(args.query.id);
+            if (!result) {
+                return Utils.sendError(res, 404, "No such image");
+            }
+            if (String(result.metadata.owner) !== String(req.user._id) && !req.user.isAdmin) {
+                return Utils.sendError(res, 403, "Permission denied");
+            }
+        } catch (e) {
+            return Utils.sendError(res, 500, `Server error: ${e}`);
+        }
+        try {
+            await DBimage.remove.byID(args.query.id);
+            return res.json({success: true});
+        } catch (e) {
+            return Utils.sendError(res, 500, "Server error");
         }
     })
 module.exports = router;
