@@ -18,4 +18,5 @@ module.exports = (app) => {
         })
     });
     console.log("+DB: configured")
+    console.log(`+DB: ${config.DB}`)
 }
