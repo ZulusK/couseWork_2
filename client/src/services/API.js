@@ -9,7 +9,6 @@ export default {
       username: username,
       password: password
     }
-
     console.log(4)
     return axios.create(args)
   },

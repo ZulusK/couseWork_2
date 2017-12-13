@@ -1,10 +1,10 @@
 const path = require('path');
 module.exports = (app) => {
+    // api middleware
+    app.use('/api', require('@routes/api'))
     app.use('*', (req, res, next) => {
         res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
     });
-    // api middleware
-    app.use('/api', require('@routes/api'))
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
         var err = new Error('Not Found');
