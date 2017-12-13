@@ -20,4 +20,5 @@ module.exports = {
             refresh: 60 * 60 * 24 * 10 //10 days
         }
     },
+    MAX_FILE_SIZE: process.env.MAX_FILE_SIZE || 5000000 //5 Mb
 };

@@ -74,7 +74,7 @@ router.post('/login', passport.authenticate('basic', {session: false}), async (r
         return Utils.sendError(res, 500, "Server error");
     }
 });
-router.post('/logout', passport.authenticate(['access-token', 'refresh-token'], {session: false}), async (req, res, next) => {
+router.post('/logout', passport.authenticate(['access-token'], {session: false}), async (req, res, next) => {
     req.user.generateSecret('access');
     req.user.generateSecret('refresh');
     await req.user.save();
@@ -94,10 +94,10 @@ router.post('/check', passport.authenticate(['access-token', 'basic'], {session:
     return res.json({success: true});
 })
 // Redirect the user to Facebook for authentication
-router.post('/facebook', passport.authenticate('facebook', {session: false}));
+router.use('/facebook', passport.authenticate('facebook', {session: false}));
 
 // Facebook will redirect the user to this URL after approval.
-router.get('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
+router.use('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
     try {
         await req.user.save();
         res.json({

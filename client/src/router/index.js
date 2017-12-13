@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '%/Index';
 import API from '%/Other/API';
+import PersonalArea from '%/user/PersonalArea';
 
 Vue.use(Router)
 
@@ -17,5 +18,10 @@ export default new Router({
       name: 'API',
       component: API
     },
+    {
+      path: '/me/',
+      name: 'PersonalArea',
+      component: PersonalArea
+    }
   ]
 })

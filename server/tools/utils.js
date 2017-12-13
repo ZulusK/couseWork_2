@@ -2,7 +2,10 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const config = require('@config');
 const fs = require('fs-promise');
+const fileType = require("file-type");
 const commonmark = require('commonmark');
+const ObjectID = require('mongoose').Types.ObjectId;
+
 exports.crypto = {
     /**
      * get hash of string, with this salt
@@ -108,5 +111,45 @@ exports.md = {
     render (text) {
         var parsed = this.reader.parse(text);
         return this.writer.render(parsed); // result is a String
+    }
+}
+exports.files = {
+    ext: {
+        images: ["png", "jpg", "jpeg"]
+    },
+    /**
+     * return extention of file
+     * @param {file} to process
+     * @returns {String} extention of file
+     */
+    extOf (data) {
+        return fileType(data).ext
+    },
+    /**
+     * check is file is image by magic number
+     * @param file file to check
+     * @returns {boolean}
+     */
+    isImage (file) {
+        try {
+            return this.ext.images.indexOf(this.extOf(file.data)) !== -1;
+        } catch (e) {
+            return false;
+        }
+    }
+}
+exports.isValid = {
+    id (str) {
+        return ObjectID.isValid(str);
+    }
+}
+exports.convert = {
+    str2id (str) {
+        if (typeof str != 'string') str;
+        try {
+            return new ObjectID.createFromHexString(str);
+        } catch (e) {
+            return undefined;
+        }
     }
 }

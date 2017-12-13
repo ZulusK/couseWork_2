@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const DBimage = require('@DBcore').images;
 const config = require('@config');
 
-module.exports = (app) => {
+module.exports = async (app) => {
     const database = mongoose.connection;
     mongoose.Promise = Promise;
     mongoose.connect(config.DB, {
@@ -9,7 +10,10 @@ module.exports = (app) => {
         promiseLibrary: global.Promise
     });
     database.on('error', error => console.log(`-DB: connection failed: ${error}`));
-    database.on('connected', () => console.log(`+DB: connected`));
+    database.on('connected', async () => {
+        console.log(`+DB: connected`)
+        await DBimage.connect();
+    });
     database.on('disconnected', () => console.log('-DB: disconnected'));
     process.on('SIGINT', () => {
         database.close(() => {
