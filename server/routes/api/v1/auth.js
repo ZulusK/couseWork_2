@@ -99,12 +99,9 @@ router.use('/facebook', passport.authenticate('facebook', {session: false}));
 // Facebook will redirect the user to this URL after approval.
 router.use('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
     try {
-        await req.user.save();
-        res.json({
-            success: true,
-            tokens: req.user.credentials,
-            user: req.user.info()
-        });
+        res.render('authentificated', {
+            data: req.user.accessToken,
+        })
     } catch (err) {
         console.log(err);
         return Utils.sendError(res, 500, "Server error");

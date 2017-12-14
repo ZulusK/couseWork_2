@@ -31,6 +31,9 @@ export default {
   noAuth () {
     let args = {};
     args.baseURL = globals.ROOT_URL;
+    args.headers = {
+      'Access-Control-Allow-Origin': '*',
+    };
     return axios.create(args)
   }
 }

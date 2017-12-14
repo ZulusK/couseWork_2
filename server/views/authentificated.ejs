@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="404 Error, page not found">
+    <meta name="author" content="Danil Kazimirov">
+    <title>Authenticated</title>
+</head>
+<body>
+Authenticated successfully.
+
+<script type="text/javascript">
+    console.log(1)
+    window.opener.authenticateCallback('<%= data %>');
+    window.close();
+</script>
+</body>
+</html>

@@ -11,7 +11,7 @@ module.exports = {
         facebook: {
             APP_ID: process.env.FACEBOOK_APP_ID,
             APP_SECRET: process.env.FACEBOOK_APP_SECRET,
-            CALLBACK_URL: '/api/v1/auth/facebook/token'
+            CALLBACK_URL: 'http://localhost:3000/api/v1/auth/facebook/token'
         }
     },
     security: {

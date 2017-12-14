@@ -18,3 +18,4 @@ module.exports.findOne = (model, query) => {
 }
 module.exports.users = require('@DB/driver.user');
 module.exports.images = require('@DB/driver.image');
+module.exports.publications = require('@DB/driver.publications');

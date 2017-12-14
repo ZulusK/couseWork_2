@@ -95,6 +95,8 @@
         }
       }
     },
+    created () {
+    },
     props: [
       'toggle'
     ],
@@ -116,22 +118,29 @@
         })
       },
       async loginFacebook () {
-        try {
-          const response = await AuthAPI.loginFacebook();
-          if (response.data.success) {
-            console.log(response, response.data);
-            this.$store.dispatch('setToken_access', response.data.tokens.access);
-            this.$store.dispatch('setToken_refresh', response.data.tokens.refresh);
-            this.$store.dispatch('setUser', response.data.user);
-            this.success(`Hello, ${response.data.user.name}`);
-            this.UI.isShown = false;
-          } else {
-            this.error(response.message)
-          }
-        } catch (err) {
-          console.log(err)
-          this.error(err.message)
-        }
+        const app = this;
+        window.authenticateCallback = function (token) {
+          console.log(token, 2)
+//          app.UI.isShown = false;
+          window.authenticateCallback = undefined;
+        };
+        window.open('http://localhost:3000/api/v1/auth/facebook');
+//        try {
+//          const response = await AuthAPI.loginFacebook();
+//          if (response.data.success) {
+//            console.log(response, response.data);
+//            this.$store.dispatch('setToken_access', response.data.tokens.access);
+//            this.$store.dispatch('setToken_refresh', response.data.tokens.refresh);
+//            this.$store.dispatch('setUser', response.data.user);
+//            this.success(`Hello, ${response.data.user.name}`);
+//            this.UI.isShown = false;
+//          } else {
+//            this.error(response.message)
+//          }
+//        } catch (err) {
+//          console.log(err)
+//          this.error(err.message)
+//        }
       },
       async login () {
         if (await this.$validator.validateAll()) {
@@ -154,7 +163,8 @@
           this.error("Not all required fields are valid");
         }
       }
-    },
+    }
+    ,
     watch: {
       toggle () {
         this.UI.isShown = !this.UI.isShown && this.isNotLogged();

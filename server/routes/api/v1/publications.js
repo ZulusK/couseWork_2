@@ -1,15 +1,28 @@
 const router = require('express').Router();
 const Utils = require('@utils');
 const validate = require('@validator');
-const DBimage = require("@DBcore").images;
+const DBpublications = require("@DBcore").publications;
 const passport = require('passport');
 let tools = {};
 
 tools.collectDataFromReq = {
     post (req) {
         let args = {query: {}};
-        if (req.files && req.files.file) {
-            args.query.file = req.files.file;
+        args.query.title = req.body.title;
+        args.query.description = req.body.description;
+        args.query.text = req.body.text;
+        args.query.difficult = req.body.difficult;
+        args.query.logo = req.body.logo;
+        if (req.body.tags) {
+            let parsed = Utils.parseJSON(req.body.tags);
+            if (Array.isArray(parsed)) {
+                args.query.tags = [];
+                parsed.forEach((value) => {
+                    args.query.tags.push(String(value));
+                })
+            } else if (parsed) {
+                args.query.tags = [String(parsed)];
+            }
         }
         return args;
     },
@@ -29,10 +42,21 @@ tools.collectDataFromReq = {
 
 tools.verifyData = {
     post (args) {
-        if (!args.query.file || !Utils.files.isImage(args.query.file)) {
-            throw Utils.errors.InvalidRequesDataError('Your file is not an image')
-        }
-        else return true;
+        // check, is all required fields are present
+        DBpublications.requiredFields.forEach((field) => {
+            if (!args.query[field]) {
+                throw Utils.errors.InvalidRequesDataError(`'${field}' is required`)
+            }
+        })
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBpublications.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            } else if (!validate('piblication', key, args.query[key])) {
+                throw Utils.errors.InvalidRequesDataError(`Invalid value of '${key}'`)
+            }
+        })
+        return true;
     },
     get (args) {
         if (!args.query.id) {
@@ -49,7 +73,7 @@ tools.result = {
         return res.json(
             {
                 success: true,
-                id: args.idOfSavedImage
+                item: args.publication.info()
             }
         )
     }
@@ -71,8 +95,6 @@ router.route('/')
             const stream = DBimage.get.stream(args.query.id);
             console.log(result)
             res.type(result.contentType);
-            // console.log(1)
-
             (await stream).pipe(res);
         } catch (e) {
             // console.log(e)
@@ -87,13 +109,9 @@ router.route('/')
             return Utils.sendError(res, 400, err.message);
         }
         try {
-            args.idOfSavedImage = await DBimage.save(
-                args.query.file,
-                {
-                    owner: req.user.id
-                }
-            )
-            if (args.idOfSavedImage) {
+            args.author = req.user.id;
+            args.publication = await DBpublications.create(args.query)
+            if (args.publication) {
                 return tools.result.post(res, args);
             } else {
                 return Utils.sendError(res, 400, "Bad arguments");

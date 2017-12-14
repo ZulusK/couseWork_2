@@ -153,3 +153,10 @@ exports.convert = {
         }
     }
 }
+exports.parseJSON = function (str) {
+    try {
+        return JSON.parse(str);
+    } catch (err) {
+        return null;
+    }
+}

@@ -66,11 +66,14 @@ module.exports.init = (app) => {
             clientID: config.auth.facebook.APP_ID,
             clientSecret: config.auth.facebook.APP_SECRET,
             callbackURL: config.auth.facebook.CALLBACK_URL,
+            session: false,
+            enableProof: true,
             profileFields: ['id', 'displayName', 'photos', 'email', 'gender', 'first_name', 'last_name']
         },
         // facebook will send back the token and profile
         async function (token, refreshToken, profile, done) {
             console.log(profile)
+            console.log(2)
             try {
                 let user = await DBusers.get.byFacebook(profile.id);
                 if (!user) {
