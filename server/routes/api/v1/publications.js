@@ -35,7 +35,7 @@ tools.collectDataFromReq = {
         args.sort = Utils.parseJSON(req.query.sort) || {title: 1, created: 1, difficult: 1}
         //id
         if (req.query.id && Utils.isValid.id(req.query.id)) {
-            query.id = Utils.convert.str2id(req.query.id);
+            query._id = Utils.convert.str2id(req.query.id);
         }
         if (req.query.title) {
             query.title = new RegExp(`^${req.query.title.trim()}`, "i");
@@ -61,7 +61,12 @@ tools.collectDataFromReq = {
 
     },
     delete (req) {
-        return this.get(req);
+        let args = {query: {}};
+        //id
+        if (req.query.id && Utils.isValid.id(req.query.id)) {
+            args.query.id = Utils.convert.str2id(req.query.id);
+        }
+        return args;
     }
 }
 
@@ -93,7 +98,10 @@ tools.verifyData = {
         return true;
     },
     delete (args) {
-        return this.get(args)
+        if (!args.query.id) {
+            throw Utils.errors.InvalidRequesDataError('Invalid id of publication')
+        }
+        return true;
     }
 }
 tools.result = {
@@ -149,7 +157,7 @@ router.route('/')
             return Utils.sendError(res, 400, err.message);
         }
         try {
-            args.author = req.user.id;
+            args.query.author = req.user.id;
             args.publication = await DBpublications.create(args.query)
             if (args.publication) {
                 return tools.result.post(res, args);
@@ -169,18 +177,19 @@ router.route('/')
             Utils.sendError(res, 400, err.message);
         }
         try {
-            const result = await DBimage.get.byID(args.query.id);
+            const result = await DBpublications.get.byID(args.query.id);
+            console.log(result)
             if (!result) {
                 return Utils.sendError(res, 404, "No such image");
             }
-            if (String(result.metadata.owner) !== String(req.user._id) && !req.user.isAdmin) {
+            if (String(result.author) !== String(req.user._id) && !req.user.isAdmin) {
                 return Utils.sendError(res, 403, "Permission denied");
             }
         } catch (e) {
             return Utils.sendError(res, 500, `Server error: ${e}`);
         }
         try {
-            await DBimage.remove.byID(args.query.id);
+            await DBpublications.remove.byID(args.query.id);
             return res.json({success: true});
         } catch (e) {
             return Utils.sendError(res, 500, "Server error");

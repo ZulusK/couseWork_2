@@ -26,6 +26,14 @@ module.exports = {
                 limit: limit,
                 sort: sort
             })
+        },
+        byID (id) {
+            return PublicationModel.findById(id);
+        }
+    },
+    remove: {
+        byID (id) {
+            return PublicationModel.findByIdAndRemove(id).exec();
         }
     }
 }
