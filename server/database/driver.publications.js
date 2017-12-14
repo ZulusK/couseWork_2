@@ -18,5 +18,14 @@ module.exports = {
     allFields: getAllFields(),
     create (args) {
         return DB.create(PublicationModel, args);
+    },
+    get: {
+        byQuery (query, page, limit, sort) {
+            return DB.find.withPagination(PublicationModel, query, {
+                page: page,
+                limit: limit,
+                sort: sort
+            })
+        }
     }
 }

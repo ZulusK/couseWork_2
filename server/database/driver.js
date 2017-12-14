@@ -16,6 +16,14 @@ module.exports.create = (model, args) => {
 module.exports.findOne = (model, query) => {
     return model.findOne(query).exec();
 }
+module.exports.find = {
+    withoutPagination (model, query) {
+        return model.find(query).exec();
+    },
+    withPagination (model, query, pagination) {
+        return model.paginate(query, pagination);
+    }
+}
 module.exports.users = require('@DB/driver.user');
 module.exports.images = require('@DB/driver.image');
 module.exports.publications = require('@DB/driver.publications');

@@ -3,6 +3,7 @@ const Utils = require('@utils');
 const validate = require('@validator');
 const DBpublications = require("@DBcore").publications;
 const passport = require('passport');
+const config = require('@config');
 let tools = {};
 
 tools.collectDataFromReq = {
@@ -27,11 +28,35 @@ tools.collectDataFromReq = {
         return args;
     },
     get (req) {
-        let args = {query: {}};
+        let args = {};
+        let query = {};
+        args.page = Number(req.query.page || 1);
+        args.limit = Number(req.query.limit || config.PAGINATION_LIMIT);
+        args.sort = Utils.parseJSON(req.query.sort) || {title: 1, created: 1, difficult: 1}
         //id
         if (req.query.id && Utils.isValid.id(req.query.id)) {
-            args.query.id = Utils.convert.str2id(req.query.id);
+            query.id = Utils.convert.str2id(req.query.id);
         }
+        if (req.query.title) {
+            query.title = new RegExp(`^${req.query.title.trim()}`, "i");
+        }
+        if (req.query.author && Utils.isValid.id(req.query.author)) {
+            query.author = Utils.convert.str2id(req.query.author);
+        }
+        //tag
+        if (req.query.tags) {
+            let tags = {$in: []};
+            let parsed = Utils.parseJSON(req.query.tags);
+            if (Array.isArray(parsed)) {
+                parsed.forEach((value) => {
+                    tags.$in.push(String(value));
+                })
+            } else if (parsed) {
+                tags.$in.push(parsed);
+            }
+            query.tags = tags;
+        }
+        args.query = query;
         return args;
 
     },
@@ -59,8 +84,11 @@ tools.verifyData = {
         return true;
     },
     get (args) {
-        if (!args.query.id) {
-            throw Utils.errors.InvalidRequesDataError('Invalid id of file')
+        if (!args.page || !Number(args.page) || Number(args.page) <= 0) {
+            throw Utils.errors.InvalidRequesDataError(`value of 'page' is invalid`)
+        }
+        if (!args.limit || !Number(args.limit) || Number(args.limit) <= 0) {
+            throw Utils.errors.InvalidRequesDataError(`value of 'limit' is invalid`)
         }
         return true;
     },
@@ -76,6 +104,21 @@ tools.result = {
                 item: args.publication.info()
             }
         )
+    },
+    get (res, args) {
+        return res.json(
+            {
+                success: true,
+                query: args.query,
+                items: args.result.docs.map((value) => {
+                    return value.info()
+                }),
+                page: args.result.page,
+                total: args.result.total,
+                limit: args.result.limit,
+                pages: args.result.pages
+            }
+        )
     }
 }
 router.route('/')
@@ -88,16 +131,13 @@ router.route('/')
             return Utils.sendError(res, 400, err.message);
         }
         try {
-            const result = await DBimage.get.byID(args.query.id);
-            if (!result) {
-                return Utils.sendError(res, 404, "Not found");
+            args.result = await DBpublications.get.byQuery(args.query, args.page, args.limit, args.sort);
+            if (args.result) {
+                return tools.result.get(res, args);
+            } else {
+                return Utils.sendError(res, 400, "Bad arguments");
             }
-            const stream = DBimage.get.stream(args.query.id);
-            console.log(result)
-            res.type(result.contentType);
-            (await stream).pipe(res);
         } catch (e) {
-            // console.log(e)
             return Utils.sendError(res, 500, `Server error: ${e}`);
         }
     })
