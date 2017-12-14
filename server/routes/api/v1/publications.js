@@ -132,7 +132,6 @@ tools.result = {
 router.route('/')
     .get(async (req, res, next) => {
         const args = tools.collectDataFromReq.get(req);
-        console.log(args);
         try {
             tools.verifyData.get(args);
         } catch (err) {
@@ -178,7 +177,6 @@ router.route('/')
         }
         try {
             const result = await DBpublications.get.byID(args.query.id);
-            console.log(result)
             if (!result) {
                 return Utils.sendError(res, 404, "No such image");
             }

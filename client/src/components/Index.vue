@@ -9,7 +9,7 @@
         <h2 class="title big-text-1 has-text-white ">
           TO CODUAL.v1
         </h2>
-        <router-link :to="{name:'Posts'}">
+        <router-link :to="{name:'Publications-list'}">
           <a class="is-primary is-large button has-text-black" ref="btn">
             DISCOVER
             <ui-ripple-ink trigger="btn" class="ripple"/>

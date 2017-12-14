@@ -14,12 +14,6 @@
             <div class="navbar-brand ">
               <!--logo-->
               <logo-btn/>
-              <!--login-->
-              <login-btn @action="$emit('login')"/>
-              <!--register-->
-              <register-btn @action="$emit('register')"/>
-              <!--logout-->
-              <logout-btn @action="$emit('logout')"/>
               <button
                 class="button navbar-burger is-amber is-left"
                 data-target="menu"
@@ -30,6 +24,19 @@
                 <span></span>
                 <span></span>
               </button>
+            </div>
+            <div class="navbar-menu" id="menu" ref="menu">
+              <div class="navbar-start">
+                <publications-btn/>
+              </div>
+              <div class="navbar-end">
+                <!--login-->
+                <login-btn @action="$emit('login')"/>
+                <!--register-->
+                <register-btn @action="$emit('register')"/>
+                <!--logout-->
+                <logout-btn @action="$emit('logout')"/>
+              </div>
             </div>
           </div>
         </div>
@@ -42,13 +49,15 @@
   import LoginBtn from '%/globals/btns/Login';
   import RegisterBtn from '%/globals/btns/Register';
   import LogoutBtn from '%/globals/btns/Logout';
+  import PublicationsBtn from '%/globals/btns/Publications';
 
   export default {
     components: {
       LogoBtn,
       LoginBtn,
       LogoutBtn,
-      RegisterBtn
+      RegisterBtn,
+      PublicationsBtn
     },
     data () {
       return {
@@ -64,6 +73,15 @@
       toggle () {
         this.UI.isShown = !this.UI.isShown;
       }
+    },
+    methods: {
+      showAllMenu: function () {
+        console.log(this.$refs.burger);
+        let burger = this.$refs.burger;
+        let menu = this.$refs.menu;
+        burger.classList.toggle('is-active');
+        menu.classList.toggle('is-active');
+      },
     }
   }
 </script>
