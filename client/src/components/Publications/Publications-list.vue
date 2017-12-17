@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <b-loading :active="UI.isLoading"/>
-    <div class="columns is-desktop">
+    <div class="columns is-desktop ">
       <div class="column  is-4-desktop filter-container mr-15">
         <b-collapse class="box is-fixed filter-area is-fixed-desktop"
                     :open.sync="UI.isOpenSearch">
@@ -19,8 +19,15 @@
                   icon="tooltip-text"/>
                 Title
               </span>
-              <b-field label="Find publication by title">
-                <b-input placeholder="Search" v-model="filters.title"></b-input>
+              <b-field>
+                <b-input placeholder="Search" v-model="filters.title" @keydown.enter="load"></b-input>
+                <a class="button is-info" @click.stop="load">
+                  <b-icon
+                    size="is-small"
+                    pack="fa"
+                    icon="search"
+                  />
+                </a>
               </b-field>
             </div>
             <hr>
@@ -42,9 +49,16 @@
           </div>
           <div class="is-hidden-desktop">
             <b-tabs v-model="UI.activeTab" position="is-centered">
-              <b-tab-item label="Title" icon="tooltip-text">
-                <b-field label="Find publication by title">
+              <b-tab-item label="Title" icon="tooltip-text" class="container">
+                <b-field>
                   <b-input placeholder="Search" v-model="filters.title"></b-input>
+                  <a class="button is-info" @click.stop="load">
+                    <b-icon
+                      size="is-small"
+                      pack="fa"
+                      icon="search"
+                    />
+                  </a>
                 </b-field>
               </b-tab-item>
               <b-tab-item label="Tags" icon="label">
@@ -72,6 +86,7 @@
     </div>
     <div class="column is-6-tablet is-offset-3-tablet">
       <b-pagination
+        v-if="items.length>0"
         class="pagination"
         :per-page="pagination.limit"
         :total="pagination.total"
@@ -89,6 +104,7 @@
   import APIUsers from '#/Users';
   import PublicationCardPrev from '%/Publications/Publication-card-prev'
   import Globals from '#/globals';
+  import BIcon from "../../../node_modules/buefy/src/components/icon/Icon.vue";
 
   export default {
     mixins: [AuthMixin, MessageMixin],
@@ -115,6 +131,7 @@
       }
     },
     components: {
+      BIcon,
       PublicationCardPrev
     },
     watch: {
@@ -129,14 +146,10 @@
       async "filters.tags" () {
         await this.load();
       },
-      async "filters.title" () {
-        await this.load();
-      },
     },
     methods: {
       async load () {
         this.UI.isLoading = true;
-        console.log('load')
         try {
           console.log(this.filters, 1)
           const response = await APIPublication.load(this.filters);
@@ -181,7 +194,10 @@
       },
       getTags (str) {
         try {
-          return JSON.parse(str);
+          const tags = JSON.parse(str);
+          if (!Array.isArray(tags)) {
+            return [tags];
+          }
         } catch (e) {
           return undefined;
         }
@@ -208,8 +224,7 @@
     },
     props: [],
     async created () {
-      console.log('created')
-      this.changeFilters(this.$router);
+      this.changeFilters(this.$route);
       await this.load();
     },
     async beforeRouteUpdate (to, from, next) {
@@ -223,7 +238,7 @@
 <style scoped lang="scss">
   @media screen and (min-width: 1024px) {
     .is-fixed-desktop {
-      position: fixed;
+      /*position: fixed;*/
     }
   }
 

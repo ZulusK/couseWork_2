@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <div class="column is-8-desktop  is-offset-2-desktop  is-12-touch">
+    <div class="column is-8-desktop  is-offset-2-desktop  is-12-tablet">
       <div class="box">
-        <div class="content markdown-body" v-html="text"/>
+        <div class="content markdown-body" v-html="renderedText"/>
       </div>
     </div>
   </div>
 </template>
 <script>
   import API from '#/API';
-
+  import Utils from '#/Utils';
   export default {
     data () {
       return {
@@ -36,7 +36,11 @@
         }
       }
     },
-    computed: {},
+    computed: {
+      renderedText () {
+        return Utils.md.render(this.text || "")
+      }
+    },
     props: [],
     async created () {
       await this.loadText();

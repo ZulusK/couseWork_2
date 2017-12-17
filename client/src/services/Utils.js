@@ -1,3 +1,5 @@
+import commonmark from 'commonmark';
+
 function convertToURL (v) {
   if (typeof v == 'object' || Array.isArray(v)) {
     return JSON.stringify(v);
@@ -13,7 +15,13 @@ function notEmpty (v) {
     return true;
   }
 }
+
 export default {
+  /**
+   * pass filter args to URL-decoded string
+   * @param filter object with args
+   * @return {string} URL
+   */
   query (filter) {
     let query = '?';
     for (let key in filter) {
@@ -21,5 +29,17 @@ export default {
         query += `${key}=${convertToURL(filter[key])}&`;
     }
     return query;
+  },
+  md: {
+    reader: new commonmark.Parser(),
+    writer: new commonmark.HtmlRenderer({safe: true}),
+    /**
+     * render string as Markdown
+     * @param text text to render
+     */
+    render (text) {
+      var parsed = this.reader.parse(text);
+      return this.writer.render(parsed); // result is a String
+    }
   }
 }

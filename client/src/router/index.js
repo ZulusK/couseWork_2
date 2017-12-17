@@ -5,6 +5,8 @@ import API from '%/Other/API';
 import PersonalArea from '%/user/PersonalArea';
 import PublicationsList from '%/Publications/Publications-list';
 import PublicationView from '%/Publications/Publications-view';
+import _404 from '%/globals/404';
+import _500 from '%/globals/500';
 
 Vue.use(Router)
 
@@ -35,5 +37,15 @@ export default new Router({
       name: 'Publications-list',
       component: PublicationsList
     },
+    {
+      path: '*',
+      name: '404',
+      component: _404
+    },
+    {
+      path: '*',
+      name: '500',
+      component: _500
+    }
   ]
 })

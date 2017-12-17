@@ -1,8 +1,8 @@
 <template>
-  <div class="box">
-    <div class="columns is-tablet is-gapless is-multiline">
-      <div class="column is-half-tablet is-one-third-desktop">
-        <router-link :to="{name:'Publications-view', params:{id:item.id}}">
+  <div>
+    <div class="columns is-tablet is-2">
+      <div class=" column">
+        <div class="box">
           <div class="has-text-centered notification"
                :class="{
           'is-easy':difficult<4,
@@ -10,16 +10,14 @@
           'is-hard':difficult>7}">
             <p class="is-size-3">{{title}}</p>
           </div>
-          <div>
-            <figure class="logo-image-container " v-ripple>
-              <img :src="logo" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5"/>
-            </figure>
-          </div>
-        </router-link>
+          <figure class="logo-image-container has-text-centered" v-ripple>
+            <img :src="logo" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5"/>
+          </figure>
+        </div>
       </div>
-      <div class="column">
-        <div class="card-content">
-          <router-link :to="{name:'Publications-list',query:{author:item.author}}">
+      <div class="column ">
+        <div class="box">
+          <router-link :to="{name:'Publications-list',query:{author:publication.author}}">
             <div class="media has-text-black">
               <div class="media-left avatar-image-container">
                 <img
@@ -47,7 +45,7 @@
           </div>
           <hr>
           <div class="tags">
-            <router-link class="tag is-warning is-medium interactive-tag" v-for="tag in item.tags" :key="tag"
+            <router-link class="tag is-warning is-medium interactive-tag" v-for="tag in publication.tags" :key="tag"
                          :to="{name:'Publications-list', query:{tags:[tag]}}">
               {{tag}}
             </router-link>
@@ -55,10 +53,16 @@
         </div>
       </div>
     </div>
+
+    <div class="box">
+      <div class="content markdown-body" v-html="renderedText"/>
+    </div>
   </div>
 </template>
 <script>
   import Globals from '#/globals';
+  import Utils from '#/Utils';
+
   export default {
     data () {
       return {}
@@ -68,16 +72,15 @@
         sender.target.src = Globals.PLACEHOLDER;
       }
     },
-    components: {},
     computed: {
       title () {
-        return this.item.title ? this.item.title.trim().substr(0, 40) : "No title";
+        return this.publication.title ? this.publication.title.trim().substr(0, 20) : "No title";
       },
       logo () {
-        return this.item.logo ? this.item.logo.trim() : Globals.PLACEHOLDER;
+        return this.publication.logo ? this.publication.logo.trim() : Globals.PLACEHOLDER;
       },
       difficult () {
-        return Number(this.item.difficult) || 5;
+        return Number(this.publication.difficult) || 5;
       },
       authorAvatar () {
         return this.author.avatar ? this.author.avatar : Globals.PLACEHOLDER;
@@ -86,14 +89,18 @@
         return this.author.name ? this.author.name.trim().substr(0, 20) : "No name";
       },
       created () {
-        return (new Date(this.item.created)).toLocaleDateString();
+        return (new Date(this.publication.created)).toLocaleDateString();
       },
       description () {
-        return this.item.description ? this.item.description.trim() : "No description"
+        return this.publication.description ? this.publication.description.trim().substr(0, 150) : "No description"
       },
+      renderedText () {
+        console.log(this.publication.text)
+        return Utils.md.render(this.publication.text || "");
+      }
     },
     props: [
-      "item",
+      "publication",
       "author"
     ],
     created () {
@@ -102,18 +109,7 @@
   }
 </script>
 <style scoped lang="scss">
-  .logo-image {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
 
-  .logo-image-container {
-    margin: auto;
-    width: 100%;
-    height: 256px;
-  }
 
   .avatar-image {
     height: 100%;
