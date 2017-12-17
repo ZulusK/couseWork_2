@@ -4,8 +4,6 @@ import router from './router'
 // stores
 import {sync} from 'vuex-router-sync'
 import store from '@/store/store'
-// config
-import config from '#/config';
 // styles
 import 'vue-material-design-icons/styles.css'
 import 'buefy/lib/buefy.css'
@@ -25,11 +23,9 @@ Vue.directive('ripple', Ripple);
 Vue.use(KeenUI);
 
 Vue.use(Buefy)
-config();
 Vue.use(VeeValidate);
 Vue.config.productionTip = false
 sync(store, router);
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -90,7 +90,10 @@ router.get('/token', passport.authenticate('refresh-token', {session: false}), a
             }
         });
 })
-router.post('/check', passport.authenticate(['access-token', 'basic'], {session: false}), (req, res, next) => {
+router.post('/check/access', passport.authenticate(['access-token'], {session: false}), (req, res, next) => {
+    return res.json({success: true});
+})
+router.post('/check/refresh', passport.authenticate(['refresh-token'], {session: false}), (req, res, next) => {
     return res.json({success: true});
 })
 // Redirect the user to Facebook for authentication

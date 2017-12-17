@@ -80,10 +80,12 @@
 </template>
 <script>
   import AuthMixin from '%/Other/AuthMixin';
+  import MessageMixin from '%/Other/MessageMixin';
+
   import AuthAPI from '#/Auth';
 
   export default {
-    mixins: [AuthMixin],
+    mixins: [AuthMixin, MessageMixin],
     data () {
       return {
         UI: {
@@ -101,22 +103,6 @@
       'toggle'
     ],
     methods: {
-      error (msg) {
-        this.$toast.open({
-          duration: 5000,
-          message: msg || "Something is going wrong",
-          position: 'is-top',
-          type: 'is-danger'
-        })
-      },
-      success (msg) {
-        this.$toast.open({
-          duration: 5000,
-          message: msg || "All is ok",
-          position: 'is-top',
-          type: 'is-success'
-        })
-      },
       async loginFacebook () {
         const app = this;
         window.authenticateCallback = function (token) {
@@ -125,22 +111,6 @@
           window.authenticateCallback = undefined;
         };
         window.open('http://localhost:3000/api/v1/auth/facebook');
-//        try {
-//          const response = await AuthAPI.loginFacebook();
-//          if (response.data.success) {
-//            console.log(response, response.data);
-//            this.$store.dispatch('setToken_access', response.data.tokens.access);
-//            this.$store.dispatch('setToken_refresh', response.data.tokens.refresh);
-//            this.$store.dispatch('setUser', response.data.user);
-//            this.success(`Hello, ${response.data.user.name}`);
-//            this.UI.isShown = false;
-//          } else {
-//            this.error(response.message)
-//          }
-//        } catch (err) {
-//          console.log(err)
-//          this.error(err.message)
-//        }
       },
       async login () {
         if (await this.$validator.validateAll()) {
@@ -156,8 +126,7 @@
               this.error(response.message)
             }
           } catch (err) {
-            console.log(err)
-            this.error(err.message)
+            this.error(err.response.status == 401 ? "Invalid credentials" : err.response.message||err.message);
           }
         } else {
           this.error("Not all required fields are valid");

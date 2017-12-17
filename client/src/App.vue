@@ -37,8 +37,10 @@
   import xFooter from '%/globals/Footer';
   import xLogin from '%/auth/Login';
   import xRegister from '%/auth/Register';
+  import AuthMixin from '%/Other/AuthMixin';
 
   export default {
+    mixins: [AuthMixin],
     name: 'app',
     components: {
       xHeader,
@@ -72,18 +74,13 @@
       register () {
         this.UI.register.isShown = !this.UI.register.isShown;
       },
-      logout () {
-        this.$store.dispatch('setToken_access', null);
-        this.$store.dispatch('setToken_refresh', null);
-        this.$store.dispatch('setUser', null);
-      },
       setHeader () {
 
       },
       setFooter () {
 
-      }
-    }
+      },
+    },
   }
 </script>
 
@@ -111,7 +108,10 @@
   #viewport {
     flex: 1 0 auto;
   }
-
+  *{
+    word-break: break-all;
+    word-wrap: break-word;
+  }
   #app {
     background-image: url('/static/img/bg-rock.jpg');
     background-repeat: no-repeat;
@@ -122,4 +122,5 @@
     display: flex;
     flex-direction: column;
   }
+
 </style>

@@ -4,18 +4,18 @@ const Utils = require('@utils');
 const validator = require('@validator');
 const config = require('@config');
 let User = new Schema({
-    name: {
-        type: String,
-        required: function () {
-            return !Boolean(this.facebook.id)
-        },
-        validate: {
-            validator: function (value) {
-                return validate('name', value, this)
+        name: {
+            type: String,
+            required: function () {
+                return !Boolean(this.facebook.id)
             },
-            message: '{VALUE} is not a valid name'
+            validate: {
+                validator: function (value) {
+                    return validate('name', value, this)
+                },
+                message: '{VALUE} is not a valid name'
+            },
         },
-    },
         email: {
             type: String,
             unique: function () {
@@ -43,6 +43,10 @@ let User = new Schema({
                 message: '{VALUE} is not a valid password'
             },
         },
+        avatar: {
+            type: String,
+            default: null
+        },
         facebook: {
             id: {
                 type: String
@@ -68,14 +72,14 @@ let User = new Schema({
         salt: {
             type: String
         },
-    secrets: {
+        secrets: {
             access: {
                 type: String
             },
             refresh: {
                 type: String
             }
-    },
+        },
         created: {
             type: Date,
             default:

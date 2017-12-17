@@ -10,10 +10,16 @@ export default {
   register (credentials) {
     return API.noAuth().post('/api/v1/auth/register/', credentials);
   },
-  check (path, key, value) {
+  validate (path, key, value) {
     return API.noAuth().post(`/api/v1/validate/auth/${path}/${key}`, {value: value});
   },
-  refresh () {
+  checkTokenAccess(){
+    return API.access().post('api/v1/check/access');
+  },
+  checkTokenRefresh(){
+    return API.refresh().post('api/v1/check/refresh');
+  },
+  updateAccessToken () {
     return API.refresh().get('/api/v1/auth/token');
-  }
+  },
 }

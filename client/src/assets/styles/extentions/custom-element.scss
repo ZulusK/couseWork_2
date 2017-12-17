@@ -11,6 +11,10 @@ $primary-2: $md-grey-900;
 $primary-2-invert: $white;
 $facebook: #3b5998;
 $facebook-invert: $white;
+$easy:$md-green-500;
+$middle:$md-amber-500;
+$hard:$md-red-500;
+
 $colors: (
   "white": ($white, $black),
   "black": ($black, $white),
@@ -23,13 +27,66 @@ $colors: (
   "primary": ($primary, $primary-invert),
   "primary-2": ($primary-2, $primary-2-invert),
   "twitter":($twitter, $twitter-invert),
-  "facebook":($facebook, $facebook-invert)
+  "facebook":($facebook, $facebook-invert),
+  "hard":($hard,$white),
+  "middle":($middle,$white),
+  "easy":($easy,$white),
 );
-
+$dimensions: (
+  16, 24, 32, 48, 64, 96, 128, 256, 512
+);
 // Links
 $link: $twitter;
 $link-invert: $twitter-invert;
 $link-focus-border: $twitter;
+@for $i from 0 through 100{
+  .w-#{$i}{
+    width: $i*1%;
+  }
+}
+@for $i from 0 through 50 {
+  .round-corner-#{$i} {
+    border-radius: $i*1px;
+  }
+  .round-percent-#{$i}{
+    border-radius: $i*1%;
+  }
+}
+@for $space from 0 through 10 {
+  .round-corner-#{$space}{
+    border-radius: $space*1px;
+  }
+  .ma-#{$space} {
+    margin: $space*1px;
+  }
+  .pa#{$space} {
+    padding: $space*1px;
+  }
+  .ml-#{$space} {
+    margin-left: $space*1px;
+  }
+  .pl#{$space} {
+    padding-left: $space*1px;
+  }
+  .mr-#{$space} {
+    margin-right: $space*1px;
+  }
+  .pr#{$space} {
+    padding-right: $space*1px;
+  }
+  .mt-#{$space} {
+    margin-top: $space*1px;
+  }
+  .pt#{$space} {
+    padding-top: $space*1px;
+  }
+  .mb-#{$space} {
+    margin-bottom: $space*1px;
+  }
+  .pb#{$space} {
+    padding-bottom: $space*1px;
+  }
+}
 
 // Import Bulma and Buefy styles
 @import "~bulma";
