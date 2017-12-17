@@ -52,7 +52,8 @@ $link-focus-border: $twitter;
     border-radius: $i*1%;
   }
 }
-@for $space from 0 through 10 {
+
+@for $space from 0 through 20 {
   .round-corner-#{$space}{
     border-radius: $space*1px;
   }

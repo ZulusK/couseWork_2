@@ -1,44 +1,75 @@
 <template>
   <div class="container">
-    <br>
-    <div class="columns is-multiline">
-      <b-collapse
-        class="box column is-10-tablet is-offset-1-tablet is-8-desktop is-offset-2-desktop"
-        :open.sync="UI.isOpenSearch">
-        <p class="has-text-centered is-size-5" slot="trigger">
-          Active filters. Found {{pagination.total}}
-          <b-icon :icon="UI.isOpenSearch ?
-                        'menu-down' : 'menu-up'">
-          </b-icon>
-        </p>
-        <b-tabs v-model="UI.activeTab" position="is-centered">
-          <b-tab-item label="Title" icon="format-title">
-            <b-field label="Find publication by title">
-              <b-input placeholder="Search" v-model="filters.title"></b-input>
-            </b-field>
-          </b-tab-item>
-          <b-tab-item label="Tags" icon="label">
-            <b-field label="Find publications with next tags">
-              <b-taginput
-                v-model="filters.tags"
-                type="is-primary" attached>
-              </b-taginput>
-            </b-field>
-          </b-tab-item>
-        </b-tabs>
-      </b-collapse>
-      <div class="column is-10-tablet is-offset-1-tablet is-8-desktop is-offset-2-desktop">
-
+    <b-loading :active="UI.isLoading"/>
+    <div class="columns is-desktop">
+      <div class="column  is-4-desktop filter-container mr-15">
+        <b-collapse class="box is-fixed filter-area is-fixed-desktop"
+                    :open.sync="UI.isOpenSearch">
+          <p class="has-text-centered is-size-5" slot="trigger">
+            Filter found {{pagination.total}}
+            <b-icon :icon="UI.isOpenSearch ?'menu-down' : 'menu-up'"/>
+          </p>
+          <div class="is-hidden-touch">
+            <hr>
+            <div>
+              <span class="has-text-info title">
+                <b-icon
+                  size="is-small"
+                  class="mdi"
+                  icon="tooltip-text"/>
+                Title
+              </span>
+              <b-field label="Find publication by title">
+                <b-input placeholder="Search" v-model="filters.title"></b-input>
+              </b-field>
+            </div>
+            <hr>
+            <div>
+              <span class="has-text-info title">
+                <b-icon
+                  size="is-small"
+                  class="mdi"
+                  icon="label-outline"/>
+                Tags
+              </span>
+              <b-field label="Find publications with next tags">
+                <b-taginput
+                  v-model="filters.tags"
+                  type="is-primary" attached>
+                </b-taginput>
+              </b-field>
+            </div>
+          </div>
+          <div class="is-hidden-desktop">
+            <b-tabs v-model="UI.activeTab" position="is-centered">
+              <b-tab-item label="Title" icon="tooltip-text">
+                <b-field label="Find publication by title">
+                  <b-input placeholder="Search" v-model="filters.title"></b-input>
+                </b-field>
+              </b-tab-item>
+              <b-tab-item label="Tags" icon="label">
+                <b-field label="Find publications, that contain next tags">
+                  <b-taginput
+                    v-model="filters.tags"
+                    type="is-primary" attached>
+                  </b-taginput>
+                </b-field>
+              </b-tab-item>
+            </b-tabs>
+          </div>
+        </b-collapse>
       </div>
-      <div class="column is-10-tablet is-offset-1-tablet is-8-desktop is-offset-2-desktop"
-           v-for="(item, i) in items"
-           :key="item.title">
-        <publication-card-prev
-          :item="item"
-          :author="authors[item.author]"/>
+      <div class="column is-9-desktop">
+        <div v-for="(item, i) in items"
+             class="mb-15"
+             :key="item.title">
+          <publication-card-prev
+            class="interactive-item"
+            :item="item"
+            :author="authors[item.author]"/>
+        </div>
       </div>
     </div>
-    <b-loading :active="UI.isLoading"/>
     <div class="column is-6-tablet is-offset-3-tablet">
       <b-pagination
         class="pagination"
@@ -49,6 +80,7 @@
         order="is-centered"/>
     </div>
   </div>
+
 </template>
 <script>
   import AuthMixin from '%/Other/AuthMixin';
@@ -189,4 +221,18 @@
   }
 </script>
 <style scoped lang="scss">
+  @media screen and (min-width: 1024px) {
+    .is-fixed-desktop {
+      position: fixed;
+    }
+  }
+
+  .interactive-item {
+    transition: transform 0.4s;
+
+  }
+
+  .interactive-item:hover {
+    transform: scale(0.98, 0.98); /* Standard syntax */
+  }
 </style>

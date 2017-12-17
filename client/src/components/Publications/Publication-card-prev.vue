@@ -2,50 +2,55 @@
   <div class="box">
     <div class="columns is-tablet is-gapless is-multiline">
       <div class="column is-half-tablet is-one-third-desktop">
-        <div class="has-text-centered notification"
-             :class="{
+        <router-link :to="{name:'Publications-view', params:{id:item.id}}">
+          <div class="has-text-centered notification"
+               :class="{
           'is-easy':difficult<4,
           'is-middle':difficult>=4 && difficult<=7,
           'is-hard':difficult>7}">
-          <p class="is-size-3">{{title}}</p>
-        </div>
-        <div>
-          <figure class="logo-image-container ">
-            <img :src="logo" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5">
-          </figure>
-        </div>
+            <p class="is-size-3">{{title}}</p>
+          </div>
+          <div>
+            <figure class="logo-image-container " v-ripple>
+              <img :src="logo" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5"/>
+            </figure>
+          </div>
+        </router-link>
       </div>
       <div class="column">
         <div class="card-content">
-          <div class="media">
-            <div class="media-left avatar-image-container">
-              <img
-                :src="authorAvatar"
-                alt="Author avatar"
-                @error="usePlaceholder"
-                class="avatar-image">
-            </div>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{authorName}}</strong>
-                  <small><a>@telegram</a></small>
-                  <br>
-                  on
-                  <small>{{created}}</small>
-                </p>
+          <router-link :to="{name:'Publications-list',query:{author:item.author}}">
+            <div class="media has-text-black">
+              <div class="media-left avatar-image-container">
+                <img
+                  :src="authorAvatar"
+                  alt="Author avatar"
+                  @error="usePlaceholder"
+                  class="avatar-image">
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>{{authorName}}</strong>
+                    <small><a>@telegram</a></small>
+                    <br>
+                    on
+                    <small>{{created}}</small>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </router-link>
           <hr>
           <div class=" content">
             {{description}}
           </div>
           <hr>
           <div class="tags">
-            <div class="tag is-warning is-medium" v-for="tag in item.tags" :key="tag">
+            <router-link class="tag is-warning is-medium interactive-tag" v-for="tag in item.tags" :key="tag"
+                         :to="{name:'Publications-list', query:{tags:[tag]}}">
               {{tag}}
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -54,6 +59,7 @@
 </template>
 <script>
   import Globals from '#/globals';
+  import UiRippleInk from "../../../node_modules/keen-ui/src/UiRippleInk.vue";
 
   export default {
     data () {
@@ -65,19 +71,19 @@
 
       }
     },
-    components: {},
+    components: {UiRippleInk},
     computed: {
       title () {
         return this.item.title ? this.item.title.trim().substr(0, 20) : "No title";
       },
       logo () {
-        return this.item.logo ? this.item.logo.trim() : '/static/img/401.jpg';
+        return this.item.logo ? this.item.logo.trim() : Globals.PLACEHOLDER;
       },
       difficult () {
         return Number(this.item.difficult) || 5;
       },
       authorAvatar () {
-        return this.author.avatar ? this.author.avatar : '/static/img/404.jpg';
+        return this.author.avatar ? this.author.avatar : Globals.PLACEHOLDER;
       },
       authorName () {
         return this.author.name ? this.author.name.trim().substr(0, 20) : "No name";
@@ -123,5 +129,18 @@
   .avatar-image-container {
     width: 64px;
     height: 64px;
+  }
+
+  .interactive-tag {
+    transition: transform 0.4s;
+
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .interactive-tag:hover {
+    transform: scale(1.2, 1.2); /* Standard syntax */
   }
 </style>

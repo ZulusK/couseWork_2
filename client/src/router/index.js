@@ -4,6 +4,7 @@ import Index from '%/Index';
 import API from '%/Other/API';
 import PersonalArea from '%/user/PersonalArea';
 import PublicationsList from '%/Publications/Publications-list';
+import PublicationView from '%/Publications/Publications-view';
 
 Vue.use(Router)
 
@@ -25,9 +26,14 @@ export default new Router({
       component: PersonalArea
     },
     {
+      path: '/publications/:id',
+      name: 'Publications-view',
+      component: PublicationView
+    },
+    {
       path: '/publications/',
       name: 'Publications-list',
       component: PublicationsList
-    }
+    },
   ]
 })
