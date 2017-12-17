@@ -30,6 +30,8 @@
                 <p>
                   <strong>{{authorName}}</strong>
                   <small><a>@telegram</a></small>
+                  <br>
+                  on
                   <small>{{created}}</small>
                 </p>
               </div>

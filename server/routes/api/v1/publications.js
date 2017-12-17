@@ -178,7 +178,7 @@ router.route('/')
         try {
             const result = await DBpublications.get.byID(args.query.id);
             if (!result) {
-                return Utils.sendError(res, 404, "No such image");
+                return Utils.sendError(res, 404, "No such publication");
             }
             if (String(result.author) !== String(req.user._id) && !req.user.isAdmin) {
                 return Utils.sendError(res, 403, "Permission denied");

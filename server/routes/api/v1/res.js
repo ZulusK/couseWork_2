@@ -16,8 +16,8 @@ tools.collectDataFromReq = {
     get (req) {
         let args = {query: {}};
         //id
-        if (req.query.id && Utils.isValid.id(req.query.id)) {
-            args.query.id = Utils.convert.str2id(req.query.id);
+        if (req.params.id && Utils.isValid.id(req.params.id)) {
+            args.query.id = Utils.convert.str2id(req.params.id);
         }
         return args;
 
@@ -54,7 +54,8 @@ tools.result = {
         )
     }
 }
-router.route('/')
+
+router.route('/:id')
     .get(async (req, res, next) => {
         const args = tools.collectDataFromReq.get(req);
         console.log(args);
@@ -77,30 +78,6 @@ router.route('/')
         } catch (e) {
             // console.log(e)
             return Utils.sendError(res, 500, `Server error: ${e}`);
-        }
-    })
-    .post(passport.authenticate(['access-token', 'basic'], {session: false}), async (req, res, next) => {
-        const args = tools.collectDataFromReq.post(req);
-        try {
-            tools.verifyData.post(args);
-        } catch (err) {
-            return Utils.sendError(res, 400, err.message);
-        }
-        try {
-            args.idOfSavedImage = await DBimage.save(
-                args.query.file,
-                {
-                    owner: req.user.id
-                }
-            )
-            if (args.idOfSavedImage) {
-                return tools.result.post(res, args);
-            } else {
-                return Utils.sendError(res, 400, "Bad arguments");
-            }
-        } catch (err) {
-            console.log(err);
-            return Utils.sendError(res, 500, `Server error: ${err}`);
         }
     })
     .delete(passport.authenticate(['access-token', 'basic'], {session: false}), async (req, res, next) => {
@@ -126,6 +103,31 @@ router.route('/')
             return res.json({success: true});
         } catch (e) {
             return Utils.sendError(res, 500, "Server error");
+        }
+    })
+router.route('/')
+    .post(passport.authenticate(['access-token', 'basic'], {session: false}), async (req, res, next) => {
+        const args = tools.collectDataFromReq.post(req);
+        try {
+            tools.verifyData.post(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.idOfSavedImage = await DBimage.save(
+                args.query.file,
+                {
+                    owner: req.user.id
+                }
+            )
+            if (args.idOfSavedImage) {
+                return tools.result.post(res, args);
+            } else {
+                return Utils.sendError(res, 400, "Bad arguments");
+            }
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
         }
     })
 module.exports = router;

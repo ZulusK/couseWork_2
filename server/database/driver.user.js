@@ -21,7 +21,6 @@ module.exports.create = {
         })
     }
 }
-
 module.exports.update = {
     facebook (user, profile) {
         if (user.facebook.name != profile.displayName) {
@@ -47,5 +46,20 @@ module.exports.get = {
     async byFacebook (facebookID) {
         const user = await DB.findOne(UserModel, {'facebook.id': facebookID});
         return user;
+    },
+    byQuery (query, page, limit, sort) {
+        return DB.find.withPagination(UserModel, query, {
+            page: page,
+            limit: limit,
+            sort: sort
+        })
+    },
+    byID (id) {
+        return UserModel.findById(id);
+    }
+}
+module.exports.remove = {
+    byID (id) {
+        return UserModel.findByIdAndRemove(id).exec();
     }
 }
