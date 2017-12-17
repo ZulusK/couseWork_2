@@ -15,14 +15,18 @@
       <template v-if="isLogged()">
         <hr class="navbar-divider">
         <a class="navbar-item">
-          My
+          <router-link :to="{name:'Publications-list',query:{author:$store.state.user.id}}">
+            My
+          </router-link>
         </a>
         <a class="navbar-item">
           Favourite
         </a>
         <hr class="navbar-divider">
         <a class="navbar-item">
-          Create
+          <router-link :to="{name:'Publication-create'}">
+            Create
+          </router-link>
         </a>
         <a class="navbar-item">
           Manage
@@ -52,5 +56,16 @@
 
   .ripple {
     color: $md-amber-200;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+    :hover {
+      text-decoration: none;
+    }
+    :visited {
+      text-decoration: none;
+    }
   }
 </style>

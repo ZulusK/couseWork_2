@@ -4,6 +4,7 @@ import Index from '%/Index';
 import API from '%/Other/API';
 import PersonalArea from '%/user/PersonalArea';
 import PublicationsList from '%/Publications/Publications-list';
+import PublicationCreate from '%/Publications/Publication-create';
 import PublicationView from '%/Publications/Publications-view';
 import _404 from '%/globals/404';
 import _500 from '%/globals/500';
@@ -28,6 +29,11 @@ export default new Router({
       component: PersonalArea
     },
     {
+      path: '/publications/create',
+      name: 'Publication-create',
+      component: PublicationCreate
+    },
+    {
       path: '/publications/:id',
       name: 'Publications-view',
       component: PublicationView
@@ -37,6 +43,7 @@ export default new Router({
       name: 'Publications-list',
       component: PublicationsList
     },
+
     {
       path: '*',
       name: '404',
