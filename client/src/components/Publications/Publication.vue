@@ -11,7 +11,7 @@
             <p class="is-size-3">{{title}}</p>
           </div>
           <figure class="logo-image-container has-text-centered" v-ripple>
-            <img :src="logo" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5"/>
+            <img :src="logo()" alt="Publication logo" @error="usePlaceholder" class="logo-image round-corner-5"/>
           </figure>
         </div>
       </div>
@@ -70,14 +70,14 @@
     methods: {
       usePlaceholder (sender) {
         sender.target.src = Globals.PLACEHOLDER;
+      },
+      logo () {
+        return this.publication.logo ? this.publication.logo : Globals.PLACEHOLDER;
       }
     },
     computed: {
       title () {
         return this.publication.title ? this.publication.title.trim().substr(0, 20) : "No title";
-      },
-      logo () {
-        return this.publication.logo ? this.publication.logo.trim() : Globals.PLACEHOLDER;
       },
       difficult () {
         return Number(this.publication.difficult) || 5;

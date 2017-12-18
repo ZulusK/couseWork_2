@@ -107,6 +107,7 @@
     width: 100%;
     object-fit: cover;
     object-position: center;
+    border-radius: 5px;
   }
 
   .logo-image-container {

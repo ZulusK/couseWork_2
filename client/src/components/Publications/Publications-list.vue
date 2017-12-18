@@ -20,14 +20,17 @@
                 Title
               </span>
               <b-field>
-                <b-input placeholder="Search" v-model="filters.title" @keydown.enter="load"></b-input>
-                <a class="button is-info" @click.stop="load">
-                  <b-icon
-                    size="is-small"
-                    pack="fa"
-                    icon="search"
-                  />
-                </a>
+                <b-input placeholder="Search" v-model="filters.title" @keydown.enter="load" expanded></b-input>
+                <p class="control">
+                  <a class="button is-info " @click.stop="load">
+                    <span>Search</span>
+                    <b-icon
+                      class="icon"
+                      size="is-small"
+                      pack="fa"
+                      icon="search"/>
+                  </a>
+                </p>
               </b-field>
             </div>
             <hr>
@@ -51,14 +54,17 @@
             <b-tabs v-model="UI.activeTab" position="is-centered">
               <b-tab-item label="Title" icon="tooltip-text" class="container">
                 <b-field>
-                  <b-input placeholder="Search" v-model="filters.title"></b-input>
-                  <a class="button is-info" @click.stop="load">
-                    <b-icon
-                      size="is-small"
-                      pack="fa"
-                      icon="search"
-                    />
-                  </a>
+                  <b-input placeholder="Search" v-model="filters.title" @keydown.enter="load" expanded></b-input>
+                  <p class="control">
+                    <a class="button is-info " @click.stop="load">
+                      <span>Search</span>
+                      <b-icon
+                        class="icon"
+                        size="is-small"
+                        pack="fa"
+                        icon="search"/>
+                    </a>
+                  </p>
                 </b-field>
               </b-tab-item>
               <b-tab-item label="Tags" icon="label">
@@ -95,7 +101,6 @@
         order="is-centered"/>
     </div>
   </div>
-
 </template>
 <script>
   import AuthMixin from '%/Other/AuthMixin';

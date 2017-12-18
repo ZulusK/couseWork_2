@@ -13,6 +13,8 @@
     "axios": "^0.17.1",
     "buefy": "^0.6.2",
     "bulma": "^0.6.1",
+    "bulma-extensions": "^0.5.2",
+    "bulma-slider": "^0.1.0",
     "commonmark": "^0.28.1",
     "font-awesome": "^4.7.0",
     "github-markdown-css": "^2.9.0",

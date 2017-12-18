@@ -13,6 +13,7 @@
       @logout="logout"
       @setHeader="setHeader"
       @setFooter="setFooter"/>
+    <br>
     <router-view
       id="viewport"
       ref="viewport"

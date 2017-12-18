@@ -1,7 +1,6 @@
 @import "~material-colors/dist/colors";
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
-
 // Set your colors
 $primary: $md-amber-500;
 $primary-invert: $white;
@@ -14,7 +13,6 @@ $facebook-invert: $white;
 $easy:$md-green-500;
 $middle:$md-amber-500;
 $hard:$md-red-500;
-
 $colors: (
   "white": ($white, $black),
   "black": ($black, $white),
@@ -91,4 +89,6 @@ $link-focus-border: $twitter;
 
 // Import Bulma and Buefy styles
 @import "~bulma";
+@import "~bulma-slider";
 @import "~buefy/src/scss/buefy";
+
