@@ -72,7 +72,7 @@
         sender.target.src = Globals.PLACEHOLDER;
       },
       logo () {
-        return this.publication.logo ? this.publication.logo : Globals.PLACEHOLDER;
+        return this.publication.logo ? Utils.resolveImageURL(this.publication.logo) : Globals.PLACEHOLDER;
       }
     },
     computed: {

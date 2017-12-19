@@ -90,7 +90,7 @@
           text: this.publication.text,
           difficult: this.publication.difficult,
           tags: this.publication.tags,
-          logo: this.publication.x || this.publication.logo
+          logo: this.publication.logoLoaded || this.publication.logo
         }
       },
       async processFile () {

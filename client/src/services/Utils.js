@@ -1,4 +1,5 @@
 import commonmark from 'commonmark';
+import Globals from '#/globals';
 
 function convertToURL (v) {
   if (typeof v == 'object' || Array.isArray(v)) {
@@ -17,6 +18,13 @@ function notEmpty (v) {
 }
 
 export default {
+  resolveImageURL(address){
+    if(address.startsWith('/api/v1/res')){
+      return  Globals.ROOT_URL+address;
+    }else{
+      return address;
+    }
+  },
   converToURL (obj) {
     return convertToURL(obj)
   },

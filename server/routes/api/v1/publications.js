@@ -139,6 +139,7 @@ router.route('/')
         }
         try {
             args.result = await DBpublications.get.byQuery(args.query, args.page, args.limit, args.sort);
+            console.log(args.result)
             if (args.result) {
                 return tools.result.get(res, args);
             } else {
