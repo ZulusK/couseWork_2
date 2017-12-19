@@ -1,5 +1,12 @@
 <template>
   <div class="container" v-if="publication">
+    <div class="ma-15 has-text-right" v-if="allowDeleting">
+      <a class="button is-large is-danger" v-ripple @click.stop="remove">
+        <span>Delete</span>
+        <b-icon
+          icon="delete"/>
+      </a>
+    </div>
     <publication :publication="publication" :author="author"/>
   </div>
 </template>
@@ -24,6 +31,30 @@
       }
     },
     methods: {
+      confirmRemove () {
+        return true;
+        return window.confirm('Do you really want to remove this publication?');
+      },
+      async remove () {
+        if (this.confirmRemove()) {
+          await this.checkTimeOfTokens();
+          if (this.isNotLogged()) {
+            this.error('You are not logged. Please, login to continue');
+            return;
+          }
+          try {
+            const result = await APIPublications.remove(this.publication.id);
+            if (result.data.success) {
+              this.success('Successfully deleted');
+              this.$router.push({name: 'Publications-list'});
+            } else {
+              this.error(result.data.message || "Remove: server says 'no'");
+            }
+          } catch (e) {
+            this.error(e.response.data.message || e.message);
+          }
+        }
+      },
       loadAuthor: async function () {
         try {
           const result = await APIUsers.load({id: this.publication.author});
@@ -59,7 +90,11 @@
         }
       }
     },
-    computed: {},
+    computed: {
+      allowDeleting () {
+        return this.isLogged() && ((String(this.$store.state.user.id) == this.publication.author) || this.$store.state.user.isAdmin);
+      }
+    },
     props: [],
     async created () {
       this.changeFilters(this.$route);

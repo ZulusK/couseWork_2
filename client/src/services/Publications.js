@@ -11,5 +11,8 @@ export default {
       form.append(key, (Array.isArray(data[key]) ? JSON.stringify(data[key]) : data[key]))
     }
     return API.access().post('/api/v1/publications', form);
+  },
+  remove (id) {
+    return API.access().delete(`/api/v1/publications?id=${id}`);
   }
 }

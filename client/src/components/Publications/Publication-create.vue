@@ -90,7 +90,7 @@
           text: this.publication.text,
           difficult: this.publication.difficult,
           tags: this.publication.tags,
-          logo: this.publication.logoLoaded || this.publication.logo
+          logo: this.publication.x || this.publication.logo
         }
       },
       async processFile () {
@@ -150,6 +150,7 @@
         await this.checkTimeOfTokens();
         if (this.isNotLogged()) {
           this.error('You are not authorized');
+          return;
         }
         if (!await this.processFile()) {
           return;
