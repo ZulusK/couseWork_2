@@ -115,10 +115,10 @@
         switch (num) {
           case 0:
             this.publication.logo = this.imageURL;
-            vm.publication.file = null;
+            this.publication.file = null;
             break;
           case 1:
-            vm.publication.file = this.dropFiles[0];
+            this.publication.file = this.dropFiles[0];
             this.publication.logo = this.readedFile;
             break;
           default:

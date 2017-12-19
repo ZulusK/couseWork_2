@@ -166,7 +166,7 @@
             this.items = items;
           }
         } catch (err) {
-          this.error(err.response.message || err.message);
+          this.error(err.response.data.message || err.message);
         }
         this.UI.isLoading = false;
       },

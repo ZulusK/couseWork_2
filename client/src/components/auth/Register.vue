@@ -114,7 +114,7 @@
             }
           } catch (err) {
             console.log(err)
-            this.error(err.response.status == 401 ? "Invalid credentials" : err.response.message||err.message);
+            this.error(err.response.status == 401 ? "Invalid credentials" : err.response.data.message || err.message);
           }
         } else {
           this.error("Not all required fields are valid");

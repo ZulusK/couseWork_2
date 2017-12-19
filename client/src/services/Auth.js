@@ -14,10 +14,10 @@ export default {
     return API.noAuth().post(`/api/v1/validate/auth/${path}/${key}`, {value: value});
   },
   checkTokenAccess(){
-    return API.access().post('api/v1/check/access');
+    return API.access().get('/api/v1/auth/check/access');
   },
   checkTokenRefresh(){
-    return API.refresh().post('api/v1/check/refresh');
+    return API.refresh().get('/api/v1/auth/check/refresh');
   },
   updateAccessToken () {
     return API.refresh().get('/api/v1/auth/token');

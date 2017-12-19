@@ -1,20 +1,21 @@
 <script>
+  import AuthAPI from '#/Auth';
   export default {
     methods: {
       async checkTimeOfTokens () {
         if (this.isNotLogged()) return;
+        console.log(0)
         //check is access token are valid
         if (await this.isValidAccessToken()) {
           return;
         }
+        console.log(1)
         //check is refresh token are valid
         if (!await this.isValidRefreshToken()) {
-          if (this.logout) {
-            this.logout();
-          } else {
-            this.logout();
-          }
+          this.logout();
+          return;
         }
+        console.log(2)
         await this.updateAccessToken();
       },
       async updateAccessToken () {
@@ -24,9 +25,9 @@
           if (result.success) {
             this.$store.dispatch('setToken_access', response.data.tokens.access);
           } else {
-            if(this.logout) {
+            if (this.logout) {
               this.logout();
-            }else{
+            } else {
               this.logout();
             }
           }
@@ -37,6 +38,7 @@
       async isValidRefreshToken () {
         try {
           const response = await AuthAPI.checkTokenRefresh();
+          console.log(response.data)
           return response.data.success;
         } catch (err) {
           return false;

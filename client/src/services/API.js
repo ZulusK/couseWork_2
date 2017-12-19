@@ -1,5 +1,6 @@
 import axios from 'axios';
 import globals from '#/globals';
+import store from '@/store/store';
 
 export default {
   basic (username, password) {

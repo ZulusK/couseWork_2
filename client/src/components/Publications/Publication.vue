@@ -95,7 +95,6 @@
         return this.publication.description ? this.publication.description.trim().substr(0, 150) : "No description"
       },
       renderedText () {
-        console.log(this.publication.text)
         return Utils.md.render(this.publication.text || "");
       }
     },

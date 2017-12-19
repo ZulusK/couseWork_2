@@ -79,6 +79,7 @@ function validate (field, value, subject) {
 Publication.methods.info = function () {
     return {
         id: this.id,
+        logo: this.logo,
         author: this.author,
         title: this.title,
         description: this.description,

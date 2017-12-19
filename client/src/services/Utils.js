@@ -17,6 +17,9 @@ function notEmpty (v) {
 }
 
 export default {
+  converToURL (obj) {
+    return convertToURL(obj)
+  },
   /**
    * pass filter args to URL-decoded string
    * @param filter object with args
@@ -41,5 +44,6 @@ export default {
       var parsed = this.reader.parse(text);
       return this.writer.render(parsed); // result is a String
     }
-  }
+  },
 }
+
