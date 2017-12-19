@@ -1,5 +1,6 @@
 <template>
   <div class="ma-20">
+    <b-loading :active="UI.isLoading"/>
     <div v-if="$store.getters.isLogged()">
       <div class="columns is-desktop">
         <div class="column is-12-mobile is-6-desktop">
@@ -53,6 +54,9 @@
     },
     data () {
       return {
+        UI: {
+          isLoading: false
+        },
         allowLeave: false,
         publication: {
           title: "",
@@ -145,14 +149,17 @@
         }
       },
       async pushPublication () {
+        this.UI.isLoading = true;
         //todo check validation
         //check access and refresh
         await this.checkTimeOfTokens();
         if (this.isNotLogged()) {
           this.error('You are not authorized');
+          this.UI.isLoading = false;
           return;
         }
         if (!await this.processFile()) {
+          this.UI.isLoading = false;
           return;
         }
         const id = await this.savePublication();
@@ -162,6 +169,7 @@
           this.allowLeave = true;
           this.$router.push({name: 'Publications-view', params: {id: id}})
         }
+        this.UI.isLoading = false;
       },
       async save () {
         if (this.confirmSave()) {

@@ -22,11 +22,20 @@
           <router-link :to="{name:'Publications-list',query:{author:item.author}}">
             <div class="media has-text-black">
               <div class="media-left avatar-image-container">
-                <img
-                  :src="authorAvatar"
-                  alt="Author avatar"
-                  @error="usePlaceholder"
-                  class="avatar-image">
+                <template v-if="author.logo">
+                  <img
+                    :src="authorAvatar"
+                    alt="Author avatar"
+                    @error="usePlaceholder"
+                    class="avatar-image">
+                </template>
+                <template v-else>
+                  <v-gravatar
+                    class="avatar-image"
+                    :email="author.email||''"
+                    alt="" :size="140"
+                    ref="gavatar"/>
+                </template>
               </div>
               <div class="media-content">
                 <div class="content">
@@ -59,6 +68,7 @@
 </template>
 <script>
   import Globals from '#/globals';
+
   export default {
     data () {
       return {}

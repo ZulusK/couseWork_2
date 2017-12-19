@@ -25,9 +25,10 @@
                 <span></span>
               </button>
             </div>
-            <div class="navbar-menu" id="menu" ref="menu">
+            <div class="navbar-menu is-tablet" id="menu" ref="menu">
               <div class="navbar-start">
                 <publications-btn/>
+                <code-btn/>
               </div>
               <div class="navbar-end">
                 <!--login-->
@@ -50,6 +51,7 @@
   import RegisterBtn from '%/globals/btns/Register';
   import LogoutBtn from '%/globals/btns/Logout';
   import PublicationsBtn from '%/globals/btns/Publications';
+  import CodeBtn from '%/globals/btns/Code';
 
   export default {
     components: {
@@ -57,7 +59,8 @@
       LoginBtn,
       LogoutBtn,
       RegisterBtn,
-      PublicationsBtn
+      PublicationsBtn,
+      CodeBtn
     },
     data () {
       return {
