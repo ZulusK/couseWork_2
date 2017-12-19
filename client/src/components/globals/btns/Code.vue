@@ -33,7 +33,7 @@
     },
     methods: {
       showAll () {
-        this.$router.push({name: 'Publications-list'})
+        this.$router.push({name: 'Code'})
       }
     }
   }

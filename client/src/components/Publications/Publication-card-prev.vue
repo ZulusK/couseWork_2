@@ -57,7 +57,7 @@
           <hr>
           <div class="tags">
             <router-link class="tag is-warning is-medium interactive-tag" v-for="tag in item.tags" :key="tag"
-                         :to="{name:'Publications-list', query:{tags:[tag]}}">
+                         :to="{name:'Publications-list', query:{tags:JSON.stringify(tag)}}">
               {{tag}}
             </router-link>
           </div>
@@ -68,7 +68,7 @@
 </template>
 <script>
   import Globals from '#/globals';
-
+  import Utils from '#/Utils';
   export default {
     data () {
       return {}
@@ -84,7 +84,7 @@
         return this.item.title ? this.item.title.trim().substr(0, 40) : "No title";
       },
       logo () {
-        return this.item.logo ? this.item.logo.trim() : Globals.PLACEHOLDER;
+        return this.item.logo ? Utils.resolveImageURL(this.item.logo) : Globals.PLACEHOLDER;
       },
       difficult () {
         return Number(this.item.difficult) || 5;
