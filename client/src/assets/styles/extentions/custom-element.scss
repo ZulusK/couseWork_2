@@ -63,31 +63,31 @@ $link-focus-border: $twitter;
   .ma-#{$space} {
     margin: $space*1px;
   }
-  .pa#{$space} {
+  .pa-#{$space} {
     padding: $space*1px;
   }
   .ml-#{$space} {
     margin-left: $space*1px;
   }
-  .pl#{$space} {
+  .pl-#{$space} {
     padding-left: $space*1px;
   }
   .mr-#{$space} {
     margin-right: $space*1px;
   }
-  .pr#{$space} {
+  .pr-#{$space} {
     padding-right: $space*1px;
   }
   .mt-#{$space} {
     margin-top: $space*1px;
   }
-  .pt#{$space} {
+  .pt-#{$space} {
     padding-top: $space*1px;
   }
   .mb-#{$space} {
     margin-bottom: $space*1px;
   }
-  .pb#{$space} {
+  .pb-#{$space} {
     padding-bottom: $space*1px;
   }
 }

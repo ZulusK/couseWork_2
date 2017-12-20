@@ -11,6 +11,11 @@
       }
     },
     methods: {
+      watch: {
+        xml () {
+          this.blockly_container.updateToolbox(this.xml);
+        }
+      },
       run () {
         Blockly.JavaScript.addReservedWords('code');
         var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
@@ -33,9 +38,9 @@
             zoom:
               {
                 controls: true,
-                wheel: true,
+                wheel: false,
                 startScale: 1.0,
-                maxScale: 3,
+                maxScale: 2,
                 minScale: 0.3,
                 scaleSpeed: 1.2
               },
@@ -58,11 +63,12 @@
         this.$refs['playground'].style.top = y + 'px';
         this.$refs['playground'].style.width = this.$refs['playground-container'].offsetWidth + 'px';
         this.$refs['playground'].style.height = this.$refs['playground-container'].offsetHeight + 'px';
+        Blockly.svgResize(this.blockly_container);
+
       },
       applyResize () {
         window.addEventListener('resize', this.handleResize, false);
         this.handleResize();
-        Blockly.svgResize(this.blockly_container);
       }
     },
     computed: {},
