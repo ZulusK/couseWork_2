@@ -1,9 +1,6 @@
 <template>
-  <div class="box" ref="playground-container" :style="{height: height, width:width}">
-    <div id="playground" ref="playground" class="playground"></div>
-    <xml id="toolbox" style="display: none">
-      <slot/>
-    </xml>
+  <div ref="playground-container" class="playground-container">
+    <div ref="playground" class="playground"></div>
   </div>
 </template>
 <script>
@@ -14,16 +11,41 @@
       }
     },
     methods: {
+      run () {
+        Blockly.JavaScript.addReservedWords('code');
+        var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
+        try {
+          eval(code);
+        } catch (e) {
+          alert(e);
+        }
+      },
       inject () {
-        this.blockly_container = Blockly.inject('playground',
+        this.blockly_container = Blockly.inject(this.$refs['playground'],
           {
+            grid:
+              {
+                spacing: 20,
+                length: 3,
+                colour: '#ccc',
+                snap: true
+              },
+            zoom:
+              {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+              },
+            trashcan: true,
             media: '/static/media/',
-            toolbox: document.getElementById('toolbox')
+            toolbox: this.xml
           });
       },
       handleResize () {
-        console.log('resize')
-        var element = this.$refs['playground-container'].offsetParent.offsetParent;
+        var element = this.$refs['playground-container'];
         var x = 0;
         var y = 0;
         do {
@@ -38,13 +60,16 @@
         this.$refs['playground'].style.height = this.$refs['playground-container'].offsetHeight + 'px';
       },
       applyResize () {
-        window.addEventListener('resize', onresize, this.handleResize);
+        window.addEventListener('resize', this.handleResize, false);
         this.handleResize();
         Blockly.svgResize(this.blockly_container);
       }
     },
     computed: {},
     props: {
+      xml: {
+        default: ""
+      },
       width: {
         default: '800px'
       },
@@ -67,6 +92,10 @@
 <style scoped lang="scss">
   .playground {
     position: absolute;
+  }
+
+  .playground-container {
+    height: 90vh;
   }
 </style>
 
