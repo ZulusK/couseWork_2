@@ -10,9 +10,9 @@ $primary-2: $md-grey-900;
 $primary-2-invert: $white;
 $facebook: #3b5998;
 $facebook-invert: $white;
-$easy:$md-green-500;
-$middle:$md-amber-500;
-$hard:$md-red-500;
+$easy: $md-green-500;
+$middle: $md-amber-500;
+$hard: $md-red-500;
 $colors: (
   "white": ($white, $black),
   "black": ($black, $white),
@@ -26,10 +26,14 @@ $colors: (
   "primary-2": ($primary-2, $primary-2-invert),
   "twitter":($twitter, $twitter-invert),
   "facebook":($facebook, $facebook-invert),
-  "hard":($hard,$white),
-  "middle":($middle,$white),
-  "easy":($easy,$white),
+  "hard":($hard, $white),
+  "middle":($middle, $white),
+  "easy":($easy, $white),
 );
+
+$panel-heading-background-color: $twitter;
+$panel-heading-color: $twitter-invert;
+
 $dimensions: (
   16, 24, 32, 48, 64, 96, 128, 256, 512
 );
@@ -37,22 +41,23 @@ $dimensions: (
 $link: $twitter;
 $link-invert: $twitter-invert;
 $link-focus-border: $twitter;
-@for $i from 0 through 100{
-  .w-#{$i}{
+@for $i from 0 through 100 {
+  .w-#{$i} {
     width: $i*1%;
   }
 }
+
 @for $i from 0 through 50 {
   .round-corner-#{$i} {
     border-radius: $i*1px;
   }
-  .round-percent-#{$i}{
+  .round-percent-#{$i} {
     border-radius: $i*1%;
   }
 }
 
 @for $space from 0 through 20 {
-  .round-corner-#{$space}{
+  .round-corner-#{$space} {
     border-radius: $space*1px;
   }
   .ma-#{$space} {

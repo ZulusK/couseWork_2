@@ -1,6 +1,7 @@
 const path = require('path');
 module.exports = {
     API_DOCS: path.join(__dirname, '..', 'public', 'endpoints.md'),
+    API_BLOCKS: path.join(__dirname, '..', 'public', 'blocks.json'),
     ROOT_URL: (process.env.NODE_ENV == 'dev') ?
         `localhost:${this.PORT}` : 'https://codual.herokuapp.com',
     DB: (process.env.NODE_ENV == 'dev') ?

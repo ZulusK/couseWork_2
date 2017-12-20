@@ -1,0 +1,27 @@
+{
+  "Logic": {
+    "items": [
+      {
+        "name": "if",
+        "selected": false
+      },
+      {
+        "name": "compare",
+        "selected": false
+      },
+      {
+        "name": "operations",
+        "selected": false
+      },
+      {
+        "name": "invert",
+        "selected": false
+      },
+      {
+        "name": "boolean",
+        "selected": false,
+        "description": "Define 'true' and 'false' constants"
+      }
+    ]
+  }
+}

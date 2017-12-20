@@ -1,13 +1,8 @@
 <template>
   <div class="sandbox">
-    <div class="columns is-multiline">
-      <div class="box column is-12">
-      </div>
-      <div class="column is-12 columns is-multiline">
-        <div class="column is-12-tablet is-8-desktop">
-          <workspace :xml="toolbox" class="box " ref="workspace"/>
-        </div>
-        <div class=" column is-4-desktop is-12-mobile">
+    <div class="columns is-multiline is-desktop">
+      <div class="column is-4-desktop is-12-mobile columns  is-multiline">
+        <div class=" column is-12-desktop">
           <a class="button is-success is-medium" @click="run">
             <span>Run code</span>
             <b-icon icon="rocket"/>
@@ -23,6 +18,12 @@
             </p>
           </div>
         </div>
+        <div class="column is-12-desktop" v-if="blocks">
+          <sandbox-controls :elements="blocks"/>
+        </div>
+      </div>
+      <div class="column is-12-tablet is-8-desktop">
+        <workspace :xml="toolbox" class="box " ref="workspace"/>
       </div>
     </div>
     <br>
@@ -30,319 +31,278 @@
 </template>
 <script>
   import Workspace from '%/code/Workspace';
+  import SandboxControls from '%/code/Controls';
+  import APIBlocks from '#/Blocks';
+  import MessageMixin from '%/Other/MessageMixin';
 
   export default {
     components: {
-      Workspace
+      Workspace,
+      SandboxControls
     },
+    mixins: [MessageMixin],
     data () {
       return {
+        blocks: null,
         output: ["to large string", 33],
         toolbox: "<xml id=\"toolbox\" style=\"display: none\">\n" +
-        "    <category name=\"Logic\">\n" +
-        "      <category name=\"If\">\n" +
-        "        <block type=\"controls_if\"></block>\n" +
-        "        <block type=\"controls_if\">\n" +
-        "          <mutation else=\"1\"></mutation>\n" +
-        "        </block>\n" +
-        "        <block type=\"controls_if\">\n" +
-        "          <mutation elseif=\"1\" else=\"1\"></mutation>\n" +
-        "        </block>\n" +
-        "      </category>\n" +
-        "      <category name=\"Boolean\">\n" +
-        "        <block type=\"logic_compare\"></block>\n" +
-        "        <block type=\"logic_operation\"></block>\n" +
-        "        <block type=\"logic_negate\"></block>\n" +
-        "        <block type=\"logic_boolean\"></block>\n" +
-        "        <block type=\"logic_null\"></block>\n" +
-        "        <block type=\"logic_ternary\"></block>\n" +
-        "      </category>\n" +
+        "    <category name=\"Logic conditions\" colour=\"%{BKY_LOGIC_HUE}\">\n" +
+        "      <block type=\"controls_if\"></block>\n" +
+        "      <block type=\"logic_compare\"></block>\n" +
+        "      <block type=\"logic_operation\"></block>\n" +
+        "      <block type=\"logic_negate\"></block>\n" +
+        "      <block type=\"logic_boolean\"></block>\n" +
+        "      <block type=\"logic_null\"></block>\n" +
+        "      <block type=\"logic_ternary\"></block>\n" +
         "    </category>\n" +
-        "    <category name=\"Loops\">\n" +
+        "    <category name=\"Loop\" colour=\"%{BKY_LOOPS_HUE}\">\n" +
         "      <block type=\"controls_repeat_ext\">\n" +
         "        <value name=\"TIMES\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">10</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "      </block>\n" +
         "      <block type=\"controls_whileUntil\"></block>\n" +
         "      <block type=\"controls_for\">\n" +
-        "        <field name=\"VAR\">i</field>\n" +
         "        <value name=\"FROM\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">1</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "        <value name=\"TO\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">10</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "        <value name=\"BY\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">1</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "      </block>\n" +
         "      <block type=\"controls_forEach\"></block>\n" +
         "      <block type=\"controls_flow_statements\"></block>\n" +
         "    </category>\n" +
-        "    <category name=\"Math\">\n" +
+        "    <category name=\"Math\" colour=\"%{BKY_MATH_HUE}\">\n" +
         "      <block type=\"math_number\"></block>\n" +
-        "      <block type=\"math_arithmetic\"></block>\n" +
-        "      <block type=\"math_single\"></block>\n" +
-        "      <block type=\"math_trig\"></block>\n" +
-        "      <block type=\"math_constant\"></block>\n" +
-        "      <block type=\"math_number_property\"></block>\n" +
-        "      <block type=\"math_round\"></block>\n" +
-        "      <block type=\"math_on_list\"></block>\n" +
-        "      <block type=\"math_modulo\"></block>\n" +
-        "      <block type=\"math_constrain\">\n" +
-        "        <value name=\"LOW\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "      <block type=\"math_arithmetic\">\n" +
+        "        <value name=\"A\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">1</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "        <value name=\"B\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">1</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_single\">\n" +
+        "        <value name=\"NUM\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">9</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_trig\">\n" +
+        "        <value name=\"NUM\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">45</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_constant\"></block>\n" +
+        "      <block type=\"math_number_property\">\n" +
+        "        <value name=\"NUMBER_TO_CHECK\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">0</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_round\">\n" +
+        "        <value name=\"NUM\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">3.1</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_on_list\"></block>\n" +
+        "      <block type=\"math_modulo\">\n" +
+        "        <value name=\"DIVIDEND\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">64</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "        <value name=\"DIVISOR\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">10</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"math_constrain\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">50</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "        <value name=\"LOW\">\n" +
+        "          <shadow type=\"math_number\">\n" +
+        "            <field name=\"NUM\">1</field>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "        <value name=\"HIGH\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">100</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "      </block>\n" +
         "      <block type=\"math_random_int\">\n" +
         "        <value name=\"FROM\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">1</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "        <value name=\"TO\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">100</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "      </block>\n" +
         "      <block type=\"math_random_float\"></block>\n" +
         "    </category>\n" +
-        "    <category name=\"Lists\">\n" +
-        "      <block type=\"lists_create_empty\"></block>\n" +
+        "    <category name=\"Text\" colour=\"%{BKY_TEXTS_HUE}\">\n" +
+        "      <block type=\"text\"></block>\n" +
+        "      <block type=\"text_join\"></block>\n" +
+        "      <block type=\"text_append\">\n" +
+        "        <value name=\"TEXT\">\n" +
+        "          <shadow type=\"text\"></shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_length\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_isEmpty\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\"></field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_indexOf\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{textVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "        <value name=\"FIND\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_charAt\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{textVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_getSubstring\">\n" +
+        "        <value name=\"STRING\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{textVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_changeCase\">\n" +
+        "        <value name=\"TEXT\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_trim\">\n" +
+        "        <value name=\"TEXT\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_print\">\n" +
+        "        <value name=\"TEXT\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"text_prompt_ext\">\n" +
+        "        <value name=\"TEXT\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">abc</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "    </category>\n" +
+        "    <category name=\"List\" colour=\"%{BKY_LISTS_HUE}\">\n" +
+        "      <block type=\"lists_create_with\">\n" +
+        "        <mutation items=\"0\"></mutation>\n" +
+        "      </block>\n" +
         "      <block type=\"lists_create_with\"></block>\n" +
         "      <block type=\"lists_repeat\">\n" +
         "        <value name=\"NUM\">\n" +
-        "          <block type=\"math_number\">\n" +
+        "          <shadow type=\"math_number\">\n" +
         "            <field name=\"NUM\">5</field>\n" +
-        "          </block>\n" +
+        "          </shadow>\n" +
         "        </value>\n" +
         "      </block>\n" +
         "      <block type=\"lists_length\"></block>\n" +
         "      <block type=\"lists_isEmpty\"></block>\n" +
-        "      <block type=\"lists_indexOf\"></block>\n" +
-        "      <block type=\"lists_getIndex\"></block>\n" +
-        "      <block type=\"lists_setIndex\"></block>\n" +
+        "      <block type=\"lists_indexOf\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{listVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"lists_getIndex\">\n" +
+        "        <value name=\"VALUE\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{listVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"lists_setIndex\">\n" +
+        "        <value name=\"LIST\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{listVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"lists_getSublist\">\n" +
+        "        <value name=\"LIST\">\n" +
+        "          <block type=\"variables_get\">\n" +
+        "            <field name=\"VAR\">{listVariable}</field>\n" +
+        "          </block>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"lists_split\">\n" +
+        "        <value name=\"DELIM\">\n" +
+        "          <shadow type=\"text\">\n" +
+        "            <field name=\"TEXT\">,</field>\n" +
+        "          </shadow>\n" +
+        "        </value>\n" +
+        "      </block>\n" +
+        "      <block type=\"lists_sort\"></block>\n" +
         "    </category>\n" +
-        "    <category name=\"Variables\" custom=\"VARIABLE\"></category>\n" +
-        "    <category name=\"Functions\" custom=\"PROCEDURE\"></category>\n" +
         "    <sep></sep>\n" +
-        "    <category name=\"Library\" expanded=\"true\">\n" +
-        "      <category name=\"Randomize\">\n" +
-        "        <block type=\"procedures_defnoreturn\">\n" +
-        "          <mutation>\n" +
-        "            <arg name=\"list\"></arg>\n" +
-        "          </mutation>\n" +
-        "          <field name=\"NAME\">randomize</field>\n" +
-        "          <statement name=\"STACK\">\n" +
-        "            <block type=\"controls_for\" inline=\"true\">\n" +
-        "              <field name=\"VAR\">x</field>\n" +
-        "              <value name=\"FROM\">\n" +
-        "                <block type=\"math_number\">\n" +
-        "                  <field name=\"NUM\">1</field>\n" +
-        "                </block>\n" +
-        "              </value>\n" +
-        "              <value name=\"TO\">\n" +
-        "                <block type=\"lists_length\" inline=\"false\">\n" +
-        "                  <value name=\"VALUE\">\n" +
-        "                    <block type=\"variables_get\">\n" +
-        "                      <field name=\"VAR\">list</field>\n" +
-        "                    </block>\n" +
-        "                  </value>\n" +
-        "                </block>\n" +
-        "              </value>\n" +
-        "              <value name=\"BY\">\n" +
-        "                <block type=\"math_number\">\n" +
-        "                  <field name=\"NUM\">1</field>\n" +
-        "                </block>\n" +
-        "              </value>\n" +
-        "              <statement name=\"DO\">\n" +
-        "                <block type=\"variables_set\" inline=\"false\">\n" +
-        "                  <field name=\"VAR\">y</field>\n" +
-        "                  <value name=\"VALUE\">\n" +
-        "                    <block type=\"math_random_int\" inline=\"true\">\n" +
-        "                      <value name=\"FROM\">\n" +
-        "                        <block type=\"math_number\">\n" +
-        "                          <field name=\"NUM\">1</field>\n" +
-        "                        </block>\n" +
-        "                      </value>\n" +
-        "                      <value name=\"TO\">\n" +
-        "                        <block type=\"lists_length\" inline=\"false\">\n" +
-        "                          <value name=\"VALUE\">\n" +
-        "                            <block type=\"variables_get\">\n" +
-        "                              <field name=\"VAR\">list</field>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                        </block>\n" +
-        "                      </value>\n" +
-        "                    </block>\n" +
-        "                  </value>\n" +
-        "                  <next>\n" +
-        "                    <block type=\"variables_set\" inline=\"false\">\n" +
-        "                      <field name=\"VAR\">temp</field>\n" +
-        "                      <value name=\"VALUE\">\n" +
-        "                        <block type=\"lists_getIndex\" inline=\"true\">\n" +
-        "                          <mutation statement=\"false\" at=\"true\"></mutation>\n" +
-        "                          <field name=\"MODE\">GET</field>\n" +
-        "                          <field name=\"WHERE\">FROM_START</field>\n" +
-        "                          <value name=\"AT\">\n" +
-        "                            <block type=\"variables_get\">\n" +
-        "                              <field name=\"VAR\">y</field>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                          <value name=\"VALUE\">\n" +
-        "                            <block type=\"variables_get\">\n" +
-        "                              <field name=\"VAR\">list</field>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                        </block>\n" +
-        "                      </value>\n" +
-        "                      <next>\n" +
-        "                        <block type=\"lists_setIndex\" inline=\"false\">\n" +
-        "                          <value name=\"AT\">\n" +
-        "                            <block type=\"variables_get\">\n" +
-        "                              <field name=\"VAR\">y</field>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                          <value name=\"LIST\">\n" +
-        "                            <block type=\"variables_get\">\n" +
-        "                              <field name=\"VAR\">list</field>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                          <value name=\"TO\">\n" +
-        "                            <block type=\"lists_getIndex\" inline=\"true\">\n" +
-        "                              <mutation statement=\"false\" at=\"true\"></mutation>\n" +
-        "                              <field name=\"MODE\">GET</field>\n" +
-        "                              <field name=\"WHERE\">FROM_START</field>\n" +
-        "                              <value name=\"AT\">\n" +
-        "                                <block type=\"variables_get\">\n" +
-        "                                  <field name=\"VAR\">x</field>\n" +
-        "                                </block>\n" +
-        "                              </value>\n" +
-        "                              <value name=\"VALUE\">\n" +
-        "                                <block type=\"variables_get\">\n" +
-        "                                  <field name=\"VAR\">list</field>\n" +
-        "                                </block>\n" +
-        "                              </value>\n" +
-        "                            </block>\n" +
-        "                          </value>\n" +
-        "                          <next>\n" +
-        "                            <block type=\"lists_setIndex\" inline=\"false\">\n" +
-        "                              <value name=\"AT\">\n" +
-        "                                <block type=\"variables_get\">\n" +
-        "                                  <field name=\"VAR\">x</field>\n" +
-        "                                </block>\n" +
-        "                              </value>\n" +
-        "                              <value name=\"LIST\">\n" +
-        "                                <block type=\"variables_get\">\n" +
-        "                                  <field name=\"VAR\">list</field>\n" +
-        "                                </block>\n" +
-        "                              </value>\n" +
-        "                              <value name=\"TO\">\n" +
-        "                                <block type=\"variables_get\">\n" +
-        "                                  <field name=\"VAR\">temp</field>\n" +
-        "                                </block>\n" +
-        "                              </value>\n" +
-        "                            </block>\n" +
-        "                          </next>\n" +
-        "                        </block>\n" +
-        "                      </next>\n" +
-        "                    </block>\n" +
-        "                  </next>\n" +
-        "                </block>\n" +
-        "              </statement>\n" +
-        "            </block>\n" +
-        "          </statement>\n" +
-        "        </block>\n" +
-        "      </category>\n" +
-        "      <category name=\"Jabberwocky\">\n" +
-        "        <block type=\"text_print\">\n" +
-        "          <value name=\"TEXT\">\n" +
-        "            <block type=\"text\">\n" +
-        "              <field name=\"TEXT\">'Twas brillig, and the slithy toves</field>\n" +
-        "            </block>\n" +
-        "          </value>\n" +
-        "          <next>\n" +
-        "            <block type=\"text_print\">\n" +
-        "              <value name=\"TEXT\">\n" +
-        "                <block type=\"text\">\n" +
-        "                  <field name=\"TEXT\">  Did gyre and gimble in the wabe:</field>\n" +
-        "                </block>\n" +
-        "              </value>\n" +
-        "              <next>\n" +
-        "                <block type=\"text_print\">\n" +
-        "                  <value name=\"TEXT\">\n" +
-        "                    <block type=\"text\">\n" +
-        "                      <field name=\"TEXT\">All mimsy were the borogroves,</field>\n" +
-        "                    </block>\n" +
-        "                  </value>\n" +
-        "                  <next>\n" +
-        "                    <block type=\"text_print\">\n" +
-        "                      <value name=\"TEXT\">\n" +
-        "                        <block type=\"text\">\n" +
-        "                          <field name=\"TEXT\">  And the mome raths outgrabe.</field>\n" +
-        "                        </block>\n" +
-        "                      </value>\n" +
-        "                    </block>\n" +
-        "                  </next>\n" +
-        "                </block>\n" +
-        "              </next>\n" +
-        "            </block>\n" +
-        "          </next>\n" +
-        "        </block>\n" +
-        "        <block type=\"text_print\">\n" +
-        "          <value name=\"TEXT\">\n" +
-        "            <block type=\"text\">\n" +
-        "              <field name=\"TEXT\">\"Beware the Jabberwock, my son!</field>\n" +
-        "            </block>\n" +
-        "          </value>\n" +
-        "          <next>\n" +
-        "            <block type=\"text_print\">\n" +
-        "              <value name=\"TEXT\">\n" +
-        "                <block type=\"text\">\n" +
-        "                  <field name=\"TEXT\">  The jaws that bite, the claws that catch!</field>\n" +
-        "                </block>\n" +
-        "              </value>\n" +
-        "              <next>\n" +
-        "                <block type=\"text_print\">\n" +
-        "                  <value name=\"TEXT\">\n" +
-        "                    <block type=\"text\">\n" +
-        "                      <field name=\"TEXT\">Beware the Jubjub bird, and shun</field>\n" +
-        "                    </block>\n" +
-        "                  </value>\n" +
-        "                  <next>\n" +
-        "                    <block type=\"text_print\">\n" +
-        "                      <value name=\"TEXT\">\n" +
-        "                        <block type=\"text\">\n" +
-        "                          <field name=\"TEXT\">  The frumious Bandersnatch!\"</field>\n" +
-        "                        </block>\n" +
-        "                      </value>\n" +
-        "                    </block>\n" +
-        "                  </next>\n" +
-        "                </block>\n" +
-        "              </next>\n" +
-        "            </block>\n" +
-        "          </next>\n" +
-        "        </block>\n" +
-        "      </category>\n" +
-        "    </category>\n" +
-        "  </xml>\n"
+        "    <category name=\"Variables\" colour=\"%{BKY_VARIABLES_HUE}\" custom=\"VARIABLE\"></category>\n" +
+        "    <category name=\"Functions\" colour=\"%{BKY_PROCEDURES_HUE}\" custom=\"PROCEDURE\"></category>\n" +
+        "  </xml>"
       }
     },
     methods: {
@@ -351,12 +311,25 @@
       },
       run () {
         this.$refs.workspace.run();
+      },
+      async loadBlocks () {
+        try {
+          const result = await APIBlocks.get();
+          if (result.data.success) {
+            this.blocks = result.data.item;
+
+          } else {
+            this.error(result.data.message || "Server error at load blocks");
+          }
+        } catch (err) {
+          this.error(err.response.data.message || err.message);
+        }
       }
     },
     computed: {},
     props: [],
-    created () {
-
+    async created () {
+      await this.loadBlocks();
     }
   }
 </script>
