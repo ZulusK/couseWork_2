@@ -7,7 +7,7 @@
   export default {
     data () {
       return {
-        blockly_container: null
+        blockly_container: null,
       }
     },
     methods: {
@@ -16,6 +16,7 @@
         this.blockly_container.updateToolbox(xml);
       },
       run () {
+        const env = this.env;
         Blockly.JavaScript.addReservedWords('code');
         var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
         try {
@@ -81,7 +82,8 @@
       },
       height: {
         default: '600px'
-      }
+      },
+      env: null
     },
     mounted () {
       this.inject();

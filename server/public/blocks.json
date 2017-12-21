@@ -96,6 +96,150 @@
           "id": "12"
         }
       ]
+    },
+    {
+      "name": "Math",
+      "color": "%{BKY_MATH_HUE}",
+      "items": [
+        {
+          "id": "13",
+          "name": "number",
+          "type": "math_number"
+        },
+        {
+          "id": "14",
+          "type": "math_arithmetic",
+          "name": "arithmetic"
+        },
+        {
+          "id": "15",
+          "type": "math_single",
+          "name": "single"
+        },
+        {
+          "id": "16",
+          "type": "math_trig",
+          "name": "trig"
+        },
+        {
+          "id": "17",
+          "type": "math_constant",
+          "name": "constants"
+        },
+        {
+          "id": "18",
+          "type": "math_number_property",
+          "name": "property"
+        },
+        {
+          "id": "19",
+          "type": "math_round",
+          "name": "round"
+        },
+        {
+          "id": "20",
+          "type": "math_on_list",
+          "name": "on list"
+        },
+        {
+          "id": "21",
+          "type": "math_modulo",
+          "name": "modulo"
+        },
+        {
+          "id": "22",
+          "type": "math_constrain",
+          "name": "constrain"
+        },
+        {
+          "id": "23",
+          "type": "math_random_int",
+          "name": "random"
+        },
+        {
+          "id": "24",
+          "type": "math_random_float",
+          "name": "random float"
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "color": "%{BKY_TEXTS_HUE}",
+      "items": [
+        {
+          "id": "25",
+          "default": true,
+          "name": "text",
+          "type": "text"
+        },
+        {
+          "id": "26",
+          "default": true,
+          "name": "join",
+          "type": "text_join"
+        },
+        {
+          "id": "27",
+          "default": true,
+          "name": "length",
+          "type": "text_length"
+        },
+        {
+          "id": "28",
+          "default": true,
+          "type": "text_isEmpty",
+          "name": "isEmpty"
+        },
+        {
+          "id": "29",
+          "default": true,
+          "type": "text_indexOf",
+          "name": "indexOf"
+        },
+        {
+          "id": "30",
+          "default": true,
+          "type": "text_charAt",
+          "name": "char At"
+        },
+        {
+          "id": "31",
+          "default": true,
+          "name": "substring",
+          "type": "text_getSubstring"
+        },
+        {
+          "id": "32",
+          "default": true,
+          "name": "set case",
+          "type": "text_changeCase"
+        },
+        {
+          "id": "33",
+          "default": true,
+          "type": "text_trim",
+          "name": "trim"
+        }
+      ]
+    },
+    {
+      "name": "Output",
+      "color": "200",
+      "items": [
+        {
+          "id": "35",
+          "name": "write to terminal",
+          "type": "terminal_write",
+          "default": true
+        },
+        {
+          "id": "36",
+          "name": "show alert",
+          "type": "text_print",
+          "default": true
+        }
+      ]
     }
   ]
 }

@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="column is-12-tablet is-8-desktop">
-        <workspace class="box" ref="workspace"/>
+        <workspace class="box" ref="workspace" :env="env"/>
       </div>
     </div>
     <br>
@@ -50,6 +50,7 @@
     mixins: [MessageMixin],
     data () {
       return {
+        env: {},
         toolbox: null,
         definedCategories: null,
         output: [],
@@ -115,6 +116,44 @@
             this.error(err.response ? err.response.data.message : err.message);
           })
       },
+      createEnv () {
+        this.env = {
+          terminal: {
+            print (text) {
+              this.output.push(text);
+            }
+          }
+        }
+        this.env.terminal.output = this.output;
+      },
+      addCustomBlock () {
+        Blockly.Blocks['terminal_write'] = {
+          init: function () {
+            this.jsonInit(
+              {
+                "type": "terminal_output",
+                "message0": "write to terminal %1",
+                "args0": [
+                  {
+                    "type": "input_value",
+                    "name": "VALUE"
+                  }
+                ],
+                "previousStatement": null,
+                "nextStatement": null,
+                "colour": 20,
+                "tooltip": "",
+                "helpUrl": ""
+              }
+            )
+          }
+        }
+        Blockly.JavaScript['terminal_write'] = function (block) {
+          var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+          return `env.terminal.print(${argument0})`;
+//          return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
+        };
+      }
     },
     computed: {
       xml () {
@@ -123,6 +162,8 @@
     },
     props: [],
     created () {
+      this.createEnv();
+      this.addCustomBlock();
       this.loadBlocks();
     },
   }

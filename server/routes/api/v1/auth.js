@@ -63,7 +63,6 @@ router.post('/register', async function (req, res, next) {
 
 router.post('/login', passport.authenticate('basic', {session: false}), async (req, res, next) => {
     try {
-        await req.user.save();
         res.json({
             success: true,
             tokens: req.user.credentials,
