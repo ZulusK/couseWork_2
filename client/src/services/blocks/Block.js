@@ -1,6 +1,7 @@
-function Block (type) {
+function Block (type, id) {
   this.attrs = {
-    type: type
+    type: type,
+    id: id
   }
   this.block = {}
 }

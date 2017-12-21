@@ -19,11 +19,16 @@
           </div>
         </div>
         <div class="" v-if="definedBlocks">
-          <sandbox-controls :elements="definedBlocks"/>
+          <sandbox-controls
+            :elements="definedBlocks"
+            @update="loadBlocks"
+            @setItem="setBlock"
+            @setCategory=""
+            @restoreDefault=""/>
         </div>
       </div>
       <div class="column is-12-tablet is-8-desktop">
-        <workspace :xml="toolbox.toXML()" class="box" ref="workspace"/>
+        <workspace class="box" ref="workspace"/>
       </div>
     </div>
     <br>
@@ -50,14 +55,69 @@
       }
     },
     methods: {
+      setBlock (event) {
+        let cat = this.toolbox.getCategory(event.category);
+        if (event.used) {
+          if (!cat) {
+            cat = this.addCategory(event.category);
+          }
+          if (this.addBlock2Category(event.block, cat)) {
+            this.updateWorkspace();
+          }
+        } else {
+          if (cat && cat.containsBlock(event.block.id)) {
+            cat.removeBlock(event.block.id);
+            if (cat.size() == 0) {
+              this.toolbox.removeCategory(cat.attrs.name);
+            }
+            this.updateWorkspace();
+          }
+        }
+
+      },
+      initWorkplace () {
+        const newToolbox = new Toolbox();
+        for (let key in this.definedBlocks) {
+          this.addDefaultBlocks2Category(this.addCategory(key, newToolbox));
+        }
+        this.toolbox = newToolbox;
+        this.updateWorkspace();
+      },
+      updateWorkspace () {
+        console.log(this.toolbox.toXML())
+        this.$refs.workspace.init(this.toolbox.toXML());
+      },
+      addBlock2Category (block, cat) {
+        if (!cat.containsBlock(block.id)) {
+          cat.addBlock(new Block(block.type, block.id));
+          return true;
+        } else {
+          return false;
+        }
+      },
+      addDefaultBlocks2Category (cat) {
+        // add blocks, marked as default
+        for (let block of this.definedBlocks[cat.attrs.name].items) {
+          if (block.default) {
+            this.addBlock2Category(block, cat);
+          }
+        }
+      },
+      addCategory (name, toolbox) {
+        if (!toolbox.containsCategory(name)) {
+          let c = new Category(name, this.definedBlocks[name].color, this.definedBlocks[name].custom);
+          toolbox.addCategory(c);
+          return c;
+        }
+      },
       clear () {
         this.output = [];
       },
       run () {
         this.$refs.workspace.run();
       },
-      async loadBlocks () {
-        APIBlocks
+      loadBlocks () {
+        return APIBlocks
           .get()
           .then(result => {
             if (result.data.success) return result.data.item;
@@ -71,14 +131,15 @@
           })
       }
     },
-    computed: {},
+    computed: {
+      xml () {
+        return this.toolbox.toXML();
+      }
+    },
     props: [],
-    created () {
-      this.loadBlocks();
-      this.toolbox = new Toolbox();
-      this.toolbox.addCategory(new Category('Loop', '%{BKY_LOOPS_HUE}'));
-      this.toolbox.getCategory('Loop').addBlock(new Block('controls_if'))
-      console.log(this.toolbox.toXML())
+    async mounted () {
+      await this.loadBlocks();
+      this.initWorkplace();
     }
   }
 </script>

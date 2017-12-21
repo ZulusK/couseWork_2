@@ -11,10 +11,9 @@
       }
     },
     methods: {
-      watch: {
-        xml () {
-          this.blockly_container.updateToolbox(this.xml);
-        }
+      update (xml) {
+        console.log('workspace updated')
+        this.blockly_container.updateToolbox(xml);
       },
       run () {
         Blockly.JavaScript.addReservedWords('code');
@@ -24,6 +23,10 @@
         } catch (e) {
           alert(e);
         }
+      },
+      init (xml) {
+        this.applyResize();
+        this.update(xml);
       },
       inject () {
         this.blockly_container = Blockly.inject(this.$refs['playground'],
@@ -46,7 +49,7 @@
               },
             trashcan: true,
             media: '/static/media/',
-            toolbox: this.xml
+            toolbox: "<xml><category name=\"Codual\"></category></xml>"
           });
       },
       handleResize () {
@@ -73,9 +76,6 @@
     },
     computed: {},
     props: {
-      xml: {
-        default: ""
-      },
       width: {
         default: '800px'
       },
@@ -85,10 +85,6 @@
     },
     mounted () {
       this.inject();
-      this.applyResize();
-    },
-    destroyed () {
-
     },
     beforeRouteLeave (to, from, next) {
       next();

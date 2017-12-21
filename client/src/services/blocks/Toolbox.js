@@ -34,6 +34,9 @@ Toolbox.prototype.getCategory = function (name) {
   return this.tree.xml.find(x => x.attrs.name == name);
 }
 
+Toolbox.prototype.containsCategory = function (name) {
+  return Boolean(this.getCategory(name));
+}
 Toolbox.prototype.removeCategory = function (name) {
   const index = this.tree.xml.findIndex(x => x.name == name);
   if (index >= 0) {

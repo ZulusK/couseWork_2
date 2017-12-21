@@ -1,26 +1,49 @@
 {
   "Logic": {
+    "color": "%{BKY_LOGIC_HUE}",
     "items": [
       {
         "name": "if",
-        "selected": false
+        "type": "controls_if",
+        "default": false,
+        "id": "1"
       },
       {
         "name": "compare",
-        "selected": false
+        "type": "logic_compare",
+        "default": true,
+        "id": "2"
       },
       {
         "name": "operations",
-        "selected": false
+        "type": "logic_operation",
+        "default": true,
+        "id": "3"
       },
       {
         "name": "invert",
-        "selected": false
+        "type": "logic_negate",
+        "default": true,
+        "id": "4"
       },
       {
-        "name": "boolean",
-        "selected": false,
-        "description": "Define 'true' and 'false' constants"
+        "name": "boolean constants",
+        "description": "Define 'true' and 'false' constants",
+        "type": "logic_boolean",
+        "default": true,
+        "id": "5"
+      },
+      {
+        "name": "null",
+        "type": "logic_null",
+        "default": true,
+        "id": "6"
+      },
+      {
+        "name": "ternary",
+        "type": "logic_ternary",
+        "default": true,
+        "id": "7"
       }
     ]
   }
