@@ -1,6 +1,6 @@
 import commonmark from 'commonmark';
 import Globals from '#/globals';
-import {Block, Category, Toolbox} from '#/blocks/CodualBlocks';
+import {Node, Toolbox} from '#/blocks/CodualBlocks';
 
 function convertToURL (v) {
   if (typeof v == 'object' || Array.isArray(v)) {
@@ -29,20 +29,28 @@ let dom = {
   }
 }
 let blocks = {
-  buildDefaultCategory (name, category) {
-    console.log(category.name);
-    let c = Category.create(name, category.color, category.custom);
+  createBlock (b) {
+    return Node.create('block', {type: b.type, id: b.id});
+  },
+  createCategory (c) {
+    console.log(c)
+    return Node.create('category', {name: c.name, colour: c.color, custom: c.custom});
+  },
+  buildDefaultCategory (category) {
+    let c = Node.create('category',
+      {name: category.name, colour: category.color, custom: category.custom}
+    );
     for (let block of category.items) {
       if (block.default) {
-        Category.addBlock(c, Block.create(block.type, block.id));
+        Node.append(c, this.createBlock(block));
       }
     }
     return c;
   },
   buildDefaultTree (categories) {
     let toolbox = new Toolbox();
-    for (let name in categories) {
-      toolbox.addCategory(this.buildDefaultCategory(name, categories[name]));
+    for (let category of categories) {
+      toolbox.append(this.buildDefaultCategory(category));
     }
     return toolbox;
   },

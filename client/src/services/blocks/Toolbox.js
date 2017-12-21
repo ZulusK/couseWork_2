@@ -1,41 +1,27 @@
-import Category from './Category';
-import Utils from '#/Utils';
+import Node from './Node';
 
 /**
  * @constructor create new Toolbox object
  */
 function Toolbox () {
-  this.tree = document.createElement('xml');
-  this.addCategory(Category.create('Codual', 220))
+  this.tree = Node.create('xml', {});
+  Node.append(this.tree, Node.create('category', {name: 'Codual', colour: "220"}));
 }
 
-/**
- * return XML-presentation of this object
- * @return {string} string in XML format
- */
+Toolbox.prototype.append = function (node) {
+  return Node.append(this.tree, node)
+}
+
+Toolbox.prototype.get = function (tag, field, value) {
+  return Node.get(this.tree, tag, field, value);
+}
 Toolbox.prototype.toXML = function () {
   return this.tree;
 }
-
-/**
- * append new category to tree
- * @param category
- */
-Toolbox.prototype.addCategory = function (category) {
-  if (!this.containsCategory(category.getAttribute('name'))) {
-    this.tree.appendChild(category);
-  }
+Toolbox.prototype.contains = function (tag, field, value) {
+  return Boolean(this.get(tag, field, value));
 }
-Toolbox.prototype.getCategory = function (name) {
-  return Utils.dom.findByTagAndAttribute(this.tree, 'category', 'name', name);
-}
-
-Toolbox.prototype.containsCategory = function (name) {
-  return Boolean(this.getCategory(name));
-}
-
-
-Toolbox.prototype.removeCategory = function (name) {
-  return this.tree.removeChild(this.getCategory(name));
+Toolbox.prototype.remove = function (child) {
+  return Node.remove(this.tree, child);
 }
 export default Toolbox;

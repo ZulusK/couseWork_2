@@ -1,97 +1,101 @@
 {
-  "Logic": {
-    "color": "%{BKY_LOGIC_HUE}",
-    "items": [
-      {
-        "name": "if",
-        "type": "controls_if",
-        "default": false,
-        "id": "1"
-      },
-      {
-        "name": "compare",
-        "type": "logic_compare",
-        "default": true,
-        "id": "2"
-      },
-      {
-        "name": "operations",
-        "type": "logic_operation",
-        "default": true,
-        "id": "3"
-      },
-      {
-        "name": "invert",
-        "type": "logic_negate",
-        "default": true,
-        "id": "4"
-      },
-      {
-        "name": "boolean constants",
-        "description": "Define 'true' and 'false' constants",
-        "type": "logic_boolean",
-        "default": true,
-        "id": "5"
-      },
-      {
-        "name": "null",
-        "type": "logic_null",
-        "default": true,
-        "id": "6"
-      },
-      {
-        "name": "ternary",
-        "type": "logic_ternary",
-        "default": true,
-        "id": "7"
-      }
-    ]
-  },
-  "Loops": {
-    "color": "%{BKY_LOOPS_HUE}",
-    "items": [
-      {
-        "name": "repeat",
-        "type": "controls_repeat_ext",
-        "default": true,
-        "fields": [
-          {
-            "name": "TIMES",
-            "shadow": {
-              "type": "math_number",
-              "field": {
-                "name": "NUM",
-                "value": 10
+  "categories": [
+    {
+      "name": "Logic",
+      "color": "%{BKY_LOGIC_HUE}",
+      "items": [
+        {
+          "name": "if",
+          "type": "controls_if",
+          "default": false,
+          "id": "1"
+        },
+        {
+          "name": "compare",
+          "type": "logic_compare",
+          "default": true,
+          "id": "2"
+        },
+        {
+          "name": "operations",
+          "type": "logic_operation",
+          "default": true,
+          "id": "3"
+        },
+        {
+          "name": "invert",
+          "type": "logic_negate",
+          "default": true,
+          "id": "4"
+        },
+        {
+          "name": "boolean constants",
+          "description": "Define 'true' and 'false' constants",
+          "type": "logic_boolean",
+          "default": true,
+          "id": "5"
+        },
+        {
+          "name": "null",
+          "type": "logic_null",
+          "default": true,
+          "id": "6"
+        },
+        {
+          "name": "ternary",
+          "type": "logic_ternary",
+          "default": true,
+          "id": "7"
+        }
+      ]
+    },
+    {
+      "name": "Loops",
+      "color": "%{BKY_LOOPS_HUE}",
+      "items": [
+        {
+          "name": "repeat",
+          "type": "controls_repeat_ext",
+          "default": true,
+          "fields": [
+            {
+              "name": "TIMES",
+              "shadow": {
+                "type": "math_number",
+                "field": {
+                  "name": "NUM",
+                  "value": 10
+                }
               }
             }
-          }
-        ],
-        "id": "8"
-      },
-      {
-        "name": "while",
-        "type": "controls_whileUntil",
-        "default": true,
-        "id": "9"
-      },
-      {
-        "name": "for",
-        "type": "controls_for",
-        "default": true,
-        "id": "10"
-      },
-      {
-        "name": "forEach",
-        "type": "controls_forEach",
-        "default": true,
-        "id": "11"
-      },
-      {
-        "name": "flow",
-        "type": "controls_flow_statements",
-        "default": true,
-        "id": "12"
-      }
-    ]
-  }
+          ],
+          "id": "8"
+        },
+        {
+          "name": "while",
+          "type": "controls_whileUntil",
+          "default": true,
+          "id": "9"
+        },
+        {
+          "name": "for",
+          "type": "controls_for",
+          "default": true,
+          "id": "10"
+        },
+        {
+          "name": "forEach",
+          "type": "controls_forEach",
+          "default": true,
+          "id": "11"
+        },
+        {
+          "name": "flow",
+          "type": "controls_flow_statements",
+          "default": true,
+          "id": "12"
+        }
+      ]
+    }
+  ]
 }

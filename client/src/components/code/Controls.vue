@@ -36,10 +36,10 @@
       </b-field>
     </div>
     </b-collapse>
-  <b-tabs size="is-small" position="is-centered">
-    <b-tab-item v-for="(category,key,index) in elements" :label="key" :key="key">
+  <b-tabs size="is-small" position="is-centered" v-if="elements.categories">
+    <b-tab-item v-for="(category,index) in elements.categories" :label="category.name" :key="category.name">
       <b-table
-        @check="(l,o)=>onChecked(l,o,key)"
+        @check="(l,o)=>onChecked(l,o,category.name)"
         :data="filter(category.items)"
         :paginated="UI.isPaginated"
         :per-page="UI.perPage"
@@ -58,7 +58,7 @@
           <div class="content">
             <p>
                <code class="is-size-5">
-                 <strong>{{key}}:</strong>
+                 <strong>{{category.name}}:</strong>
                  <em>{{props.row.name}}</em>
                 </code>
               <br>
@@ -100,7 +100,7 @@
           //all row is used/cleaned
           // if checkedList contains first element of this category
           // it also contains other
-          const isUsed = checkedList.indexOf(this.elements[category].items[0]) >= 0;
+          const isUsed = checkedList.indexOf(this.elements.find(x => x.name = category).items[0]) >= 0
           this.$emit('setCategory', {used: isUsed, category: category})
         } else {
           // one block is checked
@@ -116,25 +116,21 @@
       },
       restoreDefault () {
         this.used = [];
-        Object.keys(this.elements).forEach(key => {
-          this.elements[key].items.forEach(e => {
-            if (e.default) {
-              this.used.push(e);
-            }
+        if (this.elements && this.elements.categories) {
+          this.elements.categories.forEach(category => {
+            category.items.forEach(e => {
+              if (e.default) {
+                this.used.push(e);
+              }
+            })
           })
-        });
+        }
         this.$emit('restoreDefault')
       }
     },
     watch: {
       elements () {
-        Object.keys(this.elements).forEach(key => {
-          this.elements[key].items.forEach(e => {
-            if (e.default) {
-              this.used.push(e);
-            }
-          })
-        })
+        this.restoreDefault();
       }
     },
     computed: {},

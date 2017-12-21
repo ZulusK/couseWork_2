@@ -22,7 +22,7 @@
           <sandbox-controls
             :elements="definedCategories||{}"
             @update=""
-            @setItem=""
+            @setItem="toggleBlock"
             @setCategory=""
             @restoreDefault=""/>
         </div>
@@ -39,7 +39,7 @@
   import SandboxControls from '%/code/Controls';
   import APIBlocks from '#/Blocks';
   import MessageMixin from '%/Other/MessageMixin';
-  import {Toolbox, Category, Block} from '#/blocks/CodualBlocks';
+  import {Toolbox, Node} from '#/blocks/CodualBlocks';
   import Utils from '#/Utils';
 
   export default {
@@ -57,10 +57,30 @@
     },
     methods: {
       initWorkspace () {
-        this.toolbox = Utils.blocks.buildDefaultTree(this.definedCategories)
+        this.toolbox = Utils.blocks.buildDefaultTree(this.definedCategories.categories)
+        this.updateWorkspace();
+      },
+      toggleBlock (event) {
+        console.log(event)
+        let c = this.toolbox.get('category', 'name', event.category);
+        if (event.used) {
+          if (!c) {
+            c = Utils.blocks.createCategory(this.definedCategories.categories.find(x => x.name == event.category));
+            this.toolbox.append(c)
+          }
+          c.append(Utils.blocks.createBlock(event.block))
+        } else {
+          let b = Node.get(c, 'block', 'type', event.block.type);
+          console.log(c, b);
+          Node.remove(c, b);
+          if (Node.isEmpty(c)) {
+            this.toolbox.remove(c);
+          }
+        }
         this.updateWorkspace();
       },
       updateWorkspace () {
+        console.log(this.toolbox.toXML())
         this.$refs.workspace.init(this.toolbox.toXML());
       },
       clear () {
