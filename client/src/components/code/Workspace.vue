@@ -12,8 +12,8 @@
       }
     },
     methods: {
-      updateToolbox (xml) {
-        console.log('workspace updated')
+      update (xml) {
+//        console.log('workspace updated')
         this.blocklyWorkspace.updateToolbox(xml);
       },
       getCodeJS () {
@@ -21,12 +21,12 @@
         var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
         return code;
       },
-      init (xml) {
+      init () {
         this.applyResize();
-        this.update(xml);
+        console.log('init workspace')
       },
       inject () {
-        this.blockly_container = Blockly.inject(this.$refs['workspace'],
+        this.blocklyWorkspace = Blockly.inject(this.$refs['workspace'],
           {
             grid:
               {
@@ -48,6 +48,7 @@
             media: '/static/media/',
             toolbox: "<xml><category name=\"Codual\"></category></xml>"
           });
+        console.log('workspace injected');
       },
       handleResize () {
         var element = this.$refs['workspace-container'];
@@ -58,15 +59,14 @@
           y += element.offsetTop;
           element = element.offsetParent;
         } while (element);
-
         this.$refs['workspace'].style.left = x + 'px';
         this.$refs['workspace'].style.top = y + 'px';
         this.$refs['workspace'].style.width = this.$refs['workspace-container'].offsetWidth + 'px';
         this.$refs['workspace'].style.height = this.$refs['workspace-container'].offsetHeight + 'px';
-        Blockly.svgResize(this.blockly_container);
+        Blockly.svgResize(this.blocklyWorkspace);
       },
       applyResize () {
-        window.addEventListener('resize', this.handleResize, false);
+        window.addEventListener('resize', this.handleResize);
         this.handleResize();
       }
     },

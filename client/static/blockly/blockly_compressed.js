@@ -13791,8 +13791,14 @@ Blockly.WorkspaceAudio.prototype.preload = function () {
   for (var a in this.SOUNDS_) {
     var b = this.SOUNDS_[a];
     b.volume = .01;
-    b.play();
-    b.pause();
+    var playPromise = b.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        b.pause();
+      })
+        .catch(error => {
+        });
+    }
     if (goog.userAgent.IPAD || goog.userAgent.IPHONE) break
   }
 };

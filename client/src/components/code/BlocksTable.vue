@@ -50,22 +50,21 @@
         // it also contains other
         console.log(list)
         if (list.length == 0) {
-          this.selected = []
-          console.log('disabled row', this.name, list.length)
-          this.$emit('disableCategory', {category: this.name});
+          console.log('disabled table', this.name, list.length)
+          this.$emit('disableCategory', {category: this.category, blocks: list});
         } else {
           console.log('enabled table', this.name, list.length)
-          this.$emit('enableCategory', {category: this.name});
+          this.$emit('enableCategory', {category: this.category, blocks: list});
         }
       },
       toggleRow (list, block) {
         if (block) {
           if (list.indexOf(block) < 0) {
             console.log('disable', block.name)
-            this.$emit('disableBlock', {block: block, category: this.name});
+            this.$emit('disableBlock', {block: block, category: this.category});
           } else {
             console.log('enable', block.name)
-            this.$emit('enableBlock', {block: block, category: this.name});
+            this.$emit('enableBlock', {block: block, category: this.category});
           }
         }
       },

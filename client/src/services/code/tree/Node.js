@@ -13,6 +13,10 @@ function Node (name, attrs) {
   this.children = [];
 }
 
+Node.prototype.clear = function () {
+  this.children = [];
+}
+
 Node.prototype.append = function (node) {
   this.children.push(node);
 }
@@ -43,7 +47,7 @@ Node.prototype.toXML = function () {
   return xml.join('\n');
 }
 Node.prototype.remove = function (v, callback) {
-  const index = this.children.find(callback ? callback : x => x == v);
+  const index = this.children.findIndex(callback ? callback : x => x == v);
   if (index < 0) {
     return false;
   } else {
