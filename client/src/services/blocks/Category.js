@@ -20,7 +20,6 @@ Category.prototype.containsBlock = function (id) {
 }
 Category.prototype.removeBlock = function (id) {
   const index = this.category.findIndex(x => x.attrs.id == id);
-  console.log(index);
   if (index >= 0)
     this.category.splice(index, 1)
 }

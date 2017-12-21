@@ -101,7 +101,7 @@
           // if checkedList contains first element of this category
           // it also contains other
           const isUsed = checkedList.indexOf(this.elements[category].items[0]) >= 0;
-          this.$emit('setCategory', {used: used, category: category})
+          this.$emit('setCategory', {used: isUsed, category: category})
         } else {
           // one block is checked
           this.$emit('setItem', {block: row, used: checkedList.indexOf(row) >= 0, category: category})

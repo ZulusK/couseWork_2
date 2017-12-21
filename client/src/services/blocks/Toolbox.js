@@ -1,11 +1,12 @@
 import json2xml from 'json2xml';
+import Category from './Category';
 
 /**
  * @constructor create new Toolbox object
  */
 function Toolbox () {
   this.tree = {}
-  this.tree.xml = [];
+  this.tree.xml = [new Category('Codual', 0)];
 }
 
 /**
@@ -28,6 +29,9 @@ Toolbox.prototype.toJSON = function () {
  * @param category
  */
 Toolbox.prototype.addCategory = function (category) {
+  if (this.tree.xml[0].attrs.name == 'Codual') {
+    this.tree.xml.pop();
+  }
   this.tree.xml.push(category)
 }
 Toolbox.prototype.getCategory = function (name) {
@@ -37,10 +41,22 @@ Toolbox.prototype.getCategory = function (name) {
 Toolbox.prototype.containsCategory = function (name) {
   return Boolean(this.getCategory(name));
 }
+Toolbox.prototype.isEmpty = function () {
+  return this.tree.xml.length == 0;
+}
+
+Toolbox.prototype.usePlaceholder = function () {
+  this.tree.xml.push(new Category('Codual', 0));
+}
+
 Toolbox.prototype.removeCategory = function (name) {
-  const index = this.tree.xml.findIndex(x => x.name == name);
+  const index = this.tree.xml.findIndex(x => x.attrs.name == name);
   if (index >= 0) {
-    return this.tree.xml.splice(index, 1);
+    this.tree.xml.splice(index, 1);
+    if (this.isEmpty()) {
+      this.usePlaceholder()
+    }
+    return true;
   }
 }
 export default Toolbox;

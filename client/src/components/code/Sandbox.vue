@@ -22,8 +22,8 @@
           <sandbox-controls
             :elements="definedBlocks"
             @update="loadBlocks"
-            @setItem="setBlock"
-            @setCategory=""
+            @setItem="toggleBlock"
+            @setCategory="toggleCategory"
             @restoreDefault=""/>
         </div>
       </div>
@@ -55,7 +55,23 @@
       }
     },
     methods: {
-      setBlock (event) {
+      toggleCategory (event) {
+        let cat = this.toolbox.getCategory(event.category);
+        if (event.used) {
+          if (!cat) {
+            cat = this.addCategory(event.category, this.toolbox);
+          }
+          for (let block of this.definedBlocks[event.category].items) {
+            this.addBlock2Category(block, cat);
+          }
+          this.updateWorkspace();
+        } else {
+          console.log(event.category)
+          this.toolbox.removeCategory(event.category);
+          this.updateWorkspace();
+        }
+      },
+      toggleBlock (event) {
         let cat = this.toolbox.getCategory(event.category);
         if (event.used) {
           if (!cat) {
