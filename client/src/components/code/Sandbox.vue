@@ -23,7 +23,7 @@
             :elements="definedCategories||{}"
             @update=""
             @setItem="toggleBlock"
-            @setCategory=""
+            @setCategory="toggleCategory"
             @restoreDefault=""/>
         </div>
       </div>
@@ -60,8 +60,20 @@
         this.toolbox = Utils.blocks.buildDefaultTree(this.definedCategories.categories)
         this.updateWorkspace();
       },
+      toggleCategory (event) {
+        let c = this.toolbox.get('category', 'name', event.category);
+        if (event.used) {
+          if (c) {
+            this.toolbox.remove(c);
+          }
+          this.toolbox.append(Utils.blocks.buildFullCategory(this.definedCategories.categories.find(x => x.name == event.category)));
+        } else {
+          if (c)
+            this.toolbox.remove(c);
+        }
+        this.updateWorkspace();
+      },
       toggleBlock (event) {
-        console.log(event)
         let c = this.toolbox.get('category', 'name', event.category);
         if (event.used) {
           if (!c) {
@@ -71,7 +83,6 @@
           c.append(Utils.blocks.createBlock(event.block))
         } else {
           let b = Node.get(c, 'block', 'type', event.block.type);
-          console.log(c, b);
           Node.remove(c, b);
           if (Node.isEmpty(c)) {
             this.toolbox.remove(c);

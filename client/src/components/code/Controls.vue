@@ -21,10 +21,6 @@
           <option value="15">15 per page</option>
           <option value="20">20 per page</option>
         </b-select>
-        <!--<a class="button is-info" @click.stop="update">-->
-        <!--<span>Clear</span>-->
-        <!--<b-icon icon="refresh"/>-->
-        <!--</a>-->
         <div class="control is-flex">
           <b-switch v-model="UI.isPaginated" type="is-twitter">
             Paginated: {{UI.isPaginated}}
@@ -100,7 +96,7 @@
           //all row is used/cleaned
           // if checkedList contains first element of this category
           // it also contains other
-          const isUsed = checkedList.indexOf(this.elements.find(x => x.name = category).items[0]) >= 0
+          const isUsed = checkedList.indexOf(this.elements.categories.find(x => x.name = category).items[0]) >= 0
           this.$emit('setCategory', {used: isUsed, category: category})
         } else {
           // one block is checked

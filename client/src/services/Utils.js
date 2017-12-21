@@ -33,8 +33,16 @@ let blocks = {
     return Node.create('block', {type: b.type, id: b.id});
   },
   createCategory (c) {
-    console.log(c)
     return Node.create('category', {name: c.name, colour: c.color, custom: c.custom});
+  },
+  buildFullCategory (category) {
+    let c = Node.create('category',
+      {name: category.name, colour: category.color, custom: category.custom}
+    );
+    for (let block of category.items) {
+      Node.append(c, this.createBlock(block));
+    }
+    return c;
   },
   buildDefaultCategory (category) {
     let c = Node.create('category',
