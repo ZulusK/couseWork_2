@@ -1,5 +1,6 @@
 import commonmark from 'commonmark';
 import Globals from '#/globals';
+import {Block, Category, Toolbox} from '#/blocks/CodualBlocks';
 
 function convertToURL (v) {
   if (typeof v == 'object' || Array.isArray(v)) {
@@ -17,10 +18,34 @@ function notEmpty (v) {
   }
 }
 
-let codualBlocks = {
-  js2Tree (js) {
-    return
+let dom = {
+  findByTagAndAttribute (tree, tag, attrname, v) {
+    var All = tree.getElementsByTagName(tag);
+    for (var i = 0; i < All.length; i++) {
+      if (All[i].getAttribute(attrname) == v) {
+        return All[i];
+      }
+    }
   }
+}
+let blocks = {
+  buildDefaultCategory (name, category) {
+    console.log(category.name);
+    let c = Category.create(name, category.color, category.custom);
+    for (let block of category.items) {
+      if (block.default) {
+        Category.addBlock(c, Block.create(block.type, block.id));
+      }
+    }
+    return c;
+  },
+  buildDefaultTree (categories) {
+    let toolbox = new Toolbox();
+    for (let name in categories) {
+      toolbox.addCategory(this.buildDefaultCategory(name, categories[name]));
+    }
+    return toolbox;
+  },
 }
 export default {
   resolveImageURL (address) {
@@ -58,6 +83,7 @@ export default {
       return this.writer.render(parsed); // result is a String
     }
   },
-  codualBlocks: codualBlocks
+  dom: dom,
+  blocks: blocks
 }
 

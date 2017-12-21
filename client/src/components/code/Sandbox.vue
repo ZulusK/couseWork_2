@@ -18,13 +18,13 @@
             </p>
           </div>
         </div>
-        <div class="" v-if="definedBlocks">
+        <div>
           <sandbox-controls
-            :elements="definedBlocks"
-            @update="loadBlocks"
-            @setItem="toggleBlock"
-            @setCategory="toggleCategory"
-            @restoreDefault="initWorkspace"/>
+            :elements="definedCategories||{}"
+            @update=""
+            @setItem=""
+            @setCategory=""
+            @restoreDefault=""/>
         </div>
       </div>
       <div class="column is-12-tablet is-8-desktop">
@@ -40,6 +40,7 @@
   import APIBlocks from '#/Blocks';
   import MessageMixin from '%/Other/MessageMixin';
   import {Toolbox, Category, Block} from '#/blocks/CodualBlocks';
+  import Utils from '#/Utils';
 
   export default {
     components: {
@@ -50,81 +51,17 @@
     data () {
       return {
         toolbox: null,
-        definedBlocks: null,
+        definedCategories: null,
         output: [],
       }
     },
     methods: {
-      toggleCategory (event) {
-        let cat = this.toolbox.getCategory(event.category);
-        if (event.used) {
-          if (!cat) {
-            cat = this.addCategory(event.category, this.toolbox);
-          }
-          for (let block of this.definedBlocks[event.category].items) {
-            this.addBlock2Category(block, cat);
-          }
-          this.updateWorkspace();
-        } else {
-          console.log(event.category)
-          this.toolbox.removeCategory(event.category);
-          this.updateWorkspace();
-        }
-      },
-      toggleBlock (event) {
-        let cat = this.toolbox.getCategory(event.category);
-        if (event.used) {
-          if (!cat) {
-            cat = this.addCategory(event.category, this.toolbox);
-          }
-          if (this.addBlock2Category(event.block, cat)) {
-            this.updateWorkspace();
-          }
-        } else {
-          if (cat && cat.containsBlock(event.block.id)) {
-            cat.removeBlock(event.block.id);
-            if (cat.size() == 0) {
-              this.toolbox.removeCategory(cat.attrs.name);
-            }
-            this.updateWorkspace();
-          }
-        }
-
-      },
       initWorkspace () {
-        const newToolbox = new Toolbox();
-        for (let key in this.definedBlocks) {
-          this.addDefaultBlocks2Category(this.addCategory(key, newToolbox));
-        }
-        this.toolbox = newToolbox;
+        this.toolbox = Utils.blocks.buildDefaultTree(this.definedCategories)
         this.updateWorkspace();
       },
       updateWorkspace () {
-        console.log(this.toolbox.toXML())
         this.$refs.workspace.init(this.toolbox.toXML());
-      },
-      addBlock2Category (block, cat) {
-        if (!cat.containsBlock(block.id)) {
-          cat.addBlock(new Block(block.type, block.id));
-          return true;
-        } else {
-          return false;
-        }
-      },
-      addDefaultBlocks2Category (cat) {
-        // add blocks, marked as default
-        for (let block of this.definedBlocks[cat.attrs.name].items) {
-          if (block.default) {
-            this.addBlock2Category(block, cat);
-          }
-        }
-      },
-      addCategory (name, toolbox) {
-        if (!toolbox.containsCategory(name)) {
-          let c = new Category(name, this.definedBlocks[name].color, this.definedBlocks[name].custom);
-          toolbox.addCategory(c);
-          return c;
-        }
       },
       clear () {
         this.output = [];
@@ -133,20 +70,20 @@
         this.$refs.workspace.run();
       },
       loadBlocks () {
-        return APIBlocks
+        APIBlocks
           .get()
           .then(result => {
             if (result.data.success) return result.data.item;
             else throw {response: result};
           })
           .then(item => {
-            this.definedBlocks = item;
+            this.definedCategories = item;
+            this.initWorkspace();
           })
           .catch(err => {
-            this.error(err.response.data.message || err.message);
+            this.error(err.response ? err.response.data.message : err.message);
           })
       },
-      
     },
     computed: {
       xml () {
@@ -154,11 +91,9 @@
       }
     },
     props: [],
-    async mounted () {
-//      await this.loadBlocks();
-//      this.initWorkspace();
-      this.testCreate()
-    }
+    created () {
+      this.loadBlocks();
+    },
   }
 </script>
 <style scoped lang="scss">

@@ -1,9 +1,10 @@
-function Block (type, id) {
-  this.attrs = {
-    type: type,
-    id: id
+let Block = {
+  create (type, id) {
+    let b = document.createElement('block')
+    b.setAttribute('type', type);
+    b.setAttribute('id', id);
+    return b;
   }
-  this.block = {}
 }
 
 export default Block;
