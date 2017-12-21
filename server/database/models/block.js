@@ -4,6 +4,9 @@ const Utils = require('@utils');
 const validator = require('@validator');
 const config = require('@config');
 let Block = new Schema({
+    default: {
+        type: Boolean
+    },
     name: {
         type: String,
         required: true,
@@ -35,10 +38,6 @@ let Block = new Schema({
         type: String,
         default: ""
     },
-    color: {
-        type: String,
-        default: "160"
-    },
     helpUrl: {
         type: String,
         default: ""
@@ -52,6 +51,7 @@ Block.index({type: 1}, {unique: true});
 
 Block.methods.info = function () {
     return {
+        default: this.default,
         id: this.id,
         category: this.category,
         type: this.type,
@@ -60,7 +60,7 @@ Block.methods.info = function () {
         nextStatement: this.nextStatement,
         output: this.output,
         tooltip: this.tooltip,
-        color: this.color,
+        name: this.name,
         helpUrl: this.helpUrl
     }
 }

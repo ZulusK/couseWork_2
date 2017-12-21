@@ -1,5 +1,6 @@
 module.exports = {
     User: require('@DB/models/user'),
     Publication: require('@DB/models/publication'),
-    Blockly: require('@DB/models/block')
+    Block: require('@DB/models/block'),
+    Category: require('@DB/models/category'),
 }

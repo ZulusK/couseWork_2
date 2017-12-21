@@ -42,5 +42,5 @@ app.use(function (req, res, next) {
 require('@auth').init(app);
 require('@middlewares')(app);
 require('@driverDB')(app);
-
+require('@code')();
 module.exports = app;

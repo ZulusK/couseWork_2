@@ -1,3 +1,5 @@
+"use strict";
+
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const config = require('@config');
@@ -5,6 +7,8 @@ const fs = require('fs-promise');
 const fileType = require("file-type");
 const commonmark = require('commonmark');
 const ObjectID = require('mongoose').Types.ObjectId;
+const DBBlocks = require("@DBcore").blocks;
+const DBCategories = require("@DBcore").categories;
 
 exports.crypto = {
     /**
@@ -78,7 +82,6 @@ exports.tokens = {
         )
     }
 }
-
 exports.errors = {
     InvalidRequesDataError (msg) {
         return {
@@ -90,7 +93,6 @@ exports.errors = {
 exports.sendError = (res, code, msg) => {
     return res.status(code).json({success: false, message: msg}).end();
 }
-
 exports.fs = {
     /**
      * read file from file storage
@@ -150,6 +152,33 @@ exports.convert = {
             return new ObjectID.createFromHexString(str);
         } catch (e) {
             return undefined;
+        }
+    }
+}
+exports.code = {
+    async loadDefaultBlocks () {
+        if ((await DBBlocks.size()) > 0) return;
+        let categories = JSON.parse(await exports.fs.read(config.BASE_BLOCKS));
+        for (let category of categories) {
+            await DBCategories.create({
+                name: category.name,
+                color: category.color,
+            })
+            await Promise.all(category.blocks.map(b => {
+                return DBBlocks.create({
+                    default: true,
+                    name: b.name,
+                    category: category.name,
+                    type: b.type,
+                    message0: b.message0,
+                    previousStatement: b.previousStatement,
+                    nextStatement: b.nextStatement,
+                    output: b.output,
+                    tooltip: b.tooltip,
+                    helpUrl: b.helpUrl,
+                    code: b.code
+                })
+            }))
         }
     }
 }

@@ -21,7 +21,7 @@
 <script>
   import Workspace from './Workspace';
   import SandboxControls from './SandboxControls';
-  import APIBlocks from '#/Blocks';
+  import APICode from '#/Code';
   import MessageMixin from '%/Other/MessageMixin';
   import {VPL, Node} from '#/code/VPL';
 
@@ -82,10 +82,11 @@
         }
       },
       loadBlocks () {
-        APIBlocks
+        APICode
           .get()
           .then(result => {
-            if (result.data.success) return result.data.item;
+            console.log(result.data.items)
+            if (result.data.success) return result.data.items;
             else throw {response: result};
           })
           .then(item => {

@@ -1,5 +1,6 @@
 <template>
   <b-modal :active.sync="UI.isShown"
+           class="modal"
            scroll="keep"
            animation="zoom-out"
            width="400px">
@@ -166,5 +167,9 @@
 
   .ripple {
     color: $md-light-blue-900;
+  }
+
+  .modal {
+    z-index: 1000;
   }
 </style>

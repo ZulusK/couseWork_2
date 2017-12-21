@@ -1,6 +1,7 @@
 <template>
   <b-modal :active.sync="UI.isShown"
            scroll="keep"
+           class="modal"
            animation="zoom-out"
            width="400px">
     <div class="box has-text-centered">
@@ -82,7 +83,7 @@
   import AuthAPI from '#/Auth';
 
   export default {
-    mixins: [AuthMixin,MessageMixin],
+    mixins: [AuthMixin, MessageMixin],
     data () {
       return {
         UI: {
@@ -153,5 +154,9 @@
 
   .ripple {
     color: $md-light-blue-900;
+  }
+
+  .modal {
+    z-index: 1000;
   }
 </style>

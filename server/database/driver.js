@@ -27,3 +27,6 @@ module.exports.find = {
 module.exports.users = require('@DB/driver.user');
 module.exports.images = require('@DB/driver.image');
 module.exports.publications = require('@DB/driver.publications');
+module.exports.blocks = require('@DB/driver.block');
+module.exports.categories = require('@DB/driver.category');
+

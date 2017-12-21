@@ -19,7 +19,8 @@
     "@middlewares": "./server/tools/routes.js",
     "@driverDB": "./server/tools/driverDB.js",
     "@DBmodels": "./server/database/models/models.js",
-    "@validator": "./server/tools/validator.js"
+    "@validator": "./server/tools/validator.js",
+    "@code": "./server/tools/code.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
