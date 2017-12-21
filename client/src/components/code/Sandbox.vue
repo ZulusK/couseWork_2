@@ -24,7 +24,7 @@
             @update="loadBlocks"
             @setItem="toggleBlock"
             @setCategory="toggleCategory"
-            @restoreDefault=""/>
+            @restoreDefault="initWorkspace"/>
         </div>
       </div>
       <div class="column is-12-tablet is-8-desktop">
@@ -51,7 +51,7 @@
       return {
         toolbox: null,
         definedBlocks: null,
-        output: ["to large string", 33],
+        output: [],
       }
     },
     methods: {
@@ -75,7 +75,7 @@
         let cat = this.toolbox.getCategory(event.category);
         if (event.used) {
           if (!cat) {
-            cat = this.addCategory(event.category);
+            cat = this.addCategory(event.category, this.toolbox);
           }
           if (this.addBlock2Category(event.block, cat)) {
             this.updateWorkspace();
@@ -91,7 +91,7 @@
         }
 
       },
-      initWorkplace () {
+      initWorkspace () {
         const newToolbox = new Toolbox();
         for (let key in this.definedBlocks) {
           this.addDefaultBlocks2Category(this.addCategory(key, newToolbox));
@@ -145,7 +145,8 @@
           .catch(err => {
             this.error(err.response.data.message || err.message);
           })
-      }
+      },
+      
     },
     computed: {
       xml () {
@@ -154,8 +155,9 @@
     },
     props: [],
     async mounted () {
-      await this.loadBlocks();
-      this.initWorkplace();
+//      await this.loadBlocks();
+//      this.initWorkspace();
+      this.testCreate()
     }
   }
 </script>

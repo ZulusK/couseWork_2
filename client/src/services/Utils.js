@@ -17,11 +17,16 @@ function notEmpty (v) {
   }
 }
 
+let codualBlocks = {
+  js2Tree (js) {
+    return
+  }
+}
 export default {
-  resolveImageURL(address){
-    if(address.startsWith('/api/v1/res')){
-      return  Globals.ROOT_URL+address;
-    }else{
+  resolveImageURL (address) {
+    if (address.startsWith('/api/v1/res')) {
+      return Globals.ROOT_URL + address;
+    } else {
       return address;
     }
   },
@@ -53,5 +58,6 @@ export default {
       return this.writer.render(parsed); // result is a String
     }
   },
+  codualBlocks: codualBlocks
 }
 
