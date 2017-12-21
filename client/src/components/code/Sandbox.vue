@@ -2,105 +2,38 @@
   <div class="sandbox">
     <div class="columns is-multiline is-desktop ">
       <div class="column is-4-desktop is-12-mobile ">
-        <div class=" mb-20 terminal">
-          <a class="button is-success is-medium" @click="run">
-            <span>Run code</span>
-            <b-icon icon="rocket"/>
-          </a>
-          <a class="button is-primary is-medium" @click="clear">
-            <span>Clear console</span>
-            <b-icon icon="delete"/>
-          </a>
-          <div class="notification is-black ">
-            <p class="is-size-3">Output:</p>
-            <p v-for="(line,index) in output">
-              ...{{line}}
-            </p>
-          </div>
-        </div>
         <div>
           <sandbox-controls
-            :elements="definedCategories||{}"
-            @update=""
-            @setItem="toggleBlock"
-            @setCategory="toggleCategory"
-            @restoreDefault=""/>
+            :categories="definedCategories||[]"/>
         </div>
       </div>
       <div class="column is-12-tablet is-8-desktop">
-        <workspace class="box" ref="workspace" :env="env"/>
+        <workspace class="box" ref="workspace"/>
       </div>
     </div>
     <br>
   </div>
 </template>
 <script>
-  import Workspace from '%/code/Workspace';
-  import SandboxControls from '%/code/Controls';
+  import Workspace from './Workspace';
+  import SandboxControls from './SandboxControls';
   import APIBlocks from '#/Blocks';
   import MessageMixin from '%/Other/MessageMixin';
-  import {Toolbox, Node} from '#/blocks/CodualBlocks';
-  import Utils from '#/Utils';
+  import {VPL, Node} from '#/code/VPL';
 
   export default {
+    mixins: [MessageMixin],
     components: {
       Workspace,
       SandboxControls
     },
-    mixins: [MessageMixin],
     data () {
       return {
-        env: {},
         toolbox: null,
         definedCategories: null,
-        output: [],
       }
     },
     methods: {
-      initWorkspace () {
-        this.toolbox = Utils.blocks.buildDefaultTree(this.definedCategories.categories)
-        this.updateWorkspace();
-      },
-      toggleCategory (event) {
-        let c = this.toolbox.get('category', 'name', event.category);
-        if (event.used) {
-          if (c) {
-            this.toolbox.remove(c);
-          }
-          this.toolbox.append(Utils.blocks.buildFullCategory(this.definedCategories.categories.find(x => x.name == event.category)));
-        } else {
-          if (c)
-            this.toolbox.remove(c);
-        }
-        this.updateWorkspace();
-      },
-      toggleBlock (event) {
-        let c = this.toolbox.get('category', 'name', event.category);
-        if (event.used) {
-          if (!c) {
-            c = Utils.blocks.createCategory(this.definedCategories.categories.find(x => x.name == event.category));
-            this.toolbox.append(c)
-          }
-          c.append(Utils.blocks.createBlock(event.block))
-        } else {
-          let b = Node.get(c, 'block', 'type', event.block.type);
-          Node.remove(c, b);
-          if (Node.isEmpty(c)) {
-            this.toolbox.remove(c);
-          }
-        }
-        this.updateWorkspace();
-      },
-      updateWorkspace () {
-        console.log(this.toolbox.toXML())
-        this.$refs.workspace.init(this.toolbox.toXML());
-      },
-      clear () {
-        this.output = [];
-      },
-      run () {
-        this.$refs.workspace.run();
-      },
       loadBlocks () {
         APIBlocks
           .get()
@@ -110,62 +43,23 @@
           })
           .then(item => {
             this.definedCategories = item;
+            console.log('blocks loaded');
             this.initWorkspace();
           })
           .catch(err => {
             this.error(err.response ? err.response.data.message : err.message);
           })
       },
-      createEnv () {
-        this.env = {
-          terminal: {
-            print (text) {
-              this.output.push(text);
-            }
-          }
-        }
-        this.env.terminal.output = this.output;
+      initWorkspace () {
+//        this.toolbox=VPL.build
+//        this.toolbox = this.updateWorkspace();
       },
-      addCustomBlock () {
-        Blockly.Blocks['terminal_write'] = {
-          init: function () {
-            this.jsonInit(
-              {
-                "type": "terminal_output",
-                "message0": "write to terminal %1",
-                "args0": [
-                  {
-                    "type": "input_value",
-                    "name": "VALUE"
-                  }
-                ],
-                "previousStatement": null,
-                "nextStatement": null,
-                "colour": 20,
-                "tooltip": "",
-                "helpUrl": ""
-              }
-            )
-          }
-        }
-        Blockly.JavaScript['terminal_write'] = function (block) {
-          var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
-          return `env.terminal.print(${argument0})`;
-//          return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
-        };
-      }
     },
-    computed: {
-      xml () {
-        return this.toolbox.toXML();
-      }
-    },
+    computed: {},
     props: [],
     created () {
-      this.createEnv();
-      this.addCustomBlock();
       this.loadBlocks();
-    },
+    }
   }
 </script>
 <style scoped lang="scss">

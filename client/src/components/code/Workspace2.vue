@@ -1,32 +1,36 @@
 <template>
-  <div ref="workspace-container" class="workspace-container">
-    <div ref="workspace" class="workspace"></div>
+  <div ref="playground-container" class="playground-container">
+    <div ref="playground" class="playground"></div>
   </div>
 </template>
 <script>
   export default {
-    name: 'workspace',
     data () {
       return {
-        blocklyWorkspace: null
+        blockly_container: null,
       }
     },
     methods: {
-      updateToolbox (xml) {
+      update (xml) {
         console.log('workspace updated')
-        this.blocklyWorkspace.updateToolbox(xml);
+        this.blockly_container.updateToolbox(xml);
       },
-      getCodeJS () {
+      run () {
+        const env = this.env;
         Blockly.JavaScript.addReservedWords('code');
         var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
-        return code;
+        try {
+          eval(code);
+        } catch (e) {
+          alert(e);
+        }
       },
       init (xml) {
         this.applyResize();
         this.update(xml);
       },
       inject () {
-        this.blockly_container = Blockly.inject(this.$refs['workspace'],
+        this.blockly_container = Blockly.inject(this.$refs['playground'],
           {
             grid:
               {
@@ -50,7 +54,7 @@
           });
       },
       handleResize () {
-        var element = this.$refs['workspace-container'];
+        var element = this.$refs['playground-container'];
         var x = 0;
         var y = 0;
         do {
@@ -59,11 +63,12 @@
           element = element.offsetParent;
         } while (element);
 
-        this.$refs['workspace'].style.left = x + 'px';
-        this.$refs['workspace'].style.top = y + 'px';
-        this.$refs['workspace'].style.width = this.$refs['workspace-container'].offsetWidth + 'px';
-        this.$refs['workspace'].style.height = this.$refs['workspace-container'].offsetHeight + 'px';
+        this.$refs['playground'].style.left = x + 'px';
+        this.$refs['playground'].style.top = y + 'px';
+        this.$refs['playground'].style.width = this.$refs['playground-container'].offsetWidth + 'px';
+        this.$refs['playground'].style.height = this.$refs['playground-container'].offsetHeight + 'px';
         Blockly.svgResize(this.blockly_container);
+
       },
       applyResize () {
         window.addEventListener('resize', this.handleResize, false);
@@ -77,19 +82,24 @@
       },
       height: {
         default: '600px'
-      }
+      },
+      env: null
     },
     mounted () {
       this.inject();
+    },
+    beforeRouteLeave (to, from, next) {
+      next();
     }
   }
 </script>
 <style scoped lang="scss">
-  .workspace {
+  .playground {
     position: absolute;
   }
 
-  .workspace-container {
+  .playground-container {
     height: 90vh;
   }
 </style>
+

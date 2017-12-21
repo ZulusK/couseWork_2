@@ -2,6 +2,7 @@ import commonmark from 'commonmark';
 import Globals from '#/globals';
 import {Node, Toolbox} from '#/blocks/CodualBlocks';
 
+
 function convertToURL (v) {
   if (typeof v == 'object' || Array.isArray(v)) {
     return JSON.stringify(v);
@@ -63,6 +64,7 @@ let blocks = {
     return toolbox;
   },
 }
+
 export default {
   resolveImageURL (address) {
     if (address.startsWith('/api/v1/res')) {
@@ -100,6 +102,7 @@ export default {
     }
   },
   dom: dom,
-  blocks: blocks
+  blocks: blocks,
+
 }
 
