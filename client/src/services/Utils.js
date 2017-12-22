@@ -12,7 +12,7 @@ function convertToURL (v) {
 }
 
 function notEmpty (v) {
-  if (typeof v == 'object' || Array.isArray(v)) {
+  if (Array.isArray(v)) {
     return v.length > 0;
   } else {
     return true;
@@ -75,6 +75,13 @@ export default {
   },
   converToURL (obj) {
     return convertToURL(obj)
+  },
+  parse (str) {
+    try {
+      return JSON.parse(str);
+    } catch (err) {
+
+    }
   },
   /**
    * pass filter args to URL-decoded string

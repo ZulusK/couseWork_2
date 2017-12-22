@@ -29,6 +29,9 @@ tools.collectDataFromReq = {
         }
         return args;
     },
+    getById (req) {
+        return {target: req.params.id};
+    },
     get (req) {
         let args = {};
         let query = {};
@@ -77,6 +80,12 @@ tools.collectDataFromReq = {
 }
 
 tools.verifyData = {
+    getById (args) {
+        if (!args.target) {
+            throw Utils.errors.InvalidRequesDataError('Missing id of publication')
+        }
+        return true;
+    },
     post (args) {
         // check, is all required fields are present
         DBpublications.requiredFields.forEach((field) => {
@@ -131,6 +140,14 @@ tools.verifyData = {
 }
 
 tools.result = {
+    getById (res, args) {
+        return res.json(
+            {
+                success: true,
+                item: args.item
+            }
+        )
+    },
     post (res, args) {
         return res.json(
             {
@@ -158,6 +175,27 @@ tools.result = {
         )
     }
 }
+router.route('/:id')
+    .get(async (req, res, next) => {
+        const args = tools.collectDataFromReq.getById(req);
+        try {
+            tools.verifyData.getById(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBpublications.get.byID(args.target);
+            if (args.item) {
+                await args.item.increaseViews();
+                return tools.result.getById(res, args);
+            } else {
+                return Utils.sendError(res, 404, "Not found");
+            }
+        } catch (e) {
+            console.log(e)
+            return Utils.sendError(res, 500, `Server error: ${e}`);
+        }
+    })
 router.route('/')
     .get(async (req, res, next) => {
         const args = tools.collectDataFromReq.get(req);
@@ -168,7 +206,7 @@ router.route('/')
         }
         try {
             args.result = await DBpublications.get.byQuery(args.query, args.page, args.limit, args.sort);
-            console.log(args.result)
+            console.log(args.sort)
             if (args.result) {
                 return tools.result.get(res, args);
             } else {

@@ -93,6 +93,7 @@ Publication.methods.info = function () {
         text: this.text,
         created: this.created,
         edited: this.edited,
+        views: this.views,
         tags: this.tags,
         difficult: this.difficult
     }

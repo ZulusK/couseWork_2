@@ -3,7 +3,12 @@ import Utils from '#/Utils';
 
 export default {
   load (filter) {
-    return API.noAuth().get('/api/v1/publications' + Utils.query(filter));
+    const query = Utils.query(filter);
+    console.log(query)
+    return API.noAuth().get('/api/v1/publications' + query);
+  },
+  loadOne (id) {
+    return API.noAuth().get(`/api/v1/publications/${id}`);
   },
   save (data) {
     let form = new FormData();

@@ -46,6 +46,16 @@
                   </p>
                 </div>
               </div>
+              <div class="media-right" v-if="publication.views">
+                <div class="is-grey">
+                  <b-icon
+                    size="is-small"
+                    type="is-grey"
+                    pack="mdi"
+                    icon="eye"/>
+                  {{publication.views}}
+                </div>
+              </div>
             </div>
           </router-link>
           <hr>

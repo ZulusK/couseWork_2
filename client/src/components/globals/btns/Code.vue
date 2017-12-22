@@ -13,11 +13,13 @@
       </a>
       <template v-if="isLogged()">
         <hr class="navbar-divider">
-        <a class="navbar-item">
-          <!--<router-link :to="{name:'Blockly-',query:{author:$store.state.user.id}}">-->
-          Create
-          <!--</router-link>-->
-        </a>
+        <template v-if="isAdmin()">
+          <a class="navbar-item">
+            <router-link :to="{name:'Code-builder'}">
+              Construct
+            </router-link>
+          </a>
+        </template>
       </template>
     </div>
 

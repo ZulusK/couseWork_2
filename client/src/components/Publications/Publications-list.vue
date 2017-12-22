@@ -82,7 +82,7 @@
       <div class="column is-9-desktop">
         <div v-for="(item, i) in items"
              class="mb-15"
-             :key="item.title">
+             :key="item.id">
           <publication-card-prev
             class="interactive-item"
             :item="item"
@@ -109,8 +109,7 @@
   import APIUsers from '#/Users';
   import PublicationCardPrev from '%/Publications/Publication-card-prev'
   import Globals from '#/globals';
-  import BIcon from "../../../node_modules/buefy/src/components/icon/Icon.vue";
-
+  import Utils from '#/Utils';
   export default {
     mixins: [AuthMixin, MessageMixin],
     data () {
@@ -125,6 +124,7 @@
           limit: 0
         },
         filters: {
+          sord: {},
           page: 1,
           limit: Globals.PAGINATION_LIMIT,
           title: "",
@@ -136,7 +136,6 @@
       }
     },
     components: {
-      BIcon,
       PublicationCardPrev
     },
     watch: {
@@ -210,6 +209,7 @@
       changeFilters (to) {
         let newFilters = {};
         if (!to.query) return;
+        newFilters.sort = Utils.parse(to.query.sort) || {};
         newFilters.title = to.query.title || this.filters.title;
         newFilters.author = to.query.author || this.filters.author;
         newFilters.tags = this.getTags(to.query.tags) || this.filters.tags;

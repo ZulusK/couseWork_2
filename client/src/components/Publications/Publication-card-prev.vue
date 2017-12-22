@@ -48,6 +48,16 @@
                   </p>
                 </div>
               </div>
+              <div class="media-right">
+                <div class="is-grey">
+                  <b-icon
+                    size="is-small"
+                    type="is-grey"
+                    pack="mdi"
+                    icon="eye"/>
+                  {{item.views}}
+                </div>
+              </div>
             </div>
           </router-link>
           <hr>
@@ -69,6 +79,7 @@
 <script>
   import Globals from '#/globals';
   import Utils from '#/Utils';
+
   export default {
     data () {
       return {}

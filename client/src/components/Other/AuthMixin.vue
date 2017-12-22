@@ -1,5 +1,6 @@
 <script>
   import AuthAPI from '#/Auth';
+
   export default {
     methods: {
       async checkTimeOfTokens () {
@@ -56,9 +57,13 @@
         this.$store.dispatch('setToken_access', null);
         this.$store.dispatch('setToken_refresh', null);
         this.$store.dispatch('setUser', null);
+        console.log(2)
       },
       isLogged () {
         return this.$store.getters.isLogged();
+      },
+      isAdmin () {
+        return this.isLogged() && this.$store.state.user.isAdmin;
       },
       isNotLogged () {
         return !this.isLogged();

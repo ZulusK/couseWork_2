@@ -76,9 +76,9 @@
       },
       async load () {
         try {
-          const response = await APIPublications.load({id: this.id});
-          if (response.data.success && response.data.items[0]) {
-            this.publication = response.data.items[0];
+          const response = await APIPublications.loadOne(this.id);
+          if (response.data.success && response.data.item) {
+            this.publication = response.data.item;
             await this.loadAuthor();
           } else {
             this.$router.push({name: '404', query: {msg: "No such publication"}})

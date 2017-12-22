@@ -58,7 +58,6 @@ tools.result = {
 router.route('/:id')
     .get(async (req, res, next) => {
         const args = tools.collectDataFromReq.get(req);
-        console.log(args);
         try {
             tools.verifyData.get(args);
         } catch (err) {
@@ -70,7 +69,6 @@ router.route('/:id')
                 return Utils.sendError(res, 404, "Not found");
             }
             const stream = DBimage.get.stream(args.query.id);
-            console.log(result)
             res.type(result.contentType);
             // console.log(1)
 

@@ -7,15 +7,19 @@
     </a>
     <div class="navbar-dropdown is-right">
       <a class="navbar-item">
-        Hot
+        <router-link :to="{name:'Publications-list',query:{sort:JSON.stringify({views:-1})}}">
+          Hot
+        </router-link>
       </a>
       <a class="navbar-item">
-        New
+        <router-link :to="{name:'Publications-list',query:{sort:JSON.stringify({created:1})}}">
+          New
+        </router-link>
       </a>
       <template v-if="isLogged()">
         <hr class="navbar-divider">
         <a class="navbar-item">
-          <router-link :to="{name:'Publications-list',query:{author:$store.state.user.id}}">
+          <router-link :to="{name:'Publications-list',query:{author:$store.state.user?$store.state.user.id:''}}">
             My
           </router-link>
         </a>

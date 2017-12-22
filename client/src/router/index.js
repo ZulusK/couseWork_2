@@ -9,6 +9,7 @@ import PublicationView from '%/Publications/Publications-view';
 import _404 from '%/globals/404';
 import _500 from '%/globals/500';
 import Sandbox from '%/code/Sandbox';
+import CodeBuilder from '%/code/creation/Creation';
 
 
 Vue.use(Router)
@@ -49,6 +50,11 @@ export default new Router({
       path: '/code',
       name: 'Code',
       component: Sandbox,
+    },
+    {
+      path: '/code/builder',
+      name: 'Code-builder',
+      component: CodeBuilder
     },
     {
       path: '*',
