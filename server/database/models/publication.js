@@ -49,8 +49,15 @@ let Publication = new Schema({
         default: 0
     }
 });
-Publication.plugin(require('mongoose-paginate'));
 
+
+Publication.plugin(require('mongoose-paginate'));
+Publication.methods.update = function (args) {
+    Object.keys(args).forEach(field => {
+        this[field] = args[field];
+    })
+    return this.save();
+}
 Publication.methods.increaseViews = function () {
     this.views++;
     return this.save();

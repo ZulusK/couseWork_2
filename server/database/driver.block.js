@@ -15,12 +15,17 @@ function getAllFields () {
     return Object.keys(BlockModel.schema.paths);
 }
 
+function getConstantFields () {
+    return ['id', '_id']
+}
+
 module.exports = {
     size () {
         return BlockModel.count({}).exec();
     },
     requiredFields: getRequiredFields(),
     allFields: getAllFields(),
+    constantFields: getConstantFields(),
     create (args) {
         return DB.create(BlockModel, args);
     },

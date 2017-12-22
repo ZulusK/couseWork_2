@@ -1,5 +1,10 @@
 [
   {
+    "name": "Other",
+    "color": "1",
+    "blocks": []
+  },
+  {
     "name": "Logic",
     "color": "%{BKY_LOGIC_HUE}",
     "blocks": [

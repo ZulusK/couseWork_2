@@ -1,3 +1,5 @@
+"use strict";
+
 const Schema = require('mongoose').Schema;
 const mongoose = require('mongoose');
 const Utils = require('@utils');
@@ -14,7 +16,7 @@ let Block = new Schema({
     },
     category: {
         type: String,
-        default: "Codual"
+        default: config.IDLE_CATEGORY
     },
     type: {
         type: String,
@@ -48,7 +50,12 @@ let Block = new Schema({
 });
 Block.plugin(require('mongoose-paginate'));
 Block.index({type: 1}, {unique: true});
-
+Block.methods.update = function (args) {
+    Object.keys(args).forEach(field => {
+        this[field] = args[field];
+    })
+    return this.save();
+}
 Block.methods.info = function () {
     return {
         default: this.default,

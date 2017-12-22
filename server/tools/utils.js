@@ -189,3 +189,12 @@ exports.parseJSON = function (str) {
         return null;
     }
 }
+exports.verifyAdmin = function (req, res, next) {
+    if (req.user && req.user.isAdmin) {
+        next();
+    } else {
+        let e = new Error('Forbidden');
+        e.status = 403;
+        next(e);
+    }
+}

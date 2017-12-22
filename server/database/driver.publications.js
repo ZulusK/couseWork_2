@@ -13,9 +13,14 @@ function getAllFields () {
     return Object.keys(PublicationModel.schema.paths);
 }
 
+function getConstantFields () {
+    return ['id', '_id', 'created', 'edited', 'views'];
+}
+
 module.exports = {
     requiredFields: getRequiredFields(),
     allFields: getAllFields(),
+    constantFields: getConstantFields(),
     create (args) {
         return DB.create(PublicationModel, args);
     },

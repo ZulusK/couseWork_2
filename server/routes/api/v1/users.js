@@ -92,7 +92,7 @@ router.route('/')
         }
     })
 router.route('/:id')
-    .delete(passport.authenticate(['basic'], {session: false}), async (req, res, next) => {
+    .delete(passport.authenticate(['basic', 'access-token'], {session: false}), async (req, res, next) => {
         const args = tools.collectDataFromReq.delete(req);
         try {
             tools.verifyData.delete(args);

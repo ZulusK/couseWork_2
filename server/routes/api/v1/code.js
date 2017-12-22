@@ -8,8 +8,77 @@ const DBCategories = require("@DBcore").categories;
 const passport = require('passport');
 const config = require('@config');
 let tools = {};
-
+tools.collectDataFromReq = {
+    post (req) {
+        let args = {query: req.body};
+        return args;
+    },
+    put (req) {
+        let args = {query: req.body, target: req.params.id}
+        return args;
+    },
+    delete (req) {
+        return {target: req.params.id}
+    }
+}
+tools.verifyData = {
+    post_b (args) {
+        // check, is all required fields are present
+        DBBlocks.requiredFields.forEach((field) => {
+            if (!args.query[field]) {
+                throw Utils.errors.InvalidRequesDataError(`'${field}' is required`)
+            }
+        })
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBBlocks.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            }
+        })
+        return true;
+    },
+    put_b (args) {
+        if (!args.target) {
+            throw Utils.errors.InvalidRequesDataError(`Missing id of target block`)
+        }
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBBlocks.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            }
+        })
+        Object.keys(args.query).forEach(key => {
+            if (DBBlocks.constantFields.indexOf(key) >= 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is constant`)
+            }
+        })
+        return true;
+    },
+    delete_b (args) {
+        if (!args.target) {
+            throw Utils.errors.InvalidRequesDataError(`Missing id of target block`)
+        }
+        return true;
+    }
+}
+tools.result = {
+    post (res, args) {
+        return res.json(
+            {
+                success: true,
+                item: args.item.info()
+            }
+        )
+    },
+    put (res, args) {
+        return this.post(res, args)
+    },
+    delete (res, args) {
+        return res.json({success: true});
+    }
+}
 router.route('/')
+
 /**
  * get all defined blocks
  */
@@ -25,9 +94,69 @@ router.route('/')
             return DBBlocks.get.byCategory(category.name)
         }))
         //add blocks to categories
-        blocks.forEach((b, i) => categories[i].blocks = b);
-        console.log(categories)
+        blocks.forEach((b, i) => categories[i].blocks = b.map(v => v.info()));
         res.json({success: true, items: categories})
+    })
+
+router.route('/blocks')
+    .post(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.post(req);
+        try {
+            tools.verifyData.post_b(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBBlocks.create(args.query)
+            if (args.item) {
+                return tools.result.post(res, args);
+            } else {
+                return Utils.sendError(res, 400, "Bad arguments");
+            }
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+
+router.route('/blocks/:id')
+    .put(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.put(req);
+        try {
+            tools.verifyData.put_b(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBBlocks.get.byID(args.target)
+            if (!args.item) {
+                return Utils.sendError(res, 400, "No such block");
+            }
+            await args.item.update(args.query);
+            return tools.result.put(res, args);
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+    .delete(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.delete(req);
+        try {
+            tools.verifyData.delete_b(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBBlocks.get.byID(args.target)
+            if (!args.item) {
+                return Utils.sendError(res, 400, "No such block");
+            }
+            await DBBlocks.remove.byID(args.target);
+            return tools.result.delete(res, args);
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
     })
 
 module.exports = router;

@@ -1,3 +1,5 @@
+"use strict";
+
 const router = require('express').Router();
 const Utils = require('@utils');
 const validate = require('@validator');
@@ -67,6 +69,10 @@ tools.collectDataFromReq = {
             args.query.id = Utils.convert.str2id(req.query.id);
         }
         return args;
+    },
+    put (req) {
+        let args = {query: req.body, target: req.params.id};
+        return args;
     }
 }
 
@@ -82,7 +88,7 @@ tools.verifyData = {
         Object.keys(args.query).forEach(key => {
             if (DBpublications.allFields.indexOf(key) < 0) {
                 throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
-            } else if (!validate('piblication', key, args.query[key])) {
+            } else if (!validate('publication', key, args.query[key])) {
                 throw Utils.errors.InvalidRequesDataError(`Invalid value of '${key}'`)
             }
         })
@@ -102,8 +108,28 @@ tools.verifyData = {
             throw Utils.errors.InvalidRequesDataError('Invalid id of publication')
         }
         return true;
+    },
+    put (args) {
+        if (!args.target) {
+            throw Utils.errors.InvalidRequesDataError(`Missing id of target block`)
+        }
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBpublications.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            } else if (!validate('publication', key, args.query[key])) {
+                throw Utils.errors.InvalidRequesDataError(`Invalid value of '${key}'`)
+            }
+        })
+        Object.keys(args.query).forEach(key => {
+            if (DBpublications.constantFields.indexOf(key) >= 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is constant`)
+            }
+        })
+        return true;
     }
 }
+
 tools.result = {
     post (res, args) {
         return res.json(
@@ -112,6 +138,9 @@ tools.result = {
                 item: args.publication.info()
             }
         )
+    },
+    put (res, args) {
+        return tools.result.post(res, args);
     },
     get (res, args) {
         return res.json(
@@ -174,7 +203,7 @@ router.route('/')
         try {
             tools.verifyData.delete(args);
         } catch (err) {
-            Utils.sendError(res, 400, err.message);
+            return Utils.sendError(res, 400, err.message);
         }
         try {
             const result = await DBpublications.get.byID(args.query.id);
@@ -194,4 +223,28 @@ router.route('/')
             return Utils.sendError(res, 500, "Server error");
         }
     })
+router.route('/:id')
+    .put(passport.authenticate(['access-token', 'basic'], {session: false}), async (req, res, next) => {
+        const args = tools.collectDataFromReq.put(req);
+        try {
+            tools.verifyData.put(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.publication = await DBpublications.get.byID(args.target);
+            if (!args.publication) {
+                return Utils.sendError(res, 404, "No such publication");
+            }
+            if (String(args.publication.author) !== String(req.user._id) && !req.user.isAdmin) {
+                return Utils.sendError(res, 403, "Permission denied");
+            }
+            await args.publication.update(args.query);
+            return tools.result.put(res, args);
+        } catch (e) {
+            return Utils.sendError(res, 500, `Server error: ${e}`);
+        }
+    })
+
+
 module.exports = router;

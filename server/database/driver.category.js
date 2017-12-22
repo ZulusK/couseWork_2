@@ -13,9 +13,14 @@ function getAllFields () {
     return Object.keys(CategoryModel.schema.paths);
 }
 
+function getConstantFields () {
+    return ['_id', 'id'];
+}
+
 module.exports = {
     requiredFields: getRequiredFields(),
     allFields: getAllFields(),
+    constantFields: getConstantFields(),
     create (args) {
         return DB.create(CategoryModel, args);
     },
