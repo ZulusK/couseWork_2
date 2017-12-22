@@ -5,7 +5,7 @@
       <a class="button is-outlined is-success" @click.stop="add">
         Add
       </a>
-      <a class="button is-outlined is-danger" @click.stop="remove">
+      <a class="button is-outlined is-danger" :disabled="!selected.id" @click.stop="deleteSelected">
         Delete
       </a>
       <hr>
@@ -27,7 +27,7 @@
         </template>
       </b-table>
     </div>
-    <div class="column is-6-tablet is-12-mobile" v-if="selected.name">
+    <div class="column is-6-tablet is-12-mobile">
       <b-field label="Name">
         <b-input v-model="selected.name" required></b-input>
       </b-field>
@@ -65,10 +65,57 @@
     watch: {
       "selected" () {
         Object.assign(this.old, this.selected)
-        console.log(this.old)
       },
     },
     methods: {
+      async createCategory () {
+        try {
+          const result = await APICode.category.create(this.selected);
+          if (!result.data.success) {
+            this.error(result.data.message || "Server error")
+            return false;
+          } else {
+            this.success("Success updated");
+            this.selected = {};
+            return true;
+          }
+        } catch (err) {
+          console.log(err)
+          this.error(err.response.data.message || "Server error")
+          return false;
+        }
+      },
+      async deleteCategory () {
+        try {
+          const result = await APICode.category.delete(this.selected.id);
+          if (!result.data.success) {
+            this.error(result.data.message || "Server error")
+            return false;
+          } else {
+            this.success("Success deleted");
+            this.selected = {};
+            return true;
+          }
+        } catch (err) {
+          console.log(err)
+          this.error(err.response.data.message || "Server error")
+          return false;
+        }
+      },
+      async deleteSelected () {
+        this.UI.isLoading = true;
+        await this.checkTimeOfTokens();
+        if (this.isNotLogged()) {
+          this.error('You are not authorized');
+          this.UI.isLoading = false;
+          return;
+        }
+
+        if (await this.deleteCategory()) {
+          this.$emit('update')
+        }
+        this.UI.isLoading = false;
+      },
       async saveCategory () {
         try {
           const result = await APICode.category.put(this.selected.id, this.updateArgs);
@@ -77,6 +124,8 @@
             return false;
           } else {
             this.success("Success updated");
+            this.selected = {};
+
             return true;
           }
         } catch (err) {
@@ -104,14 +153,29 @@
           this.UI.isLoading = false;
           return;
         }
-        if (await this.saveCategory()) {
-          this.$emit('update')
+        // if there are no id in selected
+        // user created it just now
+        console.log(this.selected)
+        if (!this.selected.id) {
+          if (await this.createCategory()) {
+            this.$emit('update');
+          }
         } else {
-          this.selected.color = this.old.color;
-          this.selected.name = this.old.name;
+          if (await this.saveCategory()) {
+            this.$emit('update')
+          } else {
+            this.selected.color = this.old.color;
+            this.selected.name = this.old.name;
+          }
         }
         this.UI.isLoading = false;
       },
+      add () {
+        this.selected = {
+          name: "",
+          color: ""
+        };
+      }
     },
     computed: {
       updateArgs () {

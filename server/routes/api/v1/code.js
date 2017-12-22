@@ -278,30 +278,33 @@ router.route('/categories')
 
 router.route('/categories/:id')
     .put(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
-        const args = tools.collectDataFromReq.put(req);
-        try {
-            tools.verifyData.put_c(args);
-        } catch (err) {
-            return Utils.sendError(res, 400, err.message);
-        }
-        try {
-            args.item = await DBCategories.get.byID(args.target)
-            if (!args.item) {
-                return Utils.sendError(res, 400, "No such category");
-            } else if (args.item.name == config.IDLE_CATEGORY) {
-                return Utils.sendError(res, 400, `This category cannot be updated`);
+            const args = tools.collectDataFromReq.put(req);
+            try {
+                tools.verifyData.put_c(args);
+            } catch (err) {
+                return Utils.sendError(res, 400, err.message);
             }
-            let oldName = args.item.name;
-            await args.item.update(args.query);
-            if (args.item.name != oldName) {
-                await setCategoryInBlocks(await DBBlocks.get.byCategory(oldName), args.item.name);
+            try {
+                args.item = await DBCategories.get.byID(args.target)
+                if (!args.item) {
+                    return Utils.sendError(res, 400, "No such category");
+                } else if (args.item.name == config.IDLE_CATEGORY || args.item.primary) {
+                    return Utils.sendError(res, 400, `This category cannot be updated`);
+                }
+                let oldName = args.item.name;
+                await args.item.update(args.query);
+                if (args.item.name != oldName) {
+                    await setCategoryInBlocks(await DBBlocks.get.byCategory(oldName), args.item.name);
+                }
+                return tools.result.put(res, args);
             }
-            return tools.result.put(res, args);
-        } catch (err) {
-            console.log(err);
-            return Utils.sendError(res, 500, `Server error: ${err}`);
+            catch
+                (err) {
+                console.log(err);
+                return Utils.sendError(res, 500, `Server error: ${err}`);
+            }
         }
-    })
+    )
     .delete(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
         const args = tools.collectDataFromReq.delete(req);
         try {
@@ -310,14 +313,13 @@ router.route('/categories/:id')
             return Utils.sendError(res, 400, err.message);
         }
         try {
-            args.item = await DBCategories.get.byID(args.target)
+            args.item = await DBCategories.get.byID(args.target);
             if (!args.item) {
                 return Utils.sendError(res, 400, "No such category");
+            } else if (args.item.name == config.IDLE_CATEGORY || args.item.primary) {
+                return Utils.sendError(res, 400, `This category cannot be deleted`);
             }
             await DBCategories.remove.byID(args.target);
-            if (args.item.name == config.IDLE_CATEGORY) {
-                await DBCategories.create({name: config.IDLE_CATEGORY, color: 150})
-            }
             await setCategoryInBlocks(await DBBlocks.get.byCategory(args.item.name), config.IDLE_CATEGORY);
             return tools.result.delete(res, args);
         } catch (err) {

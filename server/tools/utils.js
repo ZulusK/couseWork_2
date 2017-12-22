@@ -161,6 +161,7 @@ exports.code = {
         let categories = JSON.parse(await exports.fs.read(config.BASE_BLOCKS));
         for (let category of categories) {
             await DBCategories.create({
+                primary: true,
                 name: category.name,
                 color: category.color,
             })

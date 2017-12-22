@@ -4,6 +4,10 @@ const Utils = require('@utils');
 const validator = require('@validator');
 const config = require('@config');
 let Category = new Schema({
+    primary: {
+        type: Boolean,
+        default: false,
+    },
     name: {
         type: String,
         required: true,

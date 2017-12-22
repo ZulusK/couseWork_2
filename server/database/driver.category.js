@@ -16,7 +16,7 @@ function getAllFields () {
 }
 
 function getConstantFields () {
-    return ['_id', 'id', 'name'];
+    return ['_id', 'id'];
 }
 
 module.exports = {
