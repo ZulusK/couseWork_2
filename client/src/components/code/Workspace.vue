@@ -1,6 +1,9 @@
 <template>
-  <div ref="workspace-container" class="workspace-container">
-    <div ref="workspace" class="workspace"></div>
+  <div ref="workspace-container" class="workspace-container"
+       :style="{width:width,height:height}">
+    <div
+      ref="workspace"
+      :style="{width:width,height:height}"/>
   </div>
 </template>
 <script>
@@ -13,8 +16,9 @@
     },
     methods: {
       update (xml) {
-//        console.log('workspace updated')
+        console.log('workspace updated')
         this.blocklyWorkspace.updateToolbox(xml);
+        Blockly.svgResize(this.blocklyWorkspace);
       },
       getCodeJS () {
         Blockly.JavaScript.addReservedWords('code');
@@ -22,11 +26,11 @@
         return code;
       },
       init () {
-        this.applyResize();
+        if (this.resize) this.applyResize();
         console.log('init workspace')
       },
       inject () {
-        this.blocklyWorkspace = Blockly.inject(this.$refs['workspace'],
+        this.blocklyWorkspace = Blockly.inject(this.$refs.workspace,
           {
             grid:
               {
@@ -77,6 +81,9 @@
       },
       height: {
         default: '600px'
+      },
+      resize: {
+        default: false
       }
     },
     mounted () {
@@ -86,10 +93,15 @@
 </script>
 <style scoped lang="scss">
   .workspace {
+    padding: 0;
+    margin: 0;
     position: absolute;
+    z-index: 500;
   }
 
   .workspace-container {
-    height: 90vh;
+    /*height: 85vh;*/
+    padding: 0;
+    margin: 0;
   }
 </style>
