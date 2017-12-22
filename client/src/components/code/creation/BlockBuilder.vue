@@ -25,7 +25,7 @@
           <b-icon :icon="!UI.isOpen?'menu-down' : 'menu-up'"/>
         </p>
         <b-tabs size="is-small" position="is-centered" class="block" v-if="model.definedCategories">
-          <b-tab-item v-for="category in model.definedCategories" :label="         category.name">
+          <b-tab-item v-for="category in model.definedCategories" :label="category.name" :key="category.id">
             <b-table
               hoverable
               @select="select"
@@ -72,12 +72,64 @@
           <b-input maxlength="200" type="textarea" v-model="selected.tooltip"/>
         </b-field>
       </b-field>
-      <b-field grouped v-if="!selected.primary">
-        <b-field label="JS code" expanded>
-          <b-input type="textarea" v-model="selected.code"/>
+      <template v-if="!selected.primary">
+        <b-field grouped group-multiline>
+          <b-field label="Top connection">
+            <!--connection top-->
+            <b-select v-model="selected.previousStatement">
+              <option
+                v-for="type in types"
+                :value="type"
+                :key="type">
+                {{type || "null"}}
+              </option>
+            </b-select>
+          </b-field>
+          <b-field label="Bottom connection">
+            <!--connection top-->
+            <b-select v-model="selected.nextStatement">
+              <option
+                v-for="type in types"
+                :value="type"
+                :key="type">
+                {{type || "null"}}
+              </option>
+            </b-select>
+          </b-field>
+          <b-field label="Output" v-model="selected.output">
+            <!--connection top-->
+            <b-select>
+              <option
+                v-for="type in types"
+                :value="type"
+                :key="type">
+                {{type || "null"}}
+              </option>
+            </b-select>
+          </b-field>
         </b-field>
-      </b-field>
-
+        <b-collapse>
+          <p class="is-link has-text-centered"
+             slot="trigger" v-ripple>
+            <span>Arguments</span>
+            <b-icon :icon="!UI.isOpen?'menu-down' : 'menu-up'"/>
+          </p>
+          <template v-for="(input,i) in selected.input">
+            <block-args
+              @remove="selected.input.splice(i,1)"
+              :input="input"
+              :types="types"/>
+          </template>
+          <a class="button is-success" @click.stop="addInput()">
+            Add args
+          </a>
+        </b-collapse>
+        <b-field grouped>
+          <b-field label="JS code" expanded>
+            <b-input type="textarea" v-model="selected.code"/>
+          </b-field>
+        </b-field>
+      </template>
     </div>
   </div>
 </template>
@@ -86,23 +138,30 @@
   import APICode from '#/Code';
   import AuthMixin from '%/Other/AuthMixin';
   import MessageMixin from '%/Other/MessageMixin';
+  import BlockArgs from './BlockArgs';
 
   export default {
     mixins: [AuthMixin, MessageMixin],
+    components: {
+      BlockArgs
+    },
     data () {
       return {
+        types: [
+          'Number', 'Boolean', 'String', 'Array', 'Any', null
+        ],
         UI: {
           isLoading: false,
           filter: ""
         },
-        selected: {category: 'Other'},
+        selected: {category: 'Other', input: []},
         old: {}
       }
     },
     methods: {
       add () {
         Object.assign(this.selected, this.old);
-        this.selected = {category: 'Other'};
+        this.selected = {category: 'Other', input: []};
       },
       async save () {
         this.UI.isLoading = true;
@@ -195,6 +254,13 @@
           return false;
         }
       },
+      addInput () {
+        if (!this.selected.input) {
+          this.selected.input = [{}]
+        } else {
+          this.selected.input.push({})
+        }
+      },
       select (block) {
         this.selected = block;
         Object.assign(this.old, block);
@@ -215,6 +281,7 @@
             args[key] = this.selected[key];
           }
         })
+        args.input = this.selected.input;
         return args;
       }
     },

@@ -20,12 +20,23 @@
         </b-tabs>
       </div>
       <div class="column is-6-desktop ">
+        <a class="button is-success is-medium" @click="runCode">
+          <span>Run code</span>
+          <b-icon icon="rocket"/>
+        </a>
+        <a class="button is-primary is-medium" @click="clearTerminal">
+          <span>Clear console</span>
+          <b-icon icon="delete"/>
+        </a>
         <workspace
           ref="workspace"
           class="box"
           :resize="false"
           :height="'70vh'"
           :width="'900px'"/>
+        <terminal
+          :env="env"
+          ref="terminal"/>
       </div>
     </div>
     <div v-else class="hero">
@@ -51,16 +62,20 @@
   import {VPL, Node} from '#/code/VPL';
   import APICode from '#/Code';
   import MessageMixin from '%/Other/MessageMixin';
+  import CodeEnv from '#/CodeEnv';
+  import Terminal from '%/code/Terminal'
 
   export default {
     mixins: [AuthMixin, MessageMixin],
     components: {
       BlockBuilder,
       CategoryBuilder,
-      Workspace
+      Workspace,
+      Terminal
     },
     data () {
       return {
+        env: new CodeEnv(),
         toolbox: null,
         model: {
           definedCategories: null,
@@ -103,6 +118,18 @@
       },
       updateWorkspace () {
         this.$refs.workspace.update(this.toolbox.toXML())
+      },
+      clearTerminal () {
+        this.env.clearTerminal();
+      },
+      runCode () {
+        let code = this.$refs.workspace.getCodeJS();
+        code.split('\n').forEach(x => this.env.writeToTerminal(x))
+        try {
+          eval(code);
+        } catch (e) {
+          this.error(e)
+        }
       }
     },
     computed: {},

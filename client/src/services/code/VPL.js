@@ -71,14 +71,30 @@ VPL.prototype.registerBlock = function (block) {
             .appendField(i.field)
         }
       })
-      this.appendValueInput("DEFAULT")
-        .setCheck("Boolean")
-        .appendField("Bool");
+      if (block.previousStatement) {
+        this.setPreviousStatement(true, block.previousStatement)
+      }
+      if (block.nextStatement) {
+        this.setNextStatement(true, block.nextStatement)
+      }
+      if (block.output) {
+        this.setOutput(true, block.output);
+      }
       this.setTooltip(block.tooltip || "");
     }
   }
   Blockly.JavaScript[block.type] = function (b) {
-    return block.code || "";
+    let args = {};
+    block.input.forEach(i => {
+      if (i.inputType == 'statement') {
+        args[i.value] = Blockly.JavaScript.statementToCode(block, i.value);
+      } else {
+        args[i.value] = Blockly.JavaScript.valueToCode(b, i.value, Blockly.JavaScript.ORDER_ATOMIC);
+      }
+    })
+    let code = "";
+    eval(block.code)
+    return [code, Blockly.JavaScript.ORDER_ADDITION];
   }
 }
 

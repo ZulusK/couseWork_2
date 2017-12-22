@@ -27,10 +27,6 @@ let Block = new Schema({
         required: true,
         unique: true,
     },
-    message0: {
-        type: String,
-        default: ""
-    },
     previousStatement: {
         type: String
     },
@@ -45,7 +41,8 @@ let Block = new Schema({
         default: ""
     },
     code: {
-        type: String
+        type: String,
+        default: ""
     },
     input: {
         type: [{
@@ -85,6 +82,7 @@ Block.methods.info = function () {
         previousStatement: this.previousStatement,
         nextStatement: this.nextStatement,
         output: this.output,
+        code: this.code,
         tooltip: this.tooltip,
         name: this.name,
         helpUrl: this.helpUrl

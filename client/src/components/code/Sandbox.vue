@@ -2,6 +2,24 @@
   <div class="sandbox">
     <div class="columns is-multiline is-desktop ">
       <div class="column is-4-desktop is-12-mobile ">
+        <div class=" mb-20 terminal">
+          <a class="button is-success is-medium" @click="run">
+            <span>Run code</span>
+            <b-icon icon="rocket"/>
+          </a>
+          <a class="button is-primary is-medium" @click="clear">
+            <span>Clear console</span>
+            <b-icon icon="delete"/>
+          </a>
+          <div class="notification is-black ">
+            <p class="is-size-3">Output:</p>
+            <p v-for="(line,index) in output">
+              ...{{line}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4-desktop is-12-mobile ">
         <div>
           <sandbox-controls
             :categories="definedCategories||[]"
