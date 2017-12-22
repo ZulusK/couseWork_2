@@ -1,3 +1,5 @@
+"use strict";
+
 const CategoryModel = require('@DBmodels').Category;
 const DB = require('@DBcore');
 
@@ -34,6 +36,9 @@ module.exports = {
                 limit: limit,
                 sort: sort
             })
+        },
+        byName (name) {
+            return DB.findOne(CategoryModel, {name: name});
         },
         byID (id) {
             return CategoryModel.findById(id);

@@ -51,7 +51,7 @@ tools.verifyData = {
         })
         return true;
     },
-    post_b (args) {
+    async post_b (args) {
         // check, is all required fields are present
         DBBlocks.requiredFields.forEach((field) => {
             if (!args.query[field]) {
@@ -64,6 +64,9 @@ tools.verifyData = {
                 throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
             }
         })
+        if (args.query.category && !await DBCategories.get.byName(args.query.category)) {
+            args.query.category = config.IDLE_CATEGORY;
+        }
         return true;
     },
     put_b (args) {
@@ -144,7 +147,7 @@ router.route('/blocks')
     .post(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
         const args = tools.collectDataFromReq.post(req);
         try {
-            tools.verifyData.post_b(args);
+            await tools.verifyData.post_b(args);
         } catch (err) {
             return Utils.sendError(res, 400, err.message);
         }
@@ -187,6 +190,8 @@ router.route('/blocks/:id')
             args.item = await DBBlocks.get.byID(args.target)
             if (!args.item) {
                 return Utils.sendError(res, 400, "No such block");
+            } else if (args.item.primary) {
+                return Utils.sendError(res, 400, "This block cannot be update");
             }
             await args.item.update(args.query);
             return tools.result.put(res, args);
@@ -206,6 +211,9 @@ router.route('/blocks/:id')
             args.item = await DBBlocks.get.byID(args.target)
             if (!args.item) {
                 return Utils.sendError(res, 400, "No such block");
+            }
+            else if (args.item.primary) {
+                return Utils.sendError(res, 400, "This block cannot be deleted");
             }
             await DBBlocks.remove.byID(args.target);
             return tools.result.delete(res, args);
@@ -281,14 +289,23 @@ router.route('/categories/:id')
         try {
             args.item = await DBCategories.get.byID(args.target)
             if (!args.item) {
-                return Utils.sendError(res, 400, "No such block");
+                return Utils.sendError(res, 400, "No such category");
             }
             await DBCategories.remove.byID(args.target);
+            if (args.item.name == config.IDLE_CATEGORY) {
+                await DBCategories.create({name: config.IDLE_CATEGORY, color: 150})
+            }
+            await setCategoryInBlocks(await DBBlocks.get.byCategory(args.item.name), config.IDLE_CATEGORY);
             return tools.result.delete(res, args);
         } catch (err) {
             console.log(err);
             return Utils.sendError(res, 500, `Server error: ${err}`);
         }
     })
+
+async function setCategoryInBlocks (blocks, newCategoryName) {
+    const args = {category: newCategoryName}
+    await Promise.all(blocks.map(b => b.update(args)));
+}
 
 module.exports = router;

@@ -1,14 +1,25 @@
 <template>
   <div>
-    <div class="container is-fluid" v-if="isAdmin()">
-      <b-tabs class="box " size="is-medium" position="is-left" type="is-toggle">
+    <div class="container is-fluid columns is-desktop" v-if="isAdmin()">
+      <b-tabs class="box column is-6-desktop"
+              size="is-medium"
+              position="is-left"
+              type="is-toggle">
         <b-tab-item label="Category">
-          <category-builder/>
+          <category-builder
+            :model.sync="model"
+          />
         </b-tab-item>
         <b-tab-item label="Block">
           <block-builder/>
         </b-tab-item>
       </b-tabs>
+      <div class="column is-6-desktop">
+        <workspace
+          ref="workspace"
+          class="box" :heigth="'900px'" :resize="true"
+          :width="'800px'"/>
+      </div>
     </div>
     <div v-else class="hero">
       <div class="hero-body container">
@@ -29,23 +40,79 @@
   import AuthMixin from '%/Other/AuthMixin';
   import BlockBuilder from './BlockBuilder';
   import CategoryBuilder from './CategoryBuilder';
+  import Workspace from '%/code/Workspace';
+  import {VPL, Node} from '#/code/VPL';
+  import APICode from '#/Code';
+  import MessageMixin from '%/Other/MessageMixin';
 
   export default {
-    mixins: [AuthMixin],
+    mixins: [AuthMixin, MessageMixin],
     components: {
       BlockBuilder,
-      CategoryBuilder
+      CategoryBuilder,
+      Workspace
     },
     data () {
-      return {}
+      return {
+        toolbox: null,
+        model: {
+          definedCategories: null,
+          cNode: null,
+          bNode: null,
+          newCategory: {name: "NEW CATEGORY"},
+          newBlock: {},
+        }
+      }
     },
-    methods: {},
+    methods: {
+      loaddefinedCategories () {
+        APICode
+          .get()
+          .then(result => {
+            console.log(result.data.items)
+            if (result.data.success) return result.data.items;
+            else throw {response: result};
+          })
+          .then(item => {
+            this.model.definedCategories = item;
+            console.log('blocks loaded');
+            this.initWorkspace();
+          })
+          .catch(err => {
+            console.log(err)
+            this.error(err.response ? err.response.data.message : err.message);
+          })
+      },
+      initWorkspace () {
+        this.toolbox = new VPL();
+        this.toolbox.buildTree(this.model.definedCategories);
+        //append new category
+        this.cNode = this.toolbox.createCategory(this.model.newCategory);
+        this.toolbox.append(this.cNode);
+
+        //append tmp category
+        const tmp = this.toolbox.createCategory({name: 'NEW BLOCKS', color: '360'})
+        this.model.bNode = this.toolbox.createBlock(this.model.newBlock);
+        this.toolbox.append(tmp)
+        //append new block to tmp category
+        tmp.append(this.model.bNode);
+        //init workspace
+        this.$refs.workspace.init();
+        this.updateWorkspace();
+      },
+      updateWorkspace () {
+        this.$refs.workspace.update(this.toolbox.toXML())
+      }
+    },
     computed: {},
     props: [],
     created () {
       if (!this.isAdmin()) {
         this.$router.push({name: 'Root'})
       }
+    },
+    mounted () {
+      this.loaddefinedCategories();
     }
   }
 </script>

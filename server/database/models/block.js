@@ -9,6 +9,10 @@ let Block = new Schema({
     default: {
         type: Boolean
     },
+    primary: {
+        type: Boolean,
+        default: false,
+    },
     name: {
         type: String,
         required: true,

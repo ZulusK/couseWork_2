@@ -176,7 +176,8 @@ exports.code = {
                     output: b.output,
                     tooltip: b.tooltip,
                     helpUrl: b.helpUrl,
-                    code: b.code
+                    code: b.code,
+                    primary: true,
                 })
             }))
         }
