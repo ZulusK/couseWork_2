@@ -56,7 +56,36 @@ VPL.prototype.createCategory = function (category) {
   return new Node('category', {name: category.name, colour: category.color, id: category.id});
 }
 
+VPL.prototype.registerBlock = function (block) {
+  Blockly.Blocks[block.type] = {
+    init: function () {
+      //add inputs
+      block.input.forEach(i => {
+        if (i.inputType == 'statement') {
+          this.appendStatementInput(i.value)
+            .setCheck(i.check)
+            .appendField(i.field)
+        } else {
+          this.appendValueInput(i.value)
+            .setCheck(i.check)
+            .appendField(i.field)
+        }
+      })
+      this.appendValueInput("DEFAULT")
+        .setCheck("Boolean")
+        .appendField("Bool");
+      this.setTooltip(block.tooltip || "");
+    }
+  }
+  Blockly.JavaScript[block.type] = function (b) {
+    return block.code || "";
+  }
+}
+
 VPL.prototype.createBlock = function (block) {
+  if (!block.primary) {
+    this.registerBlock(block);
+  }
   return new Node('block', {type: block.type, id: block.id});
 }
 

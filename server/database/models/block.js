@@ -44,14 +44,27 @@ let Block = new Schema({
         type: String,
         default: ""
     },
-    helpUrl: {
-        type: String,
-        default: ""
-    },
     code: {
         type: String
+    },
+    input: {
+        type: [{
+            inputType: String,
+            check: String,
+            field: String,
+            value: String
+        }],
+        default: []
     }
 });
+Block.pre('save', function (next) {
+    this.input.forEach(x => {
+            let v = this.input.filter(i => i.value == x.value);
+            if (v.length > 1) throw new Error(`Duplicate of input's names find: ${v.value}`);
+        }
+    )
+    next();
+})
 Block.plugin(require('mongoose-paginate'));
 Block.index({type: 1}, {unique: true});
 Block.methods.update = function (args) {
@@ -65,6 +78,7 @@ Block.methods.info = function () {
         default: this.default,
         id: this.id,
         primary: this.primary,
+        input: this.input,
         category: this.category,
         type: this.type,
         message0: this.message0,
