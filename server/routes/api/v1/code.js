@@ -86,6 +86,23 @@ tools.verifyData = {
         })
         return true;
     },
+    put_c (args) {
+        if (!args.target) {
+            throw Utils.errors.InvalidRequesDataError(`Missing id of target block`)
+        }
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBCategories.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            }
+        })
+        Object.keys(args.query).forEach(key => {
+            if (DBCategories.constantFields.indexOf(key) >= 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is constant`)
+            }
+        })
+        return true;
+    },
     delete (args) {
         if (!args.target) {
             throw Utils.errors.InvalidRequesDataError(`Missing id of target`)
@@ -271,8 +288,14 @@ router.route('/categories/:id')
             args.item = await DBCategories.get.byID(args.target)
             if (!args.item) {
                 return Utils.sendError(res, 400, "No such category");
+            } else if (args.item.name == config.IDLE_CATEGORY) {
+                return Utils.sendError(res, 400, `This category cannot be updated`);
             }
+            let oldName = args.item.name;
             await args.item.update(args.query);
+            if (args.item.name != oldName) {
+                await setCategoryInBlocks(await DBBlocks.get.byCategory(oldName), args.item.name);
+            }
             return tools.result.put(res, args);
         } catch (err) {
             console.log(err);

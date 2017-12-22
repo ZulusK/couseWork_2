@@ -7,6 +7,7 @@
               type="is-toggle">
         <b-tab-item label="Category">
           <category-builder
+            @update="updateCategory"
             :model.sync="model"
           />
         </b-tab-item>
@@ -60,12 +61,12 @@
           cNode: null,
           bNode: null,
           newCategory: {name: "NEW CATEGORY"},
-          newBlock: {},
+          newBlock: {}
         }
       }
     },
     methods: {
-      loaddefinedCategories () {
+      loadDefinedCategories () {
         APICode
           .get()
           .then(result => {
@@ -76,12 +77,19 @@
           .then(item => {
             this.model.definedCategories = item;
             console.log('blocks loaded');
+            if (!this.toolbox) {
+              //init workspace
+              this.$refs.workspace.init();
+            }
             this.initWorkspace();
           })
           .catch(err => {
             console.log(err)
             this.error(err.response ? err.response.data.message : err.message);
           })
+      },
+      updateCategory (event) {
+        this.loadDefinedCategories();
       },
       initWorkspace () {
         this.toolbox = new VPL();
@@ -96,8 +104,7 @@
         this.toolbox.append(tmp)
         //append new block to tmp category
         tmp.append(this.model.bNode);
-        //init workspace
-        this.$refs.workspace.init();
+
         this.updateWorkspace();
       },
       updateWorkspace () {
@@ -112,7 +119,7 @@
       }
     },
     mounted () {
-      this.loaddefinedCategories();
+      this.loadDefinedCategories();
     }
   }
 </script>

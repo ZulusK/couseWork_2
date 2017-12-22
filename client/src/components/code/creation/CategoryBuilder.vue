@@ -1,21 +1,44 @@
 <template>
-  <div class="columns">
-    <div class="column is-6-desktop is-offset-3-desktop is-12-mobile is-8-tablet is-offset-2-tablet">
-      <h1 class="title">Manage categories of blocks</h1>
-      <a class="button is-outlined is-link" @click.stop="save">
-        Save
-      </a>
-      <hr>
-      <b-field label="Name">
-        <b-input v-model="category.name" required></b-input>
-      </b-field>
-      <b-field :label="`Color in hue ${category.color}`">
-        <input class="slider is-fullwidth is-large is-circle"
-               min="0" max="360"
-               v-model="category.color" type="range">
-      </b-field>
+  <div class="columns is-multiline">
+    <div class="column is-12 ">
+      <h1 class="title has-text-centered">Manage categories of blocks</h1>
       <a class="button is-outlined is-success" @click.stop="add">
         Add
+      </a>
+      <a class="button is-outlined is-danger" @click.stop="remove">
+        Delete
+      </a>
+      <hr>
+    </div>
+    <div class="column is-6-tablet is-12-mobile">
+      <b-field>
+        <b-input icon="magnify" placeholder="Search" v-model="UI.filter"></b-input>
+      </b-field>
+      <b-table
+        :selected.sync="selected"
+        :paginated="true"
+        perPage="5"
+        focusable
+        :data="filter()">
+        <template slot-scope="props">
+          <b-table-column label="Name" sortable field="name">
+            {{props.row.name}}
+          </b-table-column>
+        </template>
+      </b-table>
+    </div>
+    <div class="column is-6-tablet is-12-mobile" v-if="selected.name">
+      <b-field label="Name">
+        <b-input v-model="selected.name" required></b-input>
+      </b-field>
+      <b-field :label="`Color in hue ${selected.color}`">
+        <input class="slider is-fullwidth is-large is-circle"
+               min="0" max="360"
+               v-model="selected.color" type="range">
+      </b-field>
+
+      <a class="button is-outlined is-link" @click.stop="save">
+        Save
       </a>
       <hr>
     </div>
@@ -29,34 +52,47 @@
 
   export default {
     mixins: [AuthMixin, MessageMixin],
-    components: {},
     data () {
       return {
+        selected: {},
+        old: {},
         UI: {
           isLoading: false,
-        },
-        category: {
-          name: "",
-          color: 150,
-        },
-        cNode: null
+          filter: "",
+        }
       }
     },
     watch: {
-      "category.name" () {
-        this.cNode.attrs.name = this.category.name;
-        this.updateWorkspace();
-
-      },
-      "category.color" () {
-        this.cNode.attrs.colour = this.category.color;
-        this.updateWorkspace();
-
+      "selected" () {
+        Object.assign(this.old, this.selected)
+        console.log(this.old)
       },
     },
     methods: {
       async saveCategory () {
-
+        try {
+          const result = await APICode.category.put(this.selected.id, this.updateArgs);
+          if (!result.data.success) {
+            this.error(result.data.message || "Server error")
+            return false;
+          } else {
+            this.success("Success updated");
+            return true;
+          }
+        } catch (err) {
+          console.log(err)
+          this.error(err.response.data.message || "Server error")
+          return false;
+        }
+      },
+      filter () {
+        if (this.model && this.model.definedCategories) {
+          const reg = new RegExp(`^${this.UI.filter}.{0,}$`, 'i');
+          return this
+            .model
+            .definedCategories
+            .filter(x => reg.test(x.name))
+        }
       },
       async save () {
         this.UI.isLoading = true;
@@ -68,16 +104,29 @@
           this.UI.isLoading = false;
           return;
         }
-        if (!await this.saveCategory()) {
-          this.UI.isLoading = false;
-          return;
+        if (await this.saveCategory()) {
+          this.$emit('update')
         } else {
-
+          this.selected.color = this.old.color;
+          this.selected.name = this.old.name;
         }
+        this.UI.isLoading = false;
       },
     },
-    computed: {},
-    props: [],
+    computed: {
+      updateArgs () {
+        let args = {};
+        Object.keys(this.selected).forEach(key => {
+          if (this.old[key] != this.selected[key]) {
+            args[key] = this.selected[key];
+          }
+        })
+        return args;
+      }
+    },
+    props: [
+      "model"
+    ],
 
   }
 </script>
