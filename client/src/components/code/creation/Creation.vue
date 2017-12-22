@@ -128,7 +128,7 @@
         try {
           eval(code);
         } catch (e) {
-          this.error(e)
+          this.error(e.message)
         }
       }
     },

@@ -22,7 +22,7 @@
       },
       getCodeJS () {
         Blockly.JavaScript.addReservedWords('code');
-        var code = Blockly.JavaScript.workspaceToCode(this.blockly_container);
+        var code = Blockly.JavaScript.workspaceToCode(this.blocklyWorkspace);
         return code;
       },
       init () {

@@ -53,7 +53,7 @@ VPL.prototype.buildTree = function (categories) {
 }
 
 VPL.prototype.createCategory = function (category) {
-  return new Node('category', {name: category.name, colour: category.color, id: category.id});
+  return new Node('category', {name: category.name, colour: category.color, id: category.id,custom:category.custom});
 }
 
 VPL.prototype.registerBlock = function (block) {
@@ -63,11 +63,11 @@ VPL.prototype.registerBlock = function (block) {
       block.input.forEach(i => {
         if (i.inputType == 'statement') {
           this.appendStatementInput(i.value)
-            .setCheck(i.check)
+            .setCheck(i.check == 'any' || i.check == 'null' ? null : i.check)
             .appendField(i.field)
         } else {
           this.appendValueInput(i.value)
-            .setCheck(i.check)
+            .setCheck(i.check == 'any' || i.check == 'null' ? null : i.check)
             .appendField(i.field)
         }
       })
@@ -77,9 +77,9 @@ VPL.prototype.registerBlock = function (block) {
       if (block.nextStatement) {
         this.setNextStatement(true, block.nextStatement)
       }
-      if (block.output) {
-        this.setOutput(true, block.output);
-      }
+      // if (block.output == null || block.output) {
+      //   this.setOutput(true, block.output == 'any' || block.output == 'null' ? null : block.output);
+      // }
       this.setTooltip(block.tooltip || "");
     }
   }
@@ -89,7 +89,7 @@ VPL.prototype.registerBlock = function (block) {
       if (i.inputType == 'statement') {
         args[i.value] = Blockly.JavaScript.statementToCode(block, i.value);
       } else {
-        args[i.value] = Blockly.JavaScript.valueToCode(b, i.value, Blockly.JavaScript.ORDER_ATOMIC);
+        args[i.value] =b.getFieldValue(i.value);
       }
     })
     let code = "";

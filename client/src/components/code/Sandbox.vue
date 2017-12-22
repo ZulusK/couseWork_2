@@ -2,35 +2,37 @@
   <div class="sandbox">
     <div class="columns is-multiline is-desktop ">
       <div class="column is-4-desktop is-12-mobile ">
-        <div class=" mb-20 terminal">
-          <a class="button is-success is-medium" @click="run">
+        <div class=" mb-20">
+          <a class="button is-success is-medium" @click="runCode">
             <span>Run code</span>
             <b-icon icon="rocket"/>
           </a>
-          <a class="button is-primary is-medium" @click="clear">
+          <a class="button is-primary is-medium" @click="clearTerminal">
             <span>Clear console</span>
             <b-icon icon="delete"/>
           </a>
-          <div class="notification is-black ">
-            <p class="is-size-3">Output:</p>
-            <p v-for="(line,index) in output">
-              ...{{line}}
-            </p>
-          </div>
+          <a class="button is-link is-medium" @click="loadDefinedCategories">
+            <span>Refresh</span>
+            <b-icon icon="refresh"/>
+          </a>
+          <terminal
+            :env="env"
+            ref="terminal"/>
         </div>
-      </div>
-      <div class="column is-4-desktop is-12-mobile ">
-        <div>
-          <sandbox-controls
-            :categories="definedCategories||[]"
-            @disableCategory="disableCategory"
-            @enableCategory="enableCategory"
-            @enableBlock="enableBlock"
-            @disableBlock="disableBlock"/>
-        </div>
+        <sandbox-controls
+          :categories="definedCategories||[]"
+          @disableCategory="disableCategory"
+          @enableCategory="enableCategory"
+          @enableBlock="enableBlock"
+          @disableBlock="disableBlock"/>
       </div>
       <div class="column is-12-tablet is-8-desktop">
-        <workspace class="box" ref="workspace"/>
+        <workspace
+          ref="workspace"
+          class="box"
+          :resize="false"
+          :height="'70vh'"
+          :width="'900px'"/>
       </div>
     </div>
     <br>
@@ -42,15 +44,20 @@
   import APICode from '#/Code';
   import MessageMixin from '%/Other/MessageMixin';
   import {VPL, Node} from '#/code/VPL';
+  import Terminal from '%/code/Terminal'
+  import CodeEnv from '#/CodeEnv';
 
   export default {
     mixins: [MessageMixin],
     components: {
       Workspace,
-      SandboxControls
+      SandboxControls,
+      Terminal
+
     },
     data () {
       return {
+        env: new CodeEnv(),
         toolbox: null,
         definedCategories: null,
       }
@@ -99,17 +106,19 @@
           }
         }
       },
-      loadBlocks () {
+      loadDefinedCategories () {
         APICode
           .get()
           .then(result => {
-            console.log(result.data.items)
             if (result.data.success) return result.data.items;
             else throw {response: result};
           })
           .then(item => {
             this.definedCategories = item;
             console.log('blocks loaded');
+            if (!this.toolbox) {
+              this.$refs.workspace.init();
+            }
             this.initWorkspace();
           })
           .catch(err => {
@@ -118,18 +127,29 @@
           })
       },
       initWorkspace () {
-        this.$refs.workspace.init();
         this.toolbox = new VPL(this.definedCategories)
         this.updateWorkspace();
       },
       updateWorkspace () {
         this.$refs.workspace.update(this.toolbox.toXML())
+      },
+      clearTerminal () {
+        this.env.clearTerminal();
+      },
+      runCode () {
+        let code = this.$refs.workspace.getCodeJS();
+        console.log(code)
+        try {
+          eval(code);
+        } catch (e) {
+          this.error(e)
+        }
       }
     },
     computed: {},
     props: [],
     created () {
-      this.loadBlocks();
+      this.loadDefinedCategories();
     },
   }
 </script>

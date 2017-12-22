@@ -170,7 +170,7 @@
       {
         "default": true,
         "type": "text_indexOf",
-        "name": "indexOf"
+        "name": "text indexOf"
       },
       {
         "default": true,
@@ -204,5 +204,73 @@
         "default": true
       }
     ]
+  },
+  {
+    "name": "List",
+    "color": "%{BKY_PROCEDURES_HUE}",
+    "blocks": [
+      {
+        "default": true,
+        "type": "lists_create_with",
+        "name": "create list"
+      },
+      {
+        "default": true,
+        "type": "lists_repeat",
+        "name": "repeat list"
+      },
+      {
+        "default": true,
+        "type": "lists_length",
+        "name": "length of list"
+      },
+      {
+        "default": true,
+        "type": "lists_isEmpty",
+        "name": "is empty list"
+      },
+      {
+        "default": true,
+        "type": "lists_indexOf",
+        "name": "indexOf"
+      },
+      {
+        "default": true,
+        "type": "lists_getIndex",
+        "name": "get index"
+      },
+      {
+        "default": true,
+        "type": "lists_setIndex",
+        "name": "set index"
+      },
+      {
+        "default": true,
+        "type": "lists_getSublist",
+        "name": "sublist"
+      },
+      {
+        "default": true,
+        "type": "lists_split",
+        "name": "split"
+      },
+      {
+        "default": true,
+        "type": "lists_sort",
+        "name": "sort"
+      }
+    ]
+  },
+  {
+    "name": "Variables",
+    "custom": "VARIABLE",
+    "color": "%{BKY_VARIABLES_HUE}",
+    "blocks": []
+  },
+  {
+    "name": "Functions",
+    "custom": "PROCEDURE",
+    "blocks": [],
+    "color": "%{BKY_PROCEDURES_HUE}"
   }
 ]

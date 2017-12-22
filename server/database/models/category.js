@@ -8,6 +8,9 @@ let Category = new Schema({
         type: Boolean,
         default: false,
     },
+    custom:{
+        type:String,
+    },
     name: {
         type: String,
         required: true,
@@ -32,6 +35,7 @@ Category.methods.info = function () {
         id: this.id,
         name: this.name,
         color: this.color,
+        custom:this.custom
     }
 }
 module.exports = mongoose.model('Category', Category);

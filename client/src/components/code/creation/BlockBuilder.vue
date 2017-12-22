@@ -96,17 +96,17 @@
               </option>
             </b-select>
           </b-field>
-          <b-field label="Output" v-model="selected.output">
-            <!--connection top-->
-            <b-select>
-              <option
-                v-for="type in types"
-                :value="type"
-                :key="type">
-                {{type || "null"}}
-              </option>
-            </b-select>
-          </b-field>
+          <!--<b-field label="Output" v-model="selected.output">-->
+            <!--&lt;!&ndash;connection top&ndash;&gt;-->
+            <!--<b-select>-->
+              <!--<option-->
+                <!--v-for="type in types"-->
+                <!--:value="type"-->
+                <!--:key="type">-->
+                <!--{{type || "null"}}-->
+              <!--</option>-->
+            <!--</b-select>-->
+          <!--</b-field>-->
         </b-field>
         <b-collapse>
           <p class="is-link has-text-centered"
@@ -148,7 +148,7 @@
     data () {
       return {
         types: [
-          'Number', 'Boolean', 'String', 'Array', 'Any', null
+          'Number', 'Boolean', 'String', 'Array', 'any', null
         ],
         UI: {
           isLoading: false,
