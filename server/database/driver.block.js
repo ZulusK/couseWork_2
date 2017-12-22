@@ -34,7 +34,11 @@ module.exports = {
             return DB.find.withoutPagination(BlockModel, {category: category});
         },
         byQuery (query, page, limit, sort) {
-            return DB.find.withoutPagination(BlockModel, query)
+            return DB.find.withPagination(BlockModel, query, {
+                page: page,
+                limit: limit,
+                sort: sort
+            })
         },
         byID (id) {
             return BlockModel.findById(id);

@@ -16,6 +16,12 @@ let Category = new Schema({
 });
 Category.plugin(require('mongoose-paginate'));
 Category.index({name: 1}, {unique: true});
+Category.methods.update = function (args) {
+    Object.keys(args).forEach(field => {
+        this[field] = args[field];
+    })
+    return this.save();
+}
 
 Category.methods.info = function () {
     return {

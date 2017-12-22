@@ -14,7 +14,7 @@ function getAllFields () {
 }
 
 function getConstantFields () {
-    return ['_id', 'id'];
+    return ['_id', 'id', 'name'];
 }
 
 module.exports = {
@@ -27,6 +27,16 @@ module.exports = {
     get: {
         all () {
             return CategoryModel.find({}).exec();
+        },
+        byQuery (query, page, limit, sort) {
+            return DB.find.withPagination(CategoryModel, query, {
+                page: page,
+                limit: limit,
+                sort: sort
+            })
+        },
+        byID (id) {
+            return CategoryModel.findById(id);
         }
     },
     remove: {

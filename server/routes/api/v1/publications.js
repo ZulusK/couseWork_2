@@ -195,7 +195,11 @@ router.route('/')
             }
         } catch (err) {
             console.log(err);
-            return Utils.sendError(res, 500, `Server error: ${err}`);
+            if (err.code == 11000) {
+                return Utils.sendError(res, 400, "Duplicate of unique value");
+            } else {
+                return Utils.sendError(res, 500, "Server error");
+            }
         }
     })
     .delete(passport.authenticate(['access-token', 'basic'], {session: false}), async (req, res, next) => {

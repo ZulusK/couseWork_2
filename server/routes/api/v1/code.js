@@ -19,9 +19,38 @@ tools.collectDataFromReq = {
     },
     delete (req) {
         return {target: req.params.id}
+    },
+    get (req) {
+        let args = {};
+        args.page = Number(req.query.page || 1);
+        args.limit = Number(req.query.limit || config.PAGINATION_LIMIT);
+        args.sort = Utils.parseJSON(req.query.sort) || {_id: 1}
+        args.query = req.query;
+        delete args.query.page;
+        delete args.query.limit;
+        delete args.query.sort;
+        return args;
     }
 }
 tools.verifyData = {
+    get_b (args) {
+        return tools.verifyData.delete(args);
+    },
+    post_c (args) {
+        // check, is all required fields are present
+        DBCategories.requiredFields.forEach((field) => {
+            if (!args.query[field]) {
+                throw Utils.errors.InvalidRequesDataError(`'${field}' is required`)
+            }
+        })
+        // validate all fields
+        Object.keys(args.query).forEach(key => {
+            if (DBCategories.allFields.indexOf(key) < 0) {
+                throw Utils.errors.InvalidRequesDataError(`Field '${key}' is not allowed`)
+            }
+        })
+        return true;
+    },
     post_b (args) {
         // check, is all required fields are present
         DBBlocks.requiredFields.forEach((field) => {
@@ -54,9 +83,9 @@ tools.verifyData = {
         })
         return true;
     },
-    delete_b (args) {
+    delete (args) {
         if (!args.target) {
-            throw Utils.errors.InvalidRequesDataError(`Missing id of target block`)
+            throw Utils.errors.InvalidRequesDataError(`Missing id of target`)
         }
         return true;
     }
@@ -75,6 +104,19 @@ tools.result = {
     },
     delete (res, args) {
         return res.json({success: true});
+    },
+    get (res, args) {
+        return res.json(
+            {
+                page: args.items.page,
+                limit: args.items.limit,
+                total: args.items.total,
+                pages: args.items.pages,
+                success: true,
+                items: args.items.docs.map(x => x.info()),
+                query: args.query
+            }
+        )
     }
 }
 router.route('/')
@@ -115,6 +157,20 @@ router.route('/blocks')
             }
         } catch (err) {
             console.log(err);
+            if (err.code == 11000) {
+                return Utils.sendError(res, 400, "Duplicate of unique value ");
+            } else {
+                return Utils.sendError(res, 500, "Server error");
+            }
+        }
+    })
+    .get(async (req, res, next) => {
+        const args = tools.collectDataFromReq.get(req);
+        try {
+            args.items = await DBBlocks.get.byQuery(args.query, args.page, args.limit, args.sort)
+            return tools.result.get(res, args);
+        } catch (err) {
+            console.log(err);
             return Utils.sendError(res, 500, `Server error: ${err}`);
         }
     })
@@ -142,7 +198,7 @@ router.route('/blocks/:id')
     .delete(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
         const args = tools.collectDataFromReq.delete(req);
         try {
-            tools.verifyData.delete_b(args);
+            tools.verifyData.delete(args);
         } catch (err) {
             return Utils.sendError(res, 400, err.message);
         }
@@ -152,6 +208,82 @@ router.route('/blocks/:id')
                 return Utils.sendError(res, 400, "No such block");
             }
             await DBBlocks.remove.byID(args.target);
+            return tools.result.delete(res, args);
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+
+
+router.route('/categories')
+    .post(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.post(req);
+        try {
+            tools.verifyData.post_c(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBCategories.create(args.query)
+            if (args.item) {
+                return tools.result.post(res, args);
+            } else {
+                return Utils.sendError(res, 400, "Bad arguments");
+            }
+        } catch (err) {
+            console.log(err);
+            if (err.code == 11000) {
+                return Utils.sendError(res, 400, "Duplicate of unique value ");
+            } else {
+                return Utils.sendError(res, 500, "Server error");
+            }
+        }
+    })
+    .get(async (req, res, next) => {
+        const args = tools.collectDataFromReq.get(req);
+        try {
+            args.items = await DBCategories.get.byQuery(args.query, args.page, args.limit, args.sort)
+            return tools.result.get(res, args);
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+
+router.route('/categories/:id')
+    .put(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.put(req);
+        try {
+            tools.verifyData.put_c(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBCategories.get.byID(args.target)
+            if (!args.item) {
+                return Utils.sendError(res, 400, "No such category");
+            }
+            await args.item.update(args.query);
+            return tools.result.put(res, args);
+        } catch (err) {
+            console.log(err);
+            return Utils.sendError(res, 500, `Server error: ${err}`);
+        }
+    })
+    .delete(passport.authenticate(['access-token', 'basic'], {session: false}), Utils.verifyAdmin, async (req, res, next) => {
+        const args = tools.collectDataFromReq.delete(req);
+        try {
+            tools.verifyData.delete(args);
+        } catch (err) {
+            return Utils.sendError(res, 400, err.message);
+        }
+        try {
+            args.item = await DBCategories.get.byID(args.target)
+            if (!args.item) {
+                return Utils.sendError(res, 400, "No such block");
+            }
+            await DBCategories.remove.byID(args.target);
             return tools.result.delete(res, args);
         } catch (err) {
             console.log(err);
