@@ -64,6 +64,7 @@ Block.methods.info = function () {
     return {
         default: this.default,
         id: this.id,
+        primary: this.primary,
         category: this.category,
         type: this.type,
         message0: this.message0,

@@ -25,7 +25,7 @@
             <em>{{props.row.name}}</em>
           </code>
           <br>
-          {{props.row.description}}
+          {{props.row.tooltip}}
         </p>
       </div>
     </template>

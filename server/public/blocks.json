@@ -30,7 +30,7 @@
       },
       {
         "name": "boolean constants",
-        "description": "Define 'true' and 'false' constants",
+        "tooltip": "Define 'true' and 'false' constants",
         "type": "logic_boolean",
         "default": true
       },

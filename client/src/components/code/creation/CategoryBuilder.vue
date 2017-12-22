@@ -1,5 +1,6 @@
 <template>
   <div class="columns is-multiline">
+    <b-loading :active="UI.isLoading"/>
     <div class="column is-12 ">
       <h1 class="title has-text-centered">Manage categories of blocks</h1>
       <a class="button is-outlined is-success" @click.stop="add">
@@ -75,7 +76,7 @@
             this.error(result.data.message || "Server error")
             return false;
           } else {
-            this.success("Success updated");
+            this.success("Success created");
             this.selected = {};
             return true;
           }
@@ -155,7 +156,6 @@
         }
         // if there are no id in selected
         // user created it just now
-        console.log(this.selected)
         if (!this.selected.id) {
           if (await this.createCategory()) {
             this.$emit('update');

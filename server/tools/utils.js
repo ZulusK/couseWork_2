@@ -166,20 +166,10 @@ exports.code = {
                 color: category.color,
             })
             await Promise.all(category.blocks.map(b => {
-                return DBBlocks.create({
-                    default: true,
-                    name: b.name,
-                    category: category.name,
-                    type: b.type,
-                    message0: b.message0,
-                    previousStatement: b.previousStatement,
-                    nextStatement: b.nextStatement,
-                    output: b.output,
-                    tooltip: b.tooltip,
-                    helpUrl: b.helpUrl,
-                    code: b.code,
-                    primary: true,
-                })
+                b.primary = true;
+                b.default = true;
+                b.category = category.name;
+                return DBBlocks.create(b)
             }))
         }
     }

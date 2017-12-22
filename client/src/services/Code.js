@@ -12,10 +12,21 @@ let category = {
     return API.access().delete(`/api/v1/code/categories/${id}`);
   }
 }
-
+let block = {
+  put (id, args) {
+    return API.access().put(`/api/v1/code/blocks/${id}`, args);
+  },
+  create (args) {
+    return API.access().post(`/api/v1/code/blocks`, args);
+  },
+  delete (id) {
+    return API.access().delete(`/api/v1/code/blocks/${id}`);
+  }
+}
 export default {
   get (query) {
     return API.noAuth().get('/api/v1/code', +Utils.query(query || {}));
   },
   category: category,
+  block: block
 }

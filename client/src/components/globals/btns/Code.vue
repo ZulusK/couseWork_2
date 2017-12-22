@@ -12,8 +12,8 @@
         </router-link>
       </a>
       <template v-if="isLogged()">
-        <hr class="navbar-divider">
         <template v-if="isAdmin()">
+          <hr class="navbar-divider">
           <a class="navbar-item">
             <router-link :to="{name:'Code-builder'}">
               Construct

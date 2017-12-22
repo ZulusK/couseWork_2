@@ -77,12 +77,15 @@
     computed: {},
     props: {
       width: {
+        type: String,
         default: '800px'
       },
       height: {
+        type: String,
         default: '600px'
       },
       resize: {
+        type: Boolean,
         default: false
       }
     },

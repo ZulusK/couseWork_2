@@ -1,25 +1,31 @@
 <template>
   <div>
     <div class="container is-fluid columns is-desktop" v-if="isAdmin()">
-      <b-tabs class="box column is-6-desktop"
-              size="is-medium"
-              position="is-left"
-              type="is-toggle">
-        <b-tab-item label="Category">
-          <category-builder
-            @update="updateCategory"
-            :model.sync="model"
-          />
-        </b-tab-item>
-        <b-tab-item label="Block">
-          <block-builder/>
-        </b-tab-item>
-      </b-tabs>
-      <div class="column is-6-desktop">
+      <div class="column is-6-desktop ">
+        <b-tabs class="box slide"
+                size="is-medium"
+                position="is-left"
+                type="is-toggle">
+          <b-tab-item label="Category">
+            <category-builder
+              @update="updateCategory"
+              :model.sync="model"
+            />
+          </b-tab-item>
+          <b-tab-item label="Block">
+            <block-builder
+              @update="updateBlock"
+              :model.sync="model"/>
+          </b-tab-item>
+        </b-tabs>
+      </div>
+      <div class="column is-6-desktop ">
         <workspace
           ref="workspace"
-          class="box" :heigth="'900px'" :resize="true"
-          :width="'800px'"/>
+          class="box"
+          :resize="false"
+          :height="'70vh'"
+          :width="'900px'"/>
       </div>
     </div>
     <div v-else class="hero">
@@ -58,10 +64,6 @@
         toolbox: null,
         model: {
           definedCategories: null,
-          cNode: null,
-          bNode: null,
-          newCategory: {name: "NEW CATEGORY"},
-          newBlock: {}
         }
       }
     },
@@ -91,20 +93,12 @@
       updateCategory (event) {
         this.loadDefinedCategories();
       },
+      updateBlock (event) {
+        this.loadDefinedCategories();
+      },
       initWorkspace () {
         this.toolbox = new VPL();
         this.toolbox.buildTree(this.model.definedCategories);
-        //append new category
-        this.cNode = this.toolbox.createCategory(this.model.newCategory);
-        this.toolbox.append(this.cNode);
-
-        //append tmp category
-        const tmp = this.toolbox.createCategory({name: 'NEW BLOCKS', color: '360'})
-        this.model.bNode = this.toolbox.createBlock(this.model.newBlock);
-        this.toolbox.append(tmp)
-        //append new block to tmp category
-        tmp.append(this.model.bNode);
-
         this.updateWorkspace();
       },
       updateWorkspace () {
@@ -124,4 +118,7 @@
   }
 </script>
 <style scoped lang="scss">
+  .slide {
+    heigth: 70vh;
+  }
 </style>
