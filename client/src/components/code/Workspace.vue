@@ -15,6 +15,17 @@
       }
     },
     methods: {
+      usedBlocks () {
+        return this.blocklyWorkspace.getAllBlocks();
+      },
+      clear () {
+        this.blocklyWorkspace.clear();
+      },
+      load (blocks) {
+        blocks.forEach(b => {
+          this.blocklyWorkspace.addTopBlock(b)
+        })
+      },
       update (xml) {
         console.log('workspace updated')
         this.blocklyWorkspace.updateToolbox(xml);

@@ -11,6 +11,7 @@
       @login="login"
       @register="register"
       @logout="logout"
+      @fullLogout="fullLogout"
       @setHeader="setHeader"
       @setFooter="setFooter"/>
     <br>
@@ -109,10 +110,12 @@
   #viewport {
     flex: 1 0 auto;
   }
-  *{
+
+  * {
     word-break: break-all;
     word-wrap: break-word;
   }
+
   #app {
     background-image: url('/static/img/bg-rock.jpg');
     background-repeat: no-repeat;

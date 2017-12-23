@@ -28,7 +28,7 @@
             name="email"
             placeholder="Your email"
             v-model="credentials.email"
-            v-validate="'required|email'"
+            v-validate="'required|auth.login.email'"
             type="email">
           </b-input>
         </b-field>
@@ -40,7 +40,7 @@
             name="password"
             placeholder="Your password"
             v-model="credentials.password"
-            v-validate="'required'"
+            v-validate="'required|auth.login.password'"
             password-reveal
             type="password">
           </b-input>
@@ -54,18 +54,18 @@
         Login
       </a>
       <hr>
-      <a class="button is-facebook is-medium"
-         ref="btn"
-         v-ripple
-         @click="loginFacebook()">
-        <b-icon
-          type="is-white"
-          pack="mdi"
-          icon="facebook"
-          size="is-middle">
-        </b-icon>
-        <div>Facebook</div>
-      </a>
+      <!--<a class="button is-facebook is-medium"-->
+         <!--ref="btn"-->
+         <!--v-ripple-->
+         <!--@click="loginFacebook()">-->
+        <!--<b-icon-->
+          <!--type="is-white"-->
+          <!--pack="mdi"-->
+          <!--icon="facebook"-->
+          <!--size="is-middle">-->
+        <!--</b-icon>-->
+        <!--<div>Facebook</div>-->
+      <!--</a>-->
       <br/>
       <br/>
 

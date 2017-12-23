@@ -28,7 +28,7 @@
             name="email"
             placeholder="Your email"
             v-model="credentials.email"
-            v-validate="'required|email'"
+            v-validate="'required|auth.register.email'"
             type="email">
           </b-input>
         </b-field>
@@ -40,7 +40,7 @@
             name="name"
             placeholder="Your name"
             v-model="credentials.name"
-            v-validate="'required'"
+            v-validate="'required|auth.register.name'"
             type="text">
           </b-input>
         </b-field>
@@ -52,7 +52,7 @@
             name="password"
             placeholder="Your password"
             v-model="credentials.password"
-            v-validate="'required'"
+            v-validate="'required|auth.register.password'"
             password-reveal
             type="password">
           </b-input>

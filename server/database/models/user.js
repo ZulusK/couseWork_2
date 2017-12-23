@@ -6,9 +6,7 @@ const config = require('@config');
 let User = new Schema({
         name: {
             type: String,
-            required: function () {
-                return !Boolean(this.facebook.id)
-            },
+            required: true,
             validate: {
                 validator: function (value) {
                     return validate('name', value, this)
@@ -18,12 +16,8 @@ let User = new Schema({
         },
         email: {
             type: String,
-            unique: function () {
-                return !Boolean(this.facebook.id);
-            },
-            required: function () {
-                return !Boolean(this.facebook.id)
-            },
+            unique: true,
+            required: true,
             validate: {
                 validator: function (value) {
                     return validate('email', value, this)
@@ -33,9 +27,7 @@ let User = new Schema({
         },
         password: {
             type: String,
-            required: function () {
-                return !Boolean(this.facebook.id);
-            },
+            required: true,
             validate: {
                 validator: function (value) {
                     return validate('password', value, this)
@@ -46,28 +38,6 @@ let User = new Schema({
         avatar: {
             type: String,
             default: null
-        },
-        facebook: {
-            id: {
-                type: String
-            },
-            name: {
-                type: String
-            },
-            avatar: {
-                type: String
-            },
-            email: {
-                type: String
-            },
-            tokens: {
-                access: {
-                    type: String
-                },
-                refresh: {
-                    type: String
-                }
-            }
         },
         salt: {
             type: String
@@ -204,13 +174,9 @@ function validate (field, value, subject) {
 
 User.methods.info = function () {
     return {
+        name: this.name,
         id: this.id,
-        email: this.email || undefined,
-        name: this.name || undefined,
-        facebook: {
-            name: this.facebook.name,
-            avatar: this.facebook.avatar,
-        },
+        email: this.email,
         isAdmin: this.isAdmin,
         created: this.created
     }

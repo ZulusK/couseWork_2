@@ -14,6 +14,9 @@ let Publication = new Schema({
             message: '{VALUE} is not a title'
         },
     },
+    sandbox: {
+        type: Schema.ObjectId,
+    },
     author: {
         type: Schema.ObjectId,
     },
@@ -86,6 +89,7 @@ function validate (field, value, subject) {
 Publication.methods.info = function () {
     return {
         id: this.id,
+        sandbox: this.sandbox,
         logo: this.logo,
         author: this.author,
         title: this.title,

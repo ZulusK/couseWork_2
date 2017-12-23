@@ -32,7 +32,6 @@
     },
     methods: {
       confirmRemove () {
-        return true;
         return window.confirm('Do you really want to remove this publication?');
       },
       async remove () {

@@ -9,4 +9,5 @@ router.use('/v1/code', require('@APIv1/code'));
 router.get('/v1/docs', async (req, res, next) => {
     res.json({success: true, item: await Utils.fs.read(config.API_DOCS)})
 })
+router.use('/v1/validate',require('@APIv1/validator'))
 module.exports = router;

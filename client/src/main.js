@@ -17,6 +17,10 @@ import 'keen-ui/dist/keen-ui.css';
 import Ripple from 'vue-ripple-directive'
 import Gravatar from 'vue-gravatar';
 
+import validator from '#/validator';
+
+validator();
+
 Vue.component('v-gravatar', Gravatar);
 Ripple.color = 'rgba(255,255,255,0.25)';
 Vue.directive('ripple', Ripple);

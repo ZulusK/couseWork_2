@@ -56,6 +56,9 @@ module.exports.get = {
     },
     byID (id) {
         return UserModel.findById(id);
+    },
+    byEmail(email){
+        return DB.findOne(UserModel,{email:email});
     }
 }
 module.exports.remove = {

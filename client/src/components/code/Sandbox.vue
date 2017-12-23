@@ -63,6 +63,12 @@
       }
     },
     methods: {
+      usedBlocks(){
+        let b=this.$refs.workspace.usedBlocks();
+        this.$refs.workspace.clear();
+        this.$refs.workspace.load(b);
+        return b;
+      },
       disableCategory (event) {
         let c = this.toolbox.get(this.toolbox.compareBy('name', event.category.name));
         if (c) {

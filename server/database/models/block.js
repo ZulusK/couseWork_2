@@ -36,10 +36,6 @@ let Block = new Schema({
     output: {
         type: String,
     },
-    tooltip: {
-        type: String,
-        default: ""
-    },
     code: {
         type: String,
         default: ""
@@ -52,6 +48,11 @@ let Block = new Schema({
             value: String
         }],
         default: []
+    },
+
+    tooltip: {
+        type: String,
+        default: ""
     }
 });
 Block.pre('save', function (next) {

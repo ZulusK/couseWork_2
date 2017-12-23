@@ -150,6 +150,9 @@
       async "filters.tags" () {
         await this.load();
       },
+      async "filters.title" () {
+        await this.load();
+      },
     },
     methods: {
       async load () {

@@ -4,7 +4,7 @@
     <div v-if="$store.getters.isLogged()">
       <div class="columns is-desktop">
         <div class="column is-12-mobile is-6-desktop">
-          <publication-edit :publication="publication"/>
+          <publication-edit :publication="publication" ref="editArea"/>
         </div>
         <div class="column is-12-mobile is-6-desktop">
           <publication-prev :author="$store.state.user" :publication="publication"/>
@@ -45,10 +45,12 @@
   import PublicationEdit from '%/Publications/Publication-edit-area'
   import APIPublication from '#/Publications';
   import APIRes from '#/Res';
+  import Sandbox from '%/code/Sandbox';
 
   export default {
     mixins: [AuthMixin, MessageMixin],
     components: {
+      Sandbox,
       PublicationPrev,
       PublicationEdit
     },
@@ -150,7 +152,12 @@
       },
       async pushPublication () {
         this.UI.isLoading = true;
-        //todo check validation
+        console.log(await this.$refs.editArea.isValid())
+        if (!await this.$refs.editArea.isValid()) {
+          this.UI.isLoading = false;
+          this.error('Not all field are valid');
+          return;
+        }
         //check access and refresh
         await this.checkTimeOfTokens();
         if (this.isNotLogged()) {

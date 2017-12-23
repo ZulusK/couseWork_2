@@ -59,6 +59,16 @@
         this.$store.dispatch('setUser', null);
         console.log(2)
       },
+     async  fullLogout(){
+        this.$store.dispatch('setToken_access', null);
+        this.$store.dispatch('setToken_refresh', null);
+        this.$store.dispatch('setUser', null);
+        try{
+          await AuthAPI.fullLogout();
+        }catch (e){
+
+        }
+      },
       isLogged () {
         return this.$store.getters.isLogged();
       },

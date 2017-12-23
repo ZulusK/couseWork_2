@@ -37,6 +37,8 @@
                 <register-btn @action="$emit('register')"/>
                 <!--logout-->
                 <logout-btn @action="$emit('logout')"/>
+                <full-logout-btn @action="$emit('fullLogout')"/>
+
               </div>
             </div>
           </div>
@@ -52,9 +54,11 @@
   import LogoutBtn from '%/globals/btns/Logout';
   import PublicationsBtn from '%/globals/btns/Publications';
   import CodeBtn from '%/globals/btns/Code';
+  import FullLogoutBtn from './btns/FullLogout'
 
   export default {
     components: {
+      FullLogoutBtn,
       LogoBtn,
       LoginBtn,
       LogoutBtn,

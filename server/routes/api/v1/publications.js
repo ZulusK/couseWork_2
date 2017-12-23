@@ -144,7 +144,7 @@ tools.result = {
         return res.json(
             {
                 success: true,
-                item: args.item
+                item: args.item.info()
             }
         )
     },

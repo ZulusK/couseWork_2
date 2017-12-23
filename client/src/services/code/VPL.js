@@ -89,12 +89,12 @@ VPL.prototype.registerBlock = function (block) {
       if (i.inputType == 'statement') {
         args[i.value] = Blockly.JavaScript.statementToCode(block, i.value);
       } else {
-        args[i.value] =b.getFieldValue(i.value);
+        args[i.value] = Blockly.JavaScript.valueToCode(b, i.value, Blockly.JavaScript.ORDER_ATOMIC);
       }
     })
     let code = "";
     eval(block.code)
-    return [code, Blockly.JavaScript.ORDER_ADDITION];
+    return [code, Blockly.JavaScript.ORDER_MEMBER];
   }
 }
 

@@ -1,8 +1,12 @@
 <template>
   <div class="box">
-    <b-field label="Title" horizontal>
+    <b-field label="Title"
+             :type="errors.has('title') ? 'is-danger': publication.title?'is-success':''"
+             :message="errors.has('title') ? errors.first('title') : ''">
       <b-input
+        name="title"
         v-model="publication.title"
+        v-validate="'required|publication.create.title'"
         placeholder="Eq. Quick sort for teapot"
         icon="magnify"></b-input>
     </b-field>
@@ -14,18 +18,29 @@
         type="is-primary">
       </b-taginput>
     </b-field>
-    <b-field label="Difficult" horizontal>
+    <b-field label="Difficult" :type="errors.has('difficult') ? 'is-danger': publication.difficult?'is-success':''"
+             :message="errors.has('difficult') ? errors.first('difficult') : ''">
       <input class="slider is-fullwidth is-large is-circle"
              :class="{
           'is-easy':publication.difficult<4,
           'is-middle':publication.difficult>=4 && publication.difficult<=7,
           'is-hard':publication.difficult>7}"
              min="1" max="10"
+             v-validate="'required|publication.create.difficult'"
+             name="difficult"
              v-model="publication.difficult" type="range">
       <output for="sliderWithValue">{{publication.difficult}}</output>
     </b-field>
-    <b-field horizontal label="Description">
-      <b-input type="textarea" v-model="publication.description" length="200"></b-input>
+    <b-field label="Description"
+             :type="errors.has('description') ? 'is-danger': publication.description?'is-success':''"
+             :message="errors.has('description') ? errors.first('description') : ''">
+      <b-input
+        name="description"
+        type="textarea"
+        v-validate="'required|publication.create.description'"
+
+        v-model="publication.description"
+        length="200"></b-input>
     </b-field>
     <section>
       <b-tabs position="is-centered" class="block" v-model="logoMode" type="is-boxed" @change="setTypeOfLogo">
@@ -90,8 +105,14 @@
       </b-tabs>
     </section>
     <hr>
-    <b-field label="Text">
-      <b-input type="textarea" v-model="publication.text" rows="15"></b-input>
+    <b-field label="Text" :type="errors.has('text') ? 'is-danger': publication.text?'is-success':''"
+             :message="errors.has('text') ? errors.first('text') : ''">
+      <b-input
+        type="textarea"
+        name="text"
+        v-validate="'required'"
+        v-model="publication.text"
+        rows="15"></b-input>
     </b-field>
   </div>
 </template>
@@ -107,6 +128,9 @@
     },
     watch: {},
     methods: {
+      isValid () {
+        return this.$validator.validateAll();
+      },
       addURL (e) {
         if (!e || e == '\n')
           this.publication.logo = this.imageURL;

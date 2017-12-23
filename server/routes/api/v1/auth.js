@@ -63,6 +63,7 @@ router.post('/register', async function (req, res, next) {
 
 router.post('/login', passport.authenticate('basic', {session: false}), async (req, res, next) => {
     try {
+        await req.user.save();
         res.json({
             success: true,
             tokens: req.user.credentials,
@@ -96,17 +97,16 @@ router.get('/check/refresh', passport.authenticate(['refresh-token'], {session: 
     return res.json({success: true});
 })
 // Redirect the user to Facebook for authentication
-router.use('/facebook', passport.authenticate('facebook', {session: false}));
-
+// router.use('/facebook', passport.authenticate('facebook', {session: false}));
 // Facebook will redirect the user to this URL after approval.
-router.use('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
-    try {
-        res.render('authentificated', {
-            data: req.user.accessToken,
-        })
-    } catch (err) {
-        console.log(err);
-        return Utils.sendError(res, 500, "Server error");
-    }
-});
+// router.use('/facebook/token', passport.authenticate('facebook', {session: false}), async (req, res, next) => {
+//     try {
+//         res.render('authentificated', {
+//             data: req.user.accessToken,
+//         })
+//     } catch (err) {
+//         console.log(err);
+//         return Utils.sendError(res, 500, "Server error");
+//     }
+// });
 module.exports = router;

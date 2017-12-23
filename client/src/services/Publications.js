@@ -2,6 +2,9 @@ import API from '#/API';
 import Utils from '#/Utils';
 
 export default {
+  check (path, key, value) {
+    return API.noAuth().post(`/api/v1/validate/publication/${path}/${key}`, {value: value});
+  },
   load (filter) {
     const query = Utils.query(filter);
     console.log(query)
