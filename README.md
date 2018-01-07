@@ -10,22 +10,7 @@ The feature of the service is a combination of:
 * Students will be able to write a program with the help of visual elements and structural blocks, to run and get the result of its execution.
 
 ### Scope:
-An URL to DB mLab
-`mongodb://CodualWebApp:kG44fRUEEAh2GBFLAZJjcrF9@ds042527.mlab.com:42527/codual_db`
-The admin's login and password: `admin:admin`
-
-The user's login and password: `1:1`
-
 An URL of heroku app ``http://codual.herokuapp.com``
-
- Реализованные возможности:
-1. RESTFull server, at `{{host}}/api/v1` 
-2. You can use api, with Postman, just import settings (file `api_test.json`)
-3. Login and authentication with JWT token, using webapp
-4. Creation of new publication, using webapp
-
-So, work in progress 
-
 
 >## Build Setup
 
