@@ -8,7 +8,7 @@
 
 ### Build Setup
 
-```
+```sh
 # install dependencies
 npm install
 
